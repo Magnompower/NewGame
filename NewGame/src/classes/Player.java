@@ -12,47 +12,7 @@ public class Player {
     Weapon playerWeapon;
     private int playerDamage;
 
-    public void moveNorth() {
-        playerPositionY++;
-        validatePlayerPosition();
-    }
 
-    public void moveSouth() {
-        playerPositionY--;
-        validatePlayerPosition();
-    }
-
-    public void moveEast() {
-        playerPositionX++;
-        validatePlayerPosition();
-    }
-
-    public void moveWest() {
-        playerPositionX--;
-        validatePlayerPosition();
-    }
-
-    public void printPlayerPosition() {
-        System.out.println("Position: " + ConsoleColors.YELLOW_BRIGHT + "X" + ConsoleColors.RESET + ": " +
-                ConsoleColors.YELLOW_BRIGHT + playerPositionX + ConsoleColors.CYAN_BRIGHT + " Y" +
-                ConsoleColors.RESET + ": " + ConsoleColors.CYAN_BRIGHT + playerPositionY);
-    }
-
-    public void validatePlayerPosition() {
-        if (playerPositionX < 0) {
-            playerPositionX = 0;
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
-        } else if (playerPositionX > 40) {
-            playerPositionX = 40;
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further east!" + ConsoleColors.RESET);
-        } else if (playerPositionY < 0) {
-            playerPositionY = 0;
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further south!" + ConsoleColors.RESET);
-        } else if (playerPositionY > 40) {
-            playerPositionY = 40;
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further north!" + ConsoleColors.RESET);
-        }
-    }
 
     public void validatePlayerHealth() {
         if (playerHealtPoints <= 0) {

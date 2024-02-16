@@ -3,32 +3,23 @@ package classes;
 import java.util.Scanner;
 
 public class Menu {
-    Player player = new Player();
-    UI ui = new UI();
-    Scanner playerChoice = new Scanner(System.in);
-    String[] menuString;
 
-    private void startMenu() {
+    private String[] menuPoint;
+    private String menuHeader;
+
+    public Menu(String menuHeader, String[] menuPoint){
+        this.menuPoint=menuPoint;
+        this.menuHeader=menuHeader;
     }
 
-    private void combatMenu() {
-        switch (playerChoice.nextInt()) {
-            case 1 -> player.attack();
-            case 2 -> player.flee();
-
-            case 0 -> ui.quitGame();
-        }
+    public Menu() {
     }
 
-    private void movementMenu() {
-        switch (playerChoice.nextInt()) {
-            case 1 -> player.moveNorth();
-            case 2 -> player.moveEast();
-            case 3 -> player.moveSouth();
-            case 4 -> player.moveWest();
+    public void printMenu(){
+        String printString = menuHeader +"\n";
+        for (int i = 0; i < menuPoint.length; i++) printString+= menuPoint[i] + "\n"; {
+            System.out.println("\n" + printString);
 
-            case 9 -> ui.getInfo();
-            case 0 -> ui.quitGame();
         }
     }
 }

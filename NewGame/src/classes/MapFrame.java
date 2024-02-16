@@ -6,8 +6,8 @@ import java.awt.*;
 public class MapFrame extends JFrame {
     boolean makeMapVisible = false;
     private int mapSize = 31;
-    private int playerX = 15; // starting x-coordinate (middle of the map)
-    private int playerY = 15; // starting y-coordinate (middle of the map)
+    private int playerPositionX = 15; // starting x-coordinate (middle of the map)
+    private int playerPositionY = 15; // starting y-coordinate (middle of the map)
 
     public MapFrame() {
         setTitle("Dusty Map");
@@ -20,9 +20,11 @@ public class MapFrame extends JFrame {
         for (int y = 0; y < mapSize; y++) {
             for (int x = 0; x < mapSize; x++) {
                 JPanel panel = new JPanel();
+                panel.setBackground((Color.gray));
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//                panel.setBorder(BorderFactory.createEmptyBorder(26,26,27,27)); Want to make the city combined TODO
 
-                if (x == playerX && y == playerY) {
+                if (x == playerPositionX && y == playerPositionY) {
                     panel.setBackground(Color.CYAN); // Color the player's location
                 }
                 if (x == 30 && y == 0) {
@@ -73,7 +75,7 @@ public class MapFrame extends JFrame {
                 if (x == 22 && y == 12)
                     panel.setBackground(Color.YELLOW);
                 add(panel);
-                if (playerX == 15 && playerY == 8) {
+                if (playerPositionX == 15 && playerPositionY == 8) {
                     if (x == 10 && y == 8) {
                         panel.setBackground(Color.BLUE);
                     }
@@ -85,7 +87,47 @@ public class MapFrame extends JFrame {
             }
         }
         setVisible(true);
+    }
+    public void moveNorth() {
+        playerPositionY++;
+        validatePlayerPosition();
+    }
 
+    public void moveSouth() {
+        playerPositionY--;
+        validatePlayerPosition();
+    }
+
+    public void moveEast() {
+        playerPositionX++;
+        validatePlayerPosition();
+    }
+
+    public void moveWest() {
+        playerPositionX--;
+        validatePlayerPosition();
+    }
+
+    public void printPlayerPosition() {
+        System.out.println("Position: " + ConsoleColors.YELLOW_BRIGHT + "X" + ConsoleColors.RESET + ": " +
+                ConsoleColors.YELLOW_BRIGHT + playerPositionX + ConsoleColors.CYAN_BRIGHT + " Y" +
+                ConsoleColors.RESET + ": " + ConsoleColors.CYAN_BRIGHT + playerPositionY);
+    }
+
+    public void validatePlayerPosition() {
+        if (playerPositionX < 0) {
+            playerPositionX = 0;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
+        } else if (playerPositionX > 40) {
+            playerPositionX = 40;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further east!" + ConsoleColors.RESET);
+        } else if (playerPositionY < 0) {
+            playerPositionY = 0;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further south!" + ConsoleColors.RESET);
+        } else if (playerPositionY > 40) {
+            playerPositionY = 40;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further north!" + ConsoleColors.RESET);
+        }
     }
 
     public static void main(String[] args) {

@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    MapFrame worldMap;
+    MapFrame worldMap; // Måske problem her:
     UI ui = new UI();
     Scanner playerChoice = new Scanner(System.in);
     Scanner scanner = new Scanner(System.in);
@@ -18,6 +18,7 @@ public class Main {
     ArrayList<Weapon> weapons = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player = new Player();
+    MenuMaker menuMaker = new MenuMaker();
 
 
     public static void main(String[] args) {
@@ -135,8 +136,9 @@ public class Main {
 
 
         ui.welcomeMessage();
+        menuMaker.movementMenu();
 //        worldMap.makeMapVisible = true;
-        worldMap = new MapFrame(); // opens map
+        worldMap = new MapFrame(); // opens map TODO PROGRAM SHUTS DOWN WHEN MAP CLOSES
         while (gameRunning) {
 
 //            printTimePlayed(); // Not working

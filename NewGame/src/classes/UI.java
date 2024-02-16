@@ -52,7 +52,7 @@ public class UI {
 //        else menu.movementMenu();
     }
 
-    void getInfo() {
+    void getAvailableInfo() {
         System.out.println(player.playerWeapon.getWeaponName());
 
     }

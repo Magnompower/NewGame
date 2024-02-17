@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    MapFrame worldMap; // Måske problem her:
+    MapFrame mapFrame = new MapFrame(); // Måske problem her:
     UI ui = new UI();
     Scanner playerChoice = new Scanner(System.in);
     Scanner scanner = new Scanner(System.in);
@@ -137,8 +137,8 @@ public class Main {
 
         ui.welcomeMessage();
         menuMaker.movementMenu();
-//        worldMap.makeMapVisible = true;
-        worldMap = new MapFrame(); // opens map TODO PROGRAM SHUTS DOWN WHEN MAP CLOSES
+//        mapFrame.makeMapVisible = true;
+//        mapFrame.setMapVisibillity(makeMapVisible); // opens map TODO PROGRAM SHUTS DOWN WHEN MAP CLOSES
         while (gameRunning) {
 
 //            printTimePlayed(); // Not working

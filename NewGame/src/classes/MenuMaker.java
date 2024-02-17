@@ -44,10 +44,11 @@ public class MenuMaker {
 
     void movementMenu() {
         switch (playerChoice.nextInt()) {
-            case 1 -> mapFrame.moveNorth();
-            case 2 -> mapFrame.moveEast();
-            case 3 -> mapFrame.moveSouth();
-            case 4 -> mapFrame.moveWest();
+            case 1 -> player.moveNorth();
+            case 2 -> player.moveEast();
+            case 3 -> player.moveSouth();
+            case 4 -> player.moveWest();
+//            case 5 -> openMap();
 
             case 9 -> ui.getAvailableInfo();
             case 0 -> ui.quitGame();

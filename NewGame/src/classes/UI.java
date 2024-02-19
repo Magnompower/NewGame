@@ -13,6 +13,7 @@ public class UI {
     Player player = new Player();
     Main main; //TODO PROBLEMER HVIS INSTANCIERES INFINITE LOOP?
 
+
     private void openMap() {
         System.out.println(worldMap);
     }
@@ -38,17 +39,20 @@ public class UI {
         sleepForOneSecond();
         System.out.print(ConsoleColors.CYAN_BRIGHT + "KEYS");
         sleepForOneSecond();
-        System.out.print(ConsoleColors.YELLOW_BRIGHT+" of ");
+        System.out.print(ConsoleColors.YELLOW_BRIGHT + " of ");
         sleepForOneSecond();
-        System.out.println(ConsoleColors.CYAN_BRIGHT+"JUSTICE"+ ConsoleColors.RESET);
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "JUSTICE" + ConsoleColors.RESET);
     }
 
-    void quitGame() {
-        System.out.println("Are you sure you want to quit? (Y/N)");
+
+    boolean quitGame() {
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Are you sure you want to quit? (" + ConsoleColors.RED_BRIGHT +
+                "Y" + ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.GREEN_BRIGHT + "N" +
+                ConsoleColors.YELLOW_BRIGHT + ");" + ConsoleColors.RESET);
         scanner.nextLine().toUpperCase();
         if (scanner.equals("Y")) {
-            main.gameRunning = false;
-        }
+            return false;
+        } else return true;
 //        else menu.movementMenu();
     }
 
@@ -76,7 +80,7 @@ public class UI {
         }
     }
 
-    private void sleepForOneSecond() {
+    void sleepForOneSecond() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -84,7 +88,7 @@ public class UI {
         }
     }
 
-    private void sleepForHalfASecond() {
+    void sleepForHalfASecond() {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {

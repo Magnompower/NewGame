@@ -5,19 +5,10 @@ import enums.WeaponRarity;
 import enums.WeaponType;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
 
 public class Main {
-    MapFrame mapFrame = new MapFrame(); // Måske problem her:
-    UI ui = new UI();
-    Scanner playerChoice = new Scanner(System.in);
-    Scanner scanner = new Scanner(System.in);
-    Random random = new Random();
-    Boolean gameRunning = true;
     ArrayList<Weapon> weapons = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
-    Player player = new Player();
     MenuMaker menuMaker = new MenuMaker();
 
 
@@ -135,15 +126,11 @@ public class Main {
         weapons.add(axeOfOddie);
 
 
-        ui.welcomeMessage();
-        menuMaker.movementMenu();
-//        mapFrame.makeMapVisible = true;
-//        mapFrame.setMapVisibillity(makeMapVisible); // opens map TODO PROGRAM SHUTS DOWN WHEN MAP CLOSES
-        while (gameRunning) {
+        menuMaker.promtWelcomeMessage();
+        menuMaker.executeMenu();
 
 //            printTimePlayed(); // Not working
 //        When defeating an enemy you know its stats next fight.
-        }
     }
 }
 

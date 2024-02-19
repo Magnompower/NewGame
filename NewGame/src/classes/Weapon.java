@@ -28,8 +28,9 @@ public class Weapon {
 
 
     }
-    public String getWeaponType(){
-        weaponModifier=weaponType.getModifier();
+
+    public String getWeaponType() {
+        weaponModifier = weaponType.getModifier();
         return weaponModifier;
     }
 
@@ -47,9 +48,11 @@ public class Weapon {
         String colorCodeDamage = ConsoleColors.LIGHT_GOLD;
         String colorCodeReset = ConsoleColors.RESET;
         calculatedWeaponDamage = (int) Math.round(RarityMapping.getDamageForWeaponRarity(weaponRarity));
+        weaponModifier = "(" + ConsoleColors.LIGHT_GOLD + weaponType.getModifier().toUpperCase() +
+                ConsoleColors.RESET + ")";
 
-        return colorCodeWeapon + weaponName + colorCodeReset + ": " + colorCodeDamage + calculatedWeaponDamage +
-                colorCodeReset;
+        return weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeReset + ": " +
+                colorCodeDamage + calculatedWeaponDamage + colorCodeReset;
     }
 
     public void setWeaponType(WeaponType weaponType) {

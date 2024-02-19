@@ -9,15 +9,13 @@ public class MenuMaker {
     UI ui = new UI();
     MapFrame mapFrame = new MapFrame();// KÆMPE PROBLEM TODO
 
-    Boolean gameRunning = true;
-
 
     Menu mainMenu = new Menu("MAIN MENU", startMenuPoints());
     Menu combatMenu = new Menu("COMBAT MENU", combatMenuPoints());
     Menu movementMenu = new Menu("MOVEMENT MENU", movementMenuPoints());
 
     private String[] movementMenuPoints() {
-        return new String[]{"1. Move north.", "2. Move east.", "3. Move south.","4. Move west.","5. See player position",
+        return new String[]{"1. Move north.", "2. Move east.", "3. Move south.", "4. Move west.", "5. See player position",
                 "9. Show available information.", "0. Quit."};
     }
 
@@ -27,16 +25,17 @@ public class MenuMaker {
     }
 
     private String[] startMenuPoints() {
-        return new String[]{"1. Start game.", "9. Show tutorial","0. Quit game"};
+        return new String[]{"1. Start game.", "9. Show tutorial", "0. Quit game"};
     }
 
 
     private void mainMenu() {
         mainMenu.printMenu();
-        switch (playerChoice.nextInt()){
+        switch (playerChoice.nextInt()) {
             case 1 -> movementMenu();
             case 9 -> showTutorial();
             case 0 -> ui.quitGame();
+            default -> ui.invalidInput();
         }
         // TODO
     }
@@ -53,6 +52,8 @@ public class MenuMaker {
 
             case 9 -> ui.getAvailableInfo();
             case 0 -> ui.quitGame();
+            default -> ui.invalidInput();
+
         }
     }
 
@@ -67,12 +68,9 @@ public class MenuMaker {
 
             case 9 -> ui.getAvailableInfo();
             case 0 -> ui.quitGame();
-        }
-    }
+            default -> ui.invalidInput();
 
-    void quitGame() {
-       gameRunning = ui.quitGame();
-       //        else menu.movementMenu();
+        }
     }
 
     public void promtWelcomeMessage() {
@@ -82,12 +80,28 @@ public class MenuMaker {
     public void executeMenu() {
         ui.sleepForOneSecond();
         ui.sleepForOneSecond();
+        mainMenu.printMenu();
+        int playerChoiceSaved;
         do {
-            mainMenu();
-        } while (gameRunning=false);
-    }
+            playerChoiceSaved = playerChoice.nextInt(); // Read the input once
+            switch (playerChoiceSaved) {
+                case 1:
+                    movementMenu(); // Call the appropriate method based on user input
+                    break;
+                case 9:
+                    showTutorial();
+                    break;
+                case 0:
+                    ui.quitGame();
+                    break;
+                default:
+                    ui.invalidInput();
+                    break;
+            }
+        } while (playerChoiceSaved != 0); // Continue until the player chooses to quit
 
-    //        mapFrame.makeMapVisible = true; // Virker ikke
+        //        mapFrame.makeMapVisible = true; // Virker ikke
 //        mapFrame.setMapVisibillity(makeMapVisible); // opens map
 
+    }
 }

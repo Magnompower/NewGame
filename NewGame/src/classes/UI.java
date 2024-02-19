@@ -40,7 +40,6 @@ public class UI {
         System.out.print(ConsoleColors.CYAN_BRIGHT + "KEYS");
         sleepForOneSecond();
         System.out.print(ConsoleColors.YELLOW_BRIGHT + " of ");
-        sleepForOneSecond();
         System.out.println(ConsoleColors.CYAN_BRIGHT + "JUSTICE" + ConsoleColors.RESET);
     }
 
@@ -49,11 +48,10 @@ public class UI {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Are you sure you want to quit? (" + ConsoleColors.RED_BRIGHT +
                 "Y" + ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.GREEN_BRIGHT + "N" +
                 ConsoleColors.YELLOW_BRIGHT + ");" + ConsoleColors.RESET);
-        scanner.nextLine().toUpperCase();
-        if (scanner.equals("Y")) {
-            return false;
-        } else return true;
+        String playerInput = scanner.nextLine().toUpperCase();
+        return !playerInput.equals("Y");
 //        else menu.movementMenu();
+        // TODO
     }
 
     void getAvailableInfo() {
@@ -101,5 +99,40 @@ public class UI {
         for (Enemy enemy : main.enemies) {
             System.out.println(enemy);
         }
+    }
+
+    public void invalidInput() {
+        //TODO
+    }
+
+    public String printPlayerPosition() {
+        return ("Position: " + ConsoleColors.YELLOW_BRIGHT + "X" + ConsoleColors.RESET + ": " +
+                ConsoleColors.YELLOW_BRIGHT + playerPositionX + ConsoleColors.CYAN_BRIGHT + " Y" +
+                ConsoleColors.RESET + ": " + ConsoleColors.CYAN_BRIGHT + playerPositionY);
+        //TODO ONLY RETURNS DONT PRINT.
+    }
+
+    public void validatePlayerPosition() {
+        if (playerPositionX <= 0) {
+            playerPositionX = 0;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
+        } else if (playerPositionX >= 40) {
+            playerPositionX = 40;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further east!" + ConsoleColors.RESET);
+        } else if (playerPositionY <= 0) {
+            playerPositionY = 0;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further south!" + ConsoleColors.RESET);
+        } else if (playerPositionY >= 40) {
+            playerPositionY = 40;
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further north!" + ConsoleColors.RESET);
+        }
+    }
+
+    public void attack() {
+        calculatePlayerDamage(playerDamage);
+        if (playerDamage == 1) {
+            System.out.println("You attack. You deal " + playerDamage + " point of damage");
+        } else
+            System.out.println("You attack. You deal " + playerDamage + " points of damage.");
     }
 }

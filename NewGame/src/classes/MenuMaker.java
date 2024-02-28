@@ -7,7 +7,9 @@ public class MenuMaker {
     Scanner playerChoice = new Scanner(System.in);
     Player player = new Player();
     UI ui = new UI();
-    MapFrame mapFrame = new MapFrame();// KÆMPE PROBLEM TODO
+    private boolean gameRunning = true;
+    Weapon weapon;
+//    MapFrame mapFrame = new MapFrame();// KÆMPE PROBLEM TODO
 
 
     Menu mainMenu = new Menu("MAIN MENU", startMenuPoints());
@@ -34,11 +36,15 @@ public class MenuMaker {
         switch (playerChoice.nextInt()) {
             case 1 -> movementMenu();
             case 9 -> showTutorial();
-            case 0 -> ui.quitGame();
+            case 0 -> {
+                gameRunning = false;
+                executeMenu();
+            }
             default -> ui.invalidInput();
         }
         // TODO
     }
+
 
     private void showTutorial() {
         //TODO
@@ -47,11 +53,15 @@ public class MenuMaker {
     private void combatMenu() {
         combatMenu.printMenu();
         switch (playerChoice.nextInt()) {
-            case 1 -> player.attack();
+            case 1 -> ui.attack();
             case 2 -> player.flee();
 
             case 9 -> ui.getAvailableInfo();
-            case 0 -> ui.quitGame();
+            case 0 -> {
+                if (ui.quitGame())
+                    gameRunning = false;
+                executeMenu();
+            }
             default -> ui.invalidInput();
 
         }
@@ -64,12 +74,16 @@ public class MenuMaker {
             case 2 -> player.moveEast();
             case 3 -> player.moveSouth();
             case 4 -> player.moveWest();
-            case 5 -> player.printPlayerPosition();
+            case 5 -> ui.printPlayerPosition();
 
             case 9 -> ui.getAvailableInfo();
-            case 0 -> ui.quitGame();
+            case 0 -> {
+                gameRunning = !ui.quitGame();
+                if (!gameRunning) {
+                    executeMenu();
+                }
+            }
             default -> ui.invalidInput();
-
         }
     }
 
@@ -78,30 +92,35 @@ public class MenuMaker {
     }
 
     public void executeMenu() {
-        ui.sleepForOneSecond();
-        ui.sleepForOneSecond();
-        mainMenu.printMenu();
-        int playerChoiceSaved;
-        do {
-            playerChoiceSaved = playerChoice.nextInt(); // Read the input once
-            switch (playerChoiceSaved) {
-                case 1:
+        sleepForOneAndAHalfSecond();
+        while (gameRunning) {
+            mainMenu.printMenu();
+
+            int choice = playerChoice.nextInt(); // Capture user input
+            switch (choice) {
+                case 1:{ ui.playerMessage1();
                     movementMenu(); // Call the appropriate method based on user input
-                    break;
+                    break;} // Ensure execution stops after this case
                 case 9:
                     showTutorial();
                     break;
                 case 0:
-                    ui.quitGame();
+                    gameRunning = !ui.quitGame(); // Assuming quitGame() now returns boolean indicating if game should continue
                     break;
                 default:
                     ui.invalidInput();
                     break;
             }
-        } while (playerChoiceSaved != 0); // Continue until the player chooses to quit
 
-        //        mapFrame.makeMapVisible = true; // Virker ikke
-//        mapFrame.setMapVisibillity(makeMapVisible); // opens map
-
+            if (!gameRunning) {
+                ui.printTimePlayed(); // Optionally, only print if the game is still running
+            }
+        }
     }
+
+    private void sleepForOneAndAHalfSecond() {
+        ui.sleepForOneSecond();
+        ui.sleepForHalfASecond();
+    }
+
 }

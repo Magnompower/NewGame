@@ -1,7 +1,9 @@
 package classes;
 
-import comparators.EnemiesComparator;
-import comparators.WeaponComparator;
+import comparators.EnemyDamageComparison;
+import comparators.WeaponDamageComparator;
+import enemies.Enemy;
+import weapons.Weapon;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -10,11 +12,6 @@ import java.util.Scanner;
 public class UI {
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
-    MapFrame worldMap;
-    Player player = new Player();
-    Main main; //TODO PROBLEMER HVIS INSTANCIERES INFINITE LOOP?
-    Weapon weapon;
-    private String playerName;
 
 
     private void openMap() {
@@ -60,24 +57,6 @@ public class UI {
         // TODO
     }
 
-    void getAvailableInfo() {
-        String playerInfo = String.format("Level: %-3d HP: %-4d AGI: %-3d INT: %-3d STM: %-3d STR: %-3d",
-                player.getPlayerLevel(), player.getPlayerHealtPoints(),
-                player.getPlayerAgility(), player.getPlayerIntelligence(),
-                player.getPlayerStamina(), player.getPlayerStrength());
-        System.out.println(playerInfo);
-
-        System.out.println("Position: " + player.getPlayerPositionX() + ":" + player.getPlayerPositionY());
-
-        // Assuming getPlayerWeapon() returns a String. If it's an object, you might need to call a method on it,
-        // like player.getPlayerWeapon().getWeaponName()
-        System.out.println("Weapon: " + player.getPlayerWeapon().getWeaponName() + " Damage: " +
-                player.getPlayerWeapon().getCalculatedWeaponDamage());
-
-        System.out.println("Enemies killed: "); // TODO: Implement logic to count and display the number of enemies killed
-
-    }
-
 
     public void printTimePlayed() { // DONE
 
@@ -100,7 +79,7 @@ public class UI {
     }
 
     private void printWeaponsArrayInOrder() {
-        main.weapons.sort(new WeaponComparator());
+        main.weapons.sort(new WeaponDamageComparator());
         for (Weapon weapon : main.weapons) {
             System.out.println(weapon);
 
@@ -124,7 +103,7 @@ public class UI {
     }
 
     private void printEnemiesArrayInOrder() {
-        main.enemies.sort(new EnemiesComparator());
+        main.enemies.sort(new EnemyDamageComparison());
         for (Enemy enemy : main.enemies) {
             System.out.println(enemy);
         }
@@ -134,40 +113,6 @@ public class UI {
         //TODO
     }
 
-    public String printPlayerPosition() {
-        return ("Position: " + ConsoleColors.YELLOW_BRIGHT + "X" + ConsoleColors.RESET + ": " +
-                ConsoleColors.YELLOW_BRIGHT + player.getPlayerPositionX() + ConsoleColors.CYAN_BRIGHT + " Y" +
-                ConsoleColors.RESET + ": " + ConsoleColors.CYAN_BRIGHT + player.getPlayerPositionY());
-        //TODO ONLY RETURNS DONT PRINT.
-    }
-
-    public void validatePlayerPosition() {
-        if (player.getPlayerPositionX() < 0) {
-            player.setPlayerPositionX(0);
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
-        } else if (player.getPlayerPositionX() > 40) {
-            player.setPlayerPositionX(40);
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further east!" + ConsoleColors.RESET);
-        } else if (player.getPlayerPositionY() > 40) {
-            player.setPlayerPositionY(40);
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further south!" + ConsoleColors.RESET);
-        } else if (player.getPlayerPositionY() < 0) {
-            player.setPlayerPositionY(0);
-            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further north!" + ConsoleColors.RESET);
-        }
-    }
-
-    public void attack() {
-        player.calculatePlayerDamage(player.getPlayerDamage());
-        if (player.getPlayerDamage() == 1) {
-            System.out.println("You attack. You deal " + player.getPlayerDamage() + " point of damage");
-        } else
-            System.out.println("You attack. You deal " + player.getPlayerDamage() + " points of damage.");
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     public void playerMessage1() {
         System.out.print(ConsoleColors.YELLOW_BRIGHT + "You wake up feeling very disoriented. ");
@@ -185,16 +130,20 @@ public class UI {
         selectName();
     }
 
-    private void selectName() {
+    public String selectName(String playerName) {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal\n2. I am Hisha\n" +
                 "3. Howdy partner. I am Bobb\n4. Hello mister my name is Kim.");
         int playerInput = scanner.nextInt();
-        switch (playerInput){
+        switch (playerInput) {
             case 1 -> playerName = "Micheal";
             case 2 -> playerName = "Hisha";
             case 3 -> playerName = "Bobb";
             case 4 -> playerName = "Kim";
         }
+        return playerName;
+    }
 
+    public void cannotMoveFurtherWestMessage() {
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
     }
 }

@@ -1,8 +1,8 @@
 package classes;
 
-import enums.EnemyRarity;
-import enums.WeaponRarity;
+import enemies.*;
 import enums.WeaponType;
+import weapons.*;
 
 import java.util.ArrayList;
 
@@ -18,62 +18,62 @@ public class Main {
 
     private void run() {
 
-        Weapon clubPoor = new Weapon(WeaponRarity.POOR, WeaponType.ONEHANDEDMACE, "Poor Club");
-        Weapon clubCommon = new Weapon(WeaponRarity.COMMON, WeaponType.ONEHANDEDMACE, "Common Club");
-        Weapon clubUncommon = new Weapon(WeaponRarity.UNCOMMON, WeaponType.ONEHANDEDMACE, "Uncommon Club");
+        Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDEDMACE,"Poor Club");
+        Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDEDMACE,"Common Club");
+        Weapon clubUncommon = new UncommonWeapon(WeaponType.ONEHANDEDMACE, "Uncommon Club");
 
-        Weapon warHammerPoor = new Weapon(WeaponRarity.POOR, WeaponType.TWOHANDEDMACE, "Poor Warhammer");
-        Weapon warHammerCommon = new Weapon(WeaponRarity.COMMON, WeaponType.TWOHANDEDMACE, "Common Warhammer");
-        Weapon warHammerUncommon = new Weapon(WeaponRarity.UNCOMMON, WeaponType.TWOHANDEDMACE, "Uncommon Warhammer");
-
-
-        Weapon shortswordPoor = new Weapon(WeaponRarity.POOR, WeaponType.ONEHANDEDSWORD, "Poor Shortsword");
-        Weapon shortswordCommon = new Weapon(WeaponRarity.COMMON, WeaponType.ONEHANDEDSWORD, "Common Shortsword");
-        Weapon shortswordUncommon = new Weapon(WeaponRarity.UNCOMMON, WeaponType.ONEHANDEDSWORD, "Uncommon Shortsword");
+        Weapon warHammerPoor = new PoorWeapon(WeaponType.TWOHANDEDMACE, "Poor Warhammer");
+        Weapon warHammerCommon = new CommonWeapon(WeaponType.TWOHANDEDMACE, "Common Warhammer");
+        Weapon warHammerUncommon = new UncommonWeapon(WeaponType.TWOHANDEDMACE, "Uncommon Warhammer");
 
 
-        Weapon longswordPoor = new Weapon(WeaponRarity.POOR, WeaponType.TWOHANDEDSWORD, "Poor Longsword");
-        Weapon longswordCommon = new Weapon(WeaponRarity.COMMON, WeaponType.TWOHANDEDSWORD, "Common Longsword");
-        Weapon longswordUncommon = new Weapon(WeaponRarity.UNCOMMON, WeaponType.TWOHANDEDSWORD, "Uncommon Longsword");
+        Weapon shortswordPoor = new PoorWeapon(WeaponType.ONEHANDEDSWORD, "Poor Shortsword");
+        Weapon shortswordCommon = new CommonWeapon(WeaponType.ONEHANDEDSWORD, "Common Shortsword");
+        Weapon shortswordUncommon = new UncommonWeapon(WeaponType.ONEHANDEDSWORD, "Uncommon Shortsword");
 
 
-        Weapon staffOfMindorr = new Weapon(WeaponRarity.RARE, WeaponType.STAFF, "Staff of Mindorr");
+        Weapon longswordPoor = new PoorWeapon(WeaponType.TWOHANDEDSWORD, "Poor Longsword");
+        Weapon longswordCommon = new CommonWeapon(WeaponType.TWOHANDEDSWORD, "Common Longsword");
+        Weapon longswordUncommon = new UncommonWeapon(WeaponType.TWOHANDEDSWORD, "Uncommon Longsword");
 
 
-        Weapon swordOfKeilier = new Weapon(WeaponRarity.EPIC, WeaponType.TWOHANDEDSWORD, "Sword of Keilier");
+        Weapon staffOfMindorr = new RareWeapon(WeaponType.STAFF, "Staff of Mindorr");
 
 
-        Weapon axeOfOddie = new Weapon(WeaponRarity.LEGENDARY, WeaponType.TWOHANDEDAXE, "Axe of Oddie");
+        Weapon swordOfKeilier = new EpicWeapon(WeaponType.TWOHANDEDSWORD, "Sword of Keilier");
 
 
-        Enemy human = new Enemy(EnemyRarity.COMMON, "Human");
-        Enemy dog = new Enemy(EnemyRarity.COMMON, "Dog");
-        Enemy honeyBadger = new Enemy(EnemyRarity.COMMON, "Honey badger");
+        Weapon axeOfOddie = new LegendaryWeapon(WeaponType.TWOHANDEDAXE, "Axe of Oddie");
 
 
-        Enemy wolf = new Enemy(EnemyRarity.UNCOMMON, "Wolf");
-        Enemy zombie = new Enemy(EnemyRarity.UNCOMMON, "Zombie");
-        Enemy skeleton = new Enemy(EnemyRarity.UNCOMMON, "Skeleton");
+        Enemy human = new CommonEnemy("Human");
+        Enemy dog = new CommonEnemy("Dog");
+        Enemy honeyBadger = new CommonEnemy("Honey badger");
 
 
-        Enemy centaur = new Enemy(EnemyRarity.RARE, "Centaur");
-        Enemy bear = new Enemy(EnemyRarity.RARE, "Bear");
-        Enemy tiger = new Enemy(EnemyRarity.RARE, "Tiger");
+        Enemy wolf = new UncommonEnemy("Wolf");
+        Enemy zombie = new UncommonEnemy("Zombie");
+        Enemy skeleton = new UncommonEnemy("Skeleton");
 
 
-        Enemy elephant = new Enemy(EnemyRarity.EPIC, "Elephant");
-        Enemy giraf = new Enemy(EnemyRarity.EPIC, "War Giraf");
-        Enemy buffalo = new Enemy(EnemyRarity.EPIC, "Buffalo");
+        Enemy centaur = new RareEnemy("Centaur");
+        Enemy bear = new RareEnemy("Bear");
+        Enemy tiger = new RareEnemy("Tiger");
 
 
-        Enemy hussein = new Enemy(EnemyRarity.LEGENDARY, "Hussein");
-        Enemy hasan = new Enemy(EnemyRarity.LEGENDARY, "Hasan");
-        Enemy husasan = new Enemy(EnemyRarity.LEGENDARY, "HUSASAN");
+        Enemy elephant = new EpicEnemy("Elephant");
+        Enemy giraf = new EpicEnemy("War Giraf");
+        Enemy buffalo = new EpicEnemy("Buffalo");
 
 
-        Enemy blob = new Enemy(EnemyRarity.BOSS, "BLOB");
-        Enemy zlats = new Enemy(EnemyRarity.BOSS, "Hungry Zlats");
-        Enemy mossTheMad = new Enemy(EnemyRarity.BOSS, "Moss the mad");
+        Enemy hussein = new LegendaryEnemy("Hussein");
+        Enemy hasan = new LegendaryEnemy("Hasan");
+        Enemy husasan = new LegendaryEnemy("HUSASAN");
+
+
+        Enemy blob = new BossEnemy("BLOB");
+        Enemy zlats = new BossEnemy("Hungry Zlats");
+        Enemy mossTheMad = new BossEnemy("Moss the mad");
 
 
         enemies.add(human);
@@ -126,7 +126,7 @@ public class Main {
         weapons.add(axeOfOddie);
 
 
-        menuMaker.promtWelcomeMessage();
+        menuMaker.promptWelcomeMessage();
         menuMaker.executeMenu();
 
 //            printTimePlayed(); // Not working

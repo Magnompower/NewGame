@@ -1,5 +1,7 @@
 package classes;
 
+import weapons.Weapon;
+
 import java.util.Scanner;
 
 public class MenuMaker {
@@ -87,7 +89,7 @@ public class MenuMaker {
         }
     }
 
-    public void promtWelcomeMessage() {
+    public void promptWelcomeMessage() {
         ui.welcomeMessage();
     }
 

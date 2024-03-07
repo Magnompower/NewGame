@@ -1,7 +1,5 @@
 package classes;
 
-import enums.EnemyRarity;
-import enums.WeaponRarity;
 import enums.WeaponType;
 
 import java.util.HashMap;

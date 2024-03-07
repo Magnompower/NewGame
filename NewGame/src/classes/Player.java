@@ -1,7 +1,7 @@
 package classes;
 
-import enums.WeaponRarity;
 import enums.WeaponType;
+import weapons.Weapon;
 
 public class Player {
     private int playerPositionX = 15;
@@ -12,9 +12,10 @@ public class Player {
     private int playerAgility = 10;
     private int playerStamina = 10;
     private int playerHealtPoints = playerLevel * 5 + playerStamina * 3;
-    Weapon playerWeapon = new Weapon(WeaponRarity.UNCOMMON, WeaponType.TWOHANDEDSWORD,"Uncommon longsword");
-    private int playerDamage;
-//    UI ui = new UI();
+    private double playerDamage;
+
+    UI ui = new UI();
+    private Weapon playerWeapon;
 
 
     public void validatePlayerHealth() {
@@ -23,7 +24,7 @@ public class Player {
         }
     }
 
-    public int calculatePlayerDamage(int playerDamage) {
+    public int calculatePlayerDamage(double playerDamage) {
         playerDamage = playerLevel + playerWeapon.getCalculatedWeaponDamage();
         if (playerWeapon.getWeaponType().equals("STR")) {
             playerDamage = playerDamage + playerStrength / 2;
@@ -34,7 +35,7 @@ public class Player {
         if (playerWeapon.getWeaponType().equals("INT")) {
             playerDamage = playerDamage + playerIntelligence / 2;
         }
-        setPlayerDamage(playerDamage);
+        setPlayerDamage((int) Math.round(playerDamage));
         return playerDamage;
         // TODO FORKERT?
     }
@@ -93,10 +94,6 @@ public class Player {
         }
     }
 
-    public Weapon getPlayerWeapon() {
-        return playerWeapon;
-    }
-
     public int getPlayerHealtPoints() {
         return playerHealtPoints;
     }
@@ -143,5 +140,50 @@ public class Player {
 
     public void setPlayerStrength(int playerStrength) {
         this.playerStrength = playerStrength;
+    }
+    void getAvailableInfo() {
+        String playerInfo = String.format("Level: %-3d HP: %-4d AGI: %-3d INT: %-3d STM: %-3d STR: %-3d",
+                player.getPlayerLevel(), player.getPlayerHealtPoints(),
+                player.getPlayerAgility(), player.getPlayerIntelligence(),
+                player.getPlayerStamina(), player.getPlayerStrength());
+        System.out.println(playerInfo);
+
+        System.out.println("Position: " + player.getPlayerPositionX() + ":" + player.getPlayerPositionY());
+
+        // Assuming getPlayerWeapon() returns a String. If it's an object, you might need to call a method on it,
+        // like player.getPlayerWeapon().getWeaponName()
+        System.out.println("Weapon: " + player.getPlayerWeapon().getWeaponName() + " Damage: " +
+                player.getPlayerWeapon().getCalculatedWeaponDamage());
+
+        System.out.println("Enemies killed: "); // TODO: Implement logic to count and display the number of enemies killed
+
+    }
+    public String printPlayerPosition() {
+        return ("Position: " + ConsoleColors.YELLOW_BRIGHT + "X" + ConsoleColors.RESET + ": " +
+                ConsoleColors.YELLOW_BRIGHT + player.getPlayerPositionX() + ConsoleColors.CYAN_BRIGHT + " Y" +
+                ConsoleColors.RESET + ": " + ConsoleColors.CYAN_BRIGHT + player.getPlayerPositionY());
+        //TODO ONLY RETURNS DONT PRINT.
+    }
+    public void validatePlayerPosition() {
+        if (player.getPlayerPositionX() < 0) {
+            player.setPlayerPositionX(0);
+            ui.cannotMoveFurtherWestMessage();
+        } else if (player.getPlayerPositionX() > 40) {
+            player.setPlayerPositionX(40);
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further east!" + ConsoleColors.RESET);
+        } else if (player.getPlayerPositionY() > 40) {
+            player.setPlayerPositionY(40);
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further south!" + ConsoleColors.RESET);
+        } else if (player.getPlayerPositionY() < 0) {
+            player.setPlayerPositionY(0);
+            System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further north!" + ConsoleColors.RESET);
+        }
+    }
+    public void attack() {
+        player.calculatePlayerDamage(player.getPlayerDamage());
+        if (player.getPlayerDamage() == 1) {
+            System.out.println("You attack. You deal " + player.getPlayerDamage() + " point of damage");
+        } else
+            System.out.println("You attack. You deal " + player.getPlayerDamage() + " points of damage.");
     }
 }

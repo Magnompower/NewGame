@@ -95,9 +95,9 @@ public abstract class Weapon {
                 weaponType.getModifier().toUpperCase() + colorCodeNormalText + ")";
 
         String weaponDetails = weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeNormalText +
-                " : " + colorCodeDamage + calculatedWeaponDamage + colorCodeNormalText;
+                " : " + colorCodeDamage + calculatedWeaponDamage + ConsoleColors.RESET;
         if (weaponCondition.equals(WeaponCondition.NORMAL)) {
-            weaponDetails += " : " + weaponCondition.getWeaponConditionColor() +
+            weaponDetails += colorCodeNormalText + " : " + weaponCondition.getWeaponConditionColor() +
                     weaponCondition.getWeaponConditionText() + ConsoleColors.RESET;
         }
         return weaponDetails;

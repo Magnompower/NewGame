@@ -29,7 +29,11 @@ public abstract class Weapon {
     }
 
     public void setWeaponDamage(double weaponDamage) {
-        this.weaponDamage = weaponDamage;
+        if (weaponDamage <= 0) {
+            weaponDamage = 1;
+        } else if (weaponDamage > 0) {
+            this.weaponDamage = weaponDamage;
+        }
     }
 
     public void setWeaponColor(String weaponColor) {
@@ -63,7 +67,7 @@ public abstract class Weapon {
         return weaponModifier;
     }
 
-    public double getCalculatedWeaponDamage() {
+    public double getCalculatedWeaponDamage() { //TODO LOGIC IN GETTERS?
         if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
                 weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
             calculatedWeaponDamage = Math.floor(getWeaponDamage() * 0.5);
@@ -82,6 +86,8 @@ public abstract class Weapon {
     public WeaponCondition getWeaponCondition() {
         return weaponCondition;
     }
+
+    // ------------------ OTHER ------------------
 
     @Override
     public String toString() { //TODO GODT AT SKRIVE LOGIK I TOSTRING?

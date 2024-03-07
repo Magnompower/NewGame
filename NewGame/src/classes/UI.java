@@ -3,7 +3,9 @@ package classes;
 import comparators.EnemyDamageComparison;
 import comparators.WeaponDamageComparator;
 import enemies.Enemy;
+import enemies.EnemyCreator;
 import weapons.Weapon;
+import weapons.WeaponCreator;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -12,6 +14,8 @@ import java.util.Scanner;
 public class UI {
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
+    WeaponCreator weaponCreator;
+    EnemyCreator enemyCreator;
 
 
     private void openMap() {
@@ -44,7 +48,7 @@ public class UI {
     }
 
 
-    boolean quitGame() {
+    boolean wantToQuitGame() {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Are you sure you want to quit? (" + ConsoleColors.RED_BRIGHT +
                 "Y" + ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.GREEN_BRIGHT + "N" +
                 ConsoleColors.YELLOW_BRIGHT + ");" + ConsoleColors.RESET);
@@ -58,7 +62,7 @@ public class UI {
     }
 
 
-    public void printTimePlayed() { // DONE
+    public void printTimePlayed() {
 
         Duration duration = Duration.between(timeWhenGameStart, LocalTime.now());
 
@@ -79,32 +83,16 @@ public class UI {
     }
 
     private void printWeaponsArrayInOrder() {
-        main.weapons.sort(new WeaponDamageComparator());
-        for (Weapon weapon : main.weapons) {
+        weaponCreator.getWeapons().sort(new WeaponDamageComparator());
+        for (Weapon weapon : weaponCreator.getWeapons()) {
             System.out.println(weapon);
 
         }
     }
 
-    void sleepForOneSecond() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    void sleepForHalfASecond() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void printEnemiesArrayInOrder() {
-        main.enemies.sort(new EnemyDamageComparison());
-        for (Enemy enemy : main.enemies) {
+    private void printEnemiesArrayInOrder(){
+        enemyCreator.getEnemies().sort(new EnemyDamageComparison());
+        for (Enemy enemy : enemyCreator.getEnemies()){
             System.out.println(enemy);
         }
     }
@@ -130,20 +118,53 @@ public class UI {
         selectName();
     }
 
-    public String selectName(String playerName) {
+    public String selectName() {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal\n2. I am Hisha\n" +
-                "3. Howdy partner. I am Bobb\n4. Hello mister my name is Kim.");
+                "3. Howdy partner. I am Bobb\n4. Hello mister my name is Kim.\n5. Me name Jeff");
         int playerInput = scanner.nextInt();
         switch (playerInput) {
             case 1 -> playerName = "Micheal";
             case 2 -> playerName = "Hisha";
             case 3 -> playerName = "Bobb";
             case 4 -> playerName = "Kim";
+            case 5 -> playerName = "Jeff";
         }
         return playerName;
     }
+    // ------------------ MENU'S ------------------
 
     public void cannotMoveFurtherWestMessage() {
         System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
+    }
+
+    public String[] combatMenuPoints() {
+        return new String[]{"1. Attack.", "2. Attempt to flee. (" + calculatedChanceToEscape + ")",
+                "9. Show available information.", "0. Rage quit."};
+    }
+
+    public String[] mainMenuPoints() {
+        return new String[]{"1. Start game.", "9. Show tutorial", "0. Quit game"};
+    }
+
+    public String[] movementMenuPoints() {
+        return new String[]{"1. Move north.", "2. Move east.", "3. Move south.", "4. Move west.", "5. See player position",
+                "9. Show available information.", "0. Quit."};
+    }
+    // ------------------ SLEEP-TIMERS ------------------
+
+    void sleepForOneSecond() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void sleepForHalfASecond() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

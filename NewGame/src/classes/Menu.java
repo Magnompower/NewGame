@@ -19,7 +19,6 @@ public class Menu {
         String printString = menuHeader +"\n";
         for (int i = 0; i < menuPoint.length; i++) printString+= menuPoint[i] + "\n"; {
             System.out.println("\n" + printString);
-
         }
     }
 }

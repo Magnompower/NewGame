@@ -6,16 +6,26 @@ import weapons.Weapon;
 public class Player {
     private int playerPositionX = 15;
     private int playerPositionY = 15;
-    private int playerLevel = 1;
+    private int playerLevel = 1; // can never go below 1.
     private int playerStrength = 10;
     private int playerIntelligence = 10;
     private int playerAgility = 10;
     private int playerStamina = 10;
     private int playerHealtPoints = playerLevel * 5 + playerStamina * 3;
     private double playerDamage;
+    private int escapeChance;
 
     UI ui = new UI();
     private Weapon playerWeapon;
+
+    // ------------------ SETTERS ------------------
+
+
+    // ------------------ GETTERS ------------------
+
+
+    // ------------------ OTHER ------------------
+
 
 
     public void validatePlayerHealth() {
@@ -42,29 +52,31 @@ public class Player {
 
 
     public void flee() {
+        // TODO GOTO LAST SQUARE WITH CALULATED RISK
     }
 
     public void moveNorth() {
         playerPositionY--;
-        ui.validatePlayerPosition();
+        validatePlayerPosition();
     }
 
     public void moveSouth() {
         playerPositionY++;
-        ui.validatePlayerPosition();
+        validatePlayerPosition();
     }
 
     public void moveEast() {
         playerPositionX++;
-        ui.validatePlayerPosition();
+        validatePlayerPosition();
     }
 
     public void moveWest() {
         playerPositionX--;
-        ui.validatePlayerPosition();
+        validatePlayerPosition();
     }
 
     public void setPlayerWeapon(Weapon playerWeapon) {
+
         this.playerWeapon = playerWeapon;
     }
 

@@ -47,6 +47,7 @@ public abstract class Enemy {
     public String getEnemyColor() {
         return enemyColor;
     }
+    // ------------------ OTHER ------------------
 
     @Override
     public String toString() {

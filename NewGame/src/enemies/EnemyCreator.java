@@ -1,11 +1,13 @@
 package enemies;
 
+import comparators.EnemyHealthComparator;
+
 import java.util.ArrayList;
 
 public class EnemyCreator {
     private ArrayList<Enemy> enemies = new ArrayList<>();
 
-    public void InstantiateEnemies() {
+    public void instantiateEnemies() {
 
         Enemy human = new CommonEnemy("Human");
         Enemy dog = new CommonEnemy("Dog");
@@ -62,8 +64,16 @@ public class EnemyCreator {
         enemies.add(mossTheMad);
     }
 
+    public void printEnemyArraylistInOrder() {
+        enemies.sort(new EnemyHealthComparator());
+        for (Enemy enemy : enemies) {
+            System.out.println(enemy);
+        }
+    }
+
     public ArrayList<Enemy> getEnemies() {
-        return enemies;
+        ArrayList<Enemy> enemiesCopy = enemies;
+        return enemiesCopy;
     }
 
 }

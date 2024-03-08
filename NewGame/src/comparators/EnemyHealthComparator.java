@@ -4,10 +4,10 @@ import enemies.Enemy;
 
 import java.util.Comparator;
 
-public class EnemyDamageComparison implements Comparator<Enemy> {
+public class EnemyHealthComparator implements Comparator<Enemy> {
     @Override
     public int compare(Enemy o1, Enemy o2) {
-        int enemyDamageComparison = (int) (o1.getEnemyAttackDamage() - o2.getEnemyAttackDamage());
+        int enemyDamageComparison = (int) (o1.getEnemyHealthPoints() - o2.getEnemyHealthPoints());
         if (enemyDamageComparison != 0) {
             return enemyDamageComparison;
         }

@@ -10,16 +10,13 @@ import java.util.Set;
 public class MapFrame extends JFrame {
     boolean makeMapVisible;
     private final int mapSize = 31;
-    private int playerPositionX = 15; // starting x-coordinate (middle of the map)
-    private int playerPositionY = 15; // starting y-coordinate (middle of the map)
-    private Set<Point> visitedPositions = new HashSet<>(); // Keep track of visited positions
-
+    private final Set<Point> visitedPositions = new HashSet<>(); // Keep track of visited positions
 
     public MapFrame() {
         setTitle("Dusty Map");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setSize(800, 800); // Adjust the size as needed
-        setLocation(1000,1000); // Center the frame on the screen TODO
+        setLocation(1000, 1000); // Center the frame on the screen TODO
         setLayout(new GridLayout(mapSize, mapSize)); // Grid layout for the map
 
         // Create the map grid
@@ -27,22 +24,21 @@ public class MapFrame extends JFrame {
             for (int x = 0; x < mapSize; x++) {
                 JPanel panel = new JPanel();
                 panel.setBackground(MapElement.getColor(x, y));
-                if (MapElement.getColor(x,y).equals(MapElement.GREEN)){
+                if (MapElement.getColor(x, y).equals(MapElement.GREEN)) {
                     panel.setBorder(null); // MAYBE REMOVES CITYBORDER TODO
                 }
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 add(panel);
             }
         }
-        updatePlayerPosition();
-        setMapVisibillity(makeMapVisible); // WORKING?? TODO
+        setMapVisibillity(); // WORKING?? TODO
     }
 
-    public void setMapVisibillity(boolean visible) {
-        setVisible(visible && makeMapVisible);
+    public void setMapVisibillity() {
+        setVisible(makeMapVisible);
     }
 
-    private void updatePlayerPosition() {
+    public void updatePlayerPosition(int playerPositionX, int playerPositionY) {
         visitedPositions.add(new Point(playerPositionX, playerPositionY));
 
         Component[] components = getContentPane().getComponents();

@@ -8,6 +8,5 @@ public class PoorWeapon extends Weapon{
         super(weaponType,weaponName);
         setWeaponDamage(6);
         setWeaponColor(ConsoleColors.GREY);
-
     }
 }

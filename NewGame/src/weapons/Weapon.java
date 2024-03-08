@@ -9,7 +9,6 @@ public abstract class Weapon {
     private String weaponName;
     private double weaponDamage;
     private String weaponColor;
-
     private WeaponType weaponType;
     private double calculatedWeaponDamage;
     private String weaponModifier;
@@ -93,7 +92,7 @@ public abstract class Weapon {
     public String toString() { //TODO GODT AT SKRIVE LOGIK I TOSTRING?
 
         String colorCodeWeapon = getWeaponColor();
-        String colorCodeDamage = ConsoleColors.LIGHT_GOLD;
+        String colorCodeWeaponDamage = ConsoleColors.LIGHT_GOLD;
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
 
         calculatedWeaponDamage = (int) Math.round(getWeaponDamage());
@@ -101,8 +100,8 @@ public abstract class Weapon {
                 weaponType.getModifier().toUpperCase() + colorCodeNormalText + ")";
 
         String weaponDetails = weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeNormalText +
-                " : " + colorCodeDamage + calculatedWeaponDamage + ConsoleColors.RESET;
-        if (weaponCondition.equals(WeaponCondition.NORMAL)) {
+                " : " + colorCodeWeaponDamage + calculatedWeaponDamage + ConsoleColors.RESET;
+        if (!weaponCondition.equals(WeaponCondition.NORMAL)) {
             weaponDetails += colorCodeNormalText + " : " + weaponCondition.getWeaponConditionColor() +
                     weaponCondition.getWeaponConditionText() + ConsoleColors.RESET;
         }

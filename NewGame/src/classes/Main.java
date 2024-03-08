@@ -14,8 +14,15 @@ public class Main {
 
     private void run() {
 
-        enemyCreator.InstantiateEnemies();
-        weaponCreator.InstantiateWeapons();
+        enemyCreator.instantiateEnemies();
+        weaponCreator.instantiateWeapons();
+        menuMaker.player.openMap(); // TODO
+
+        menuMaker.ui.printWeaponsArraylistInOrder();
+        menuMaker.ui.printEnemiesArraylistInOrder();
+
+//        weaponCreator.printWeaponsArraylistInOrder(); // TODO
+//        enemyCreator.printEnemyArraylistInOrder();
 
         menuMaker.promptWelcomeMessage();
         menuMaker.executeMenu();

@@ -53,7 +53,7 @@ public abstract class Enemy {
     public String toString() {
 
         String colorCodeEnemy = getEnemyColor();
-        String colorCodeDamage = ConsoleColors.LIGHT_GOLD;
+        String colorCodeEnemyDamage = ConsoleColors.LIGHT_GOLD;
         String colorCodeHealth = ConsoleColors.SEA_GREEN;
 
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
@@ -63,6 +63,6 @@ public abstract class Enemy {
         int calculatedEnemyHealthPoints = (int) Math.round(getEnemyHealthPoints());
 
         return colorCodeEnemy + enemyName + colorCodeNormalText + ": " + colorCodeHealth + calculatedEnemyHealthPoints
-                + colorCodeNormalText + " : " + colorCodeDamage + calculatedEnemyDamage + colorCodeReset;
+                + colorCodeNormalText + " : " + colorCodeEnemyDamage + calculatedEnemyDamage + colorCodeReset;
     }
 }

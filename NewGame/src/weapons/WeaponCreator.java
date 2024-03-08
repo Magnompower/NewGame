@@ -1,13 +1,16 @@
 package weapons;
 
+import comparators.WeaponDamageComparator;
 import enums.WeaponType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WeaponCreator {
-    private ArrayList<Weapon> weapons = new ArrayList<>();
+    private final ArrayList<Weapon> weapons = new ArrayList<>();
 
-    public void InstantiateWeapons() {
+    public void instantiateWeapons() {
+
         Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDEDMACE, "Poor Club");
         Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDEDMACE, "Common Club");
         Weapon clubUncommon = new UncommonWeapon(WeaponType.ONEHANDEDMACE, "Uncommon Club");
@@ -60,8 +63,17 @@ public class WeaponCreator {
         weapons.add(axeOfOddie);
     }
 
+    public void printWeaponsArraylistInOrder() {
+        List<Weapon> weaponsSortedByDamage = new ArrayList<>(weapons); // Creates a copy of the list
+        weaponsSortedByDamage.sort(new WeaponDamageComparator());
+        for (Weapon weapon : weaponsSortedByDamage) {
+            System.out.println(weapon);
+        }
+    }
+
     public ArrayList<Weapon> getWeapons() {
-        return weapons;
+        ArrayList<Weapon> weaponsCopy = weapons;
+        return weaponsCopy;
     }
 
 }

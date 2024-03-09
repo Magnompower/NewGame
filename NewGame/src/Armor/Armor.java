@@ -4,7 +4,7 @@ import enums.ArmorCondition;
 
 public class Armor {
     private String armorName;
-    private int armorDefence;
+    private double armorDefence;
     private String armorColor;
     private double calculatedArmorDefence;
     private ArmorCondition armorCondition = ArmorCondition.DIRTY;
@@ -21,11 +21,11 @@ public class Armor {
         this.armorName = armorName;
     }
 
-    public int getArmorDefence() {
+    public double getArmorDefence() {
         return armorDefence;
     }
 
-    public void setArmorDefence(int armorDefence) {
+    public void setArmorDefenceInDecimal(double armorDefence) {
         this.armorDefence = armorDefence;
     }
 

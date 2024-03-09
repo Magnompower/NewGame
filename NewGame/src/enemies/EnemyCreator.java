@@ -70,10 +70,4 @@ public class EnemyCreator {
             System.out.println(enemy);
         }
     }
-
-    public ArrayList<Enemy> getEnemies() {
-        ArrayList<Enemy> enemiesCopy = enemies;
-        return enemiesCopy;
-    }
-
 }

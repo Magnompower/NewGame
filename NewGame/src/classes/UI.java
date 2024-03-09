@@ -118,15 +118,16 @@ public class UI {
         sleepForOneSecond();
         System.out.print(ConsoleColors.CYAN_BRIGHT + "Oh dear. It's a miracle you're still alive. " +
                 "What is your name?\n\n" + ConsoleColors.RESET);
-        sleepForOneSecond();
 
-        selectName(playerName);
+        playerName = selectName();
 
         System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! ");
+        sleepForOneSecond();
 
     }
 
-    public String selectName(String playerName) { // TODO
+    public String selectName() { // TODO
+        String playerName = null;
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal\n2. I am Hisha\n" +
                 "3. Howdy partner. I am Bobb\n4. Hello mister my name is Kim.\n5. Me name Jeff\n6. I am Null" +
                 ConsoleColors.RESET);

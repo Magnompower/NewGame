@@ -6,7 +6,7 @@ public class CommonArmor extends Armor {
 
     public CommonArmor(String armorName) {
         super(armorName);
-        setArmorDefence(10);
+        setArmorDefenceInDecimal(0.8);
         setArmorColor(ConsoleColors.WHITE_BRIGHT);
     }
 }

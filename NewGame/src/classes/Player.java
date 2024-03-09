@@ -1,5 +1,6 @@
 package classes;
 
+import Armor.Armor;
 import enums.WeaponType;
 import weapons.PoorWeapon;
 import weapons.Weapon;
@@ -18,9 +19,10 @@ public class Player {
     private int escapeChance;
     private int enemiesKilled = 0;
 
-    MapFrame mapFrame= new MapFrame();
+    MapFrame mapFrame = new MapFrame();
     UI ui = new UI();
-    private Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER,"Poor dagger");
+    private Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
+    private Armor playerArmor = new Armor.PoorArmor("Poor kilt"); // START ARMOR
     private int armorDefence;
     private String armorName;
 
@@ -130,9 +132,10 @@ public class Player {
         }
     }
 
-    public void openMap(){
+    public void openMap() {
         mapFrame.setMapVisibillity();
     }
+
     public double calculatedPlayerDamage(double playerDamage) {
         playerDamage = playerLevel + playerWeapon.getCalculatedWeaponDamage();
         if (playerWeapon.getWeaponType().equals("STR")) {
@@ -181,7 +184,7 @@ public class Player {
 
     void promptAvailableInfo() {
         ui.printAvailableInfo(playerLevel, playerHealthPoints, playerAgility, playerIntelligence,
-                playerStamina, playerStrength,playerPositionX,playerPositionY,playerWeapon.getWeaponName(),
+                playerStamina, playerStrength, playerPositionX, playerPositionY, playerWeapon.getWeaponName(),
                 (int) playerWeapon.getCalculatedWeaponDamage(), enemiesKilled, armorName, armorDefence);
     }
 
@@ -189,8 +192,8 @@ public class Player {
         return ui.printPlayerPosition(playerPositionX, playerPositionY);
     }
 
-    private void promptSelectName(){
-        setPlayerName(ui.selectName(playerName));
+    private void promptSelectName() {
+        setPlayerName(ui.selectName());
     }
 
     public void validatePlayerPosition() {
@@ -214,8 +217,9 @@ public class Player {
         ui.displayDamageDealt(playerDamage);
 //      TODO  enemyHealth = enemyHealth - playerDamage;
     }
-    public void promptUpdatePlayerPosition(){
-        mapFrame.updatePlayerPosition(playerPositionX,playerPositionY);
+
+    public void promptUpdatePlayerPosition() {
+        mapFrame.updatePlayerPosition(playerPositionX, playerPositionY);
     }
 
 }

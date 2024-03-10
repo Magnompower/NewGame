@@ -1,13 +1,13 @@
 package classes;
 
-import weapons.Weapon;
-
 import java.util.Scanner;
 
 public class MenuMaker {
+    UI ui = new UI();
     Scanner playerChoice = new Scanner(System.in);
     Player player = new Player();
-    UI ui = new UI();
+    MapFrame mapFrame = new MapFrame();
+
     private boolean gameRunning = true;
 
     Menu mainMenu = new Menu(promptMainMenuHeader(), promptMainMenuPoints());
@@ -17,19 +17,18 @@ public class MenuMaker {
     // ------------------ MENU'S ------------------
 
     public void executeMenu() {
-        promptSleepForOneAndAHalfSecond();
         mainMenu.printMenu();
+        int choice = playerChoice.nextInt(); // Capture user input
+        ui.playerMessage1(player.getPlayerName());
+
         while (gameRunning) {
-            int choice = playerChoice.nextInt(); // Capture user input
             switch (choice) {
                 case 1: {
-                    ui.playerMessage1(player.getPlayerName());
                     movementMenu();
                     break;
                 }
                 case 9:
                     showTutorial();
-                    ui.playerMessage1(player.getPlayerName());
                     movementMenu();
                     break;
                 case 0:
@@ -97,6 +96,10 @@ public class MenuMaker {
 
     // ------------------ OTHER ------------------
 
+//    private void promptMakeMapVisible() {        mapFrame.makeMapVisible(ui.makeMapVisible());        mapFrame.setVisible(true);    }
+
+//    private void promptMakeMapInvisible() {        mapFrame.makeMapVisible(ui.makeMapInvisible());    }
+
     private void showTutorial() {
         //TODO
     }
@@ -105,7 +108,7 @@ public class MenuMaker {
         ui.welcomeMessage();
     }
 
-    private void promptSleepForOneAndAHalfSecond() {
+    public void promptSleepForOneAndAHalfSecond() {
         ui.sleepForOneSecond();
         ui.sleepForHalfASecond();
     }

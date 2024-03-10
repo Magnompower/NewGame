@@ -96,7 +96,7 @@ public abstract class Weapon {
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
 
         calculatedWeaponDamage = (int) Math.round(getWeaponDamage());
-        weaponModifier = colorCodeNormalText + "(" + ConsoleColors.LIGHT_GOLD +
+        weaponModifier = ConsoleColors.SALMON + "(" + ConsoleColors.LIGHT_GOLD +
                 weaponType.getModifier().toUpperCase() + colorCodeNormalText + ")";
 
         String weaponDetails = weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeNormalText +

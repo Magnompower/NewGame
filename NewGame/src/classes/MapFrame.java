@@ -8,34 +8,31 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MapFrame extends JFrame {
-    boolean makeMapVisible;
     private final int mapSize = 31;
     private final Set<Point> visitedPositions = new HashSet<>(); // Keep track of visited positions
 
-    public MapFrame() {
+//    public MapFrame (){        createMapFrame();}
+    public void createMapFrame() {
+
         setTitle("Dusty Map");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        setSize(800, 800); // Adjust the size as needed
-        setLocation(1000, 1000); // Center the frame on the screen TODO
-        setLayout(new GridLayout(mapSize, mapSize)); // Grid layout for the map
+        setSize(800, 800); // Size
+        setLocation(1000, 50); // Location on screen TODO
+        setLayout(new GridLayout(mapSize, mapSize));
 
         // Create the map grid
         for (int y = 0; y < mapSize; y++) {
             for (int x = 0; x < mapSize; x++) {
                 JPanel panel = new JPanel();
                 panel.setBackground(MapElement.getColor(x, y));
-                if (MapElement.getColor(x, y).equals(MapElement.GREEN)) {
-                    panel.setBorder(null); // MAYBE REMOVES CITYBORDER TODO
-                }
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 add(panel);
             }
         }
-        setMapVisibillity(); // WORKING?? TODO
     }
 
-    public void setMapVisibillity() {
-        setVisible(makeMapVisible);
+    public void makeMapVisible() {
+        setVisible(true);
     }
 
     public void updatePlayerPosition(int playerPositionX, int playerPositionY) {

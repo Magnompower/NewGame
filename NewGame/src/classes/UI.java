@@ -3,9 +3,7 @@ package classes;
 import comparators.EnemyHealthComparator;
 import comparators.WeaponDamageComparator;
 import enemies.Enemy;
-import enemies.EnemyCreator;
 import weapons.Weapon;
-import weapons.WeaponCreator;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -15,17 +13,16 @@ import java.util.Scanner;
 public class UI {
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
-    WeaponCreator weaponCreator = new WeaponCreator();
-    EnemyCreator enemyCreator = new EnemyCreator();
-    ArrayList<Weapon> weapons = new ArrayList<>();
-    ArrayList<Enemy> enemies = new ArrayList<>(); // TODO
+    MapFrame mapFrame = new MapFrame(); // TODO UDEN MAPFRAM INSTANCIEREING
 
 
-    private void openMap() {
-
-        // TODO LOGIC TO OPEN MAP WITHOUT INSTANCIATION
+    public void promptMakeMapVisible() {
+        mapFrame.setVisible(true);
+        mapFrame.makeMapVisible();
     }
-
+    public void makeMapInvisible() {
+        mapFrame.setVisible(false);
+    }
     public void welcomeMessage() {
         System.out.print(ConsoleColors.PURPLE_BRIGHT + "MAGNOM ");
         sleepForOneSecond();
@@ -87,17 +84,16 @@ public class UI {
                 ConsoleColors.CYAN_BRIGHT + " :)" + ConsoleColors.RESET);
     }
 
-    public void printWeaponsArraylistInOrder() { //TODO DUR IKKE DUR KUN FRA WeaponCreator-Klassen
-        weapons = new ArrayList<>(weaponCreator.getWeapons()); // Creates a copy of the list
+    public void printWeaponsArraylistInOrder(ArrayList<Weapon> weapons) {
         weapons.sort(new WeaponDamageComparator());
         for (Weapon weapon : weapons) {
             System.out.println(weapon);
         }
     }
 
-    public void printEnemiesArraylistInOrder() {
-        enemyCreator.getEnemies().sort(new EnemyHealthComparator());
-        for (Enemy enemy : enemyCreator.getEnemies()) {
+    public void printEnemiesArraylistInOrder(ArrayList<Enemy> enemies) {
+        enemies.sort(new EnemyHealthComparator());
+        for (Enemy enemy : enemies) {
             System.out.println(enemy);
         }
     }
@@ -123,6 +119,8 @@ public class UI {
 
         System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! ");
         sleepForOneSecond();
+
+        promptMakeMapVisible();
 
     }
 
@@ -205,7 +203,7 @@ public class UI {
                                    int playerIntelligence,
                                    int playerStamina, int playerStrength, int playerPositionX, int playerPositionY,
                                    String weaponName, int weaponDamage, int enemiesKilled, String armorName,
-                                   int armorDefence) {
+                                   double armorDefence) {
 
         String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel +ConsoleColors.YELLOW_BRIGHT;
         String playerHealthPointsString = ConsoleColors.SEA_GREEN + playerHealthPoints + ConsoleColors.YELLOW_BRIGHT;
@@ -267,4 +265,7 @@ public class UI {
     }
 
 
+    public void updatePlayerPosition(int playerPositionX, int playerPositionY) {
+
+    }
 }

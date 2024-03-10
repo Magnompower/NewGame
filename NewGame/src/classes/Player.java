@@ -1,12 +1,17 @@
 package classes;
 
-import Armor.Armor;
+import enemies.EnemyCreator;
 import enums.WeaponType;
-import weapons.PoorWeapon;
+
+import Armor.Armor;
+import Armor.PoorArmor;
+
 import weapons.Weapon;
+import weapons.WeaponCreator;
+import weapons.PoorWeapon;
 
 public class Player {
-    private static String playerName;
+    private String playerName;
     private int playerPositionX = 15;
     private int playerPositionY = 15;
     private int playerLevel = 1; // can never go below 1.
@@ -19,12 +24,11 @@ public class Player {
     private int escapeChance;
     private int enemiesKilled = 0;
 
-    MapFrame mapFrame = new MapFrame();
     UI ui = new UI();
     private Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
-    private Armor playerArmor = new Armor.PoorArmor("Poor kilt"); // START ARMOR
-    private int armorDefence;
-    private String armorName;
+    private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
+    private WeaponCreator weaponCreator = new WeaponCreator();
+    private EnemyCreator enemyCreator;
 
     // ------------------ SETTERS ------------------
 
@@ -132,9 +136,6 @@ public class Player {
         }
     }
 
-    public void openMap() {
-        mapFrame.setMapVisibillity();
-    }
 
     public double calculatedPlayerDamage(double playerDamage) {
         playerDamage = playerLevel + playerWeapon.getCalculatedWeaponDamage();
@@ -159,21 +160,25 @@ public class Player {
     public void moveNorth() {
         playerPositionY--;
         validatePlayerPosition();
+        promptUpdatePlayerPosition();
     }
 
     public void moveSouth() {
         playerPositionY++;
         validatePlayerPosition();
+        promptUpdatePlayerPosition();
     }
 
     public void moveEast() {
         playerPositionX++;
         validatePlayerPosition();
+        promptUpdatePlayerPosition();
     }
 
     public void moveWest() {
         playerPositionX--;
         validatePlayerPosition();
+        promptUpdatePlayerPosition();
     }
 
     public void setPlayerDamage(int playerDamage) {
@@ -185,7 +190,8 @@ public class Player {
     void promptAvailableInfo() {
         ui.printAvailableInfo(playerLevel, playerHealthPoints, playerAgility, playerIntelligence,
                 playerStamina, playerStrength, playerPositionX, playerPositionY, playerWeapon.getWeaponName(),
-                (int) playerWeapon.getCalculatedWeaponDamage(), enemiesKilled, armorName, armorDefence);
+                (int) playerWeapon.getCalculatedWeaponDamage(), enemiesKilled, playerArmor.getArmorName(),
+                playerArmor.getArmorDefence());
     }
 
     public String promptPrintPlayerPosition() {
@@ -219,7 +225,13 @@ public class Player {
     }
 
     public void promptUpdatePlayerPosition() {
-        mapFrame.updatePlayerPosition(playerPositionX, playerPositionY);
+        ui.updatePlayerPosition(playerPositionX, playerPositionY);
     }
 
+    public void promptPrintWeaponsArrayInOrder() {
+        ui.printWeaponsArraylistInOrder(weaponCreator.getWeapons());
+    }
+    public void promptPrintEnemiesArrayInOrder(){
+        ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());
+    }
 }

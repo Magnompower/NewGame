@@ -3,12 +3,13 @@ package classes;
 import java.util.Scanner;
 
 public class MenuMaker {
-    UI ui = new UI();
-    Scanner playerChoice = new Scanner(System.in);
-    Player player = new Player();
-    MapFrame mapFrame = new MapFrame();
+    private UI ui = new UI();
+    private Scanner scanner = new Scanner(System.in);
+    private Player player = new Player();
+    private MapFrame mapFrame = MapFrame.getInstance();
 
     private boolean gameRunning = true;
+    private int playerChoice;
 
     Menu mainMenu = new Menu(promptMainMenuHeader(), promptMainMenuPoints());
     Menu combatMenu = new Menu(promptCombatMenuHeader(), promptCombatMenuPoints());
@@ -16,93 +17,67 @@ public class MenuMaker {
 
     // ------------------ MENU'S ------------------
 
-    public void executeMenu() {
+    public void executeMainMenu() {
         mainMenu.printMenu();
-        int choice = playerChoice.nextInt(); // Capture user input
-        ui.playerMessage1(player.getPlayerName());
-
+        changePlayerChoice();
         while (gameRunning) {
-            switch (choice) {
-                case 1: {
-                    movementMenu();
-                    break;
-                }
-                case 9:
-                    showTutorial();
-                    movementMenu();
-                    break;
-                case 0:
-                    gameRunning = !ui.wantToQuitGame();
-                    break;
-                default:
-                    ui.invalidInput();
-                    break;
-            }
-            if (!gameRunning) {
-                ui.printTimePlayed();
+            switch (playerChoice) { // TODO IF 0 AND N ÌNFINITE LOOP
+                case 1 -> startGame();
+                case 9 -> showTutorial(); //GOTO Start game after
+                case 0 -> gameRunning = !ui.wantToQuitGame();
+                default -> ui.invalidInput();
             }
         }
     }
 
     private void mainMenu() {
         mainMenu.printMenu();
-        switch (playerChoice.nextInt()) {
-            case 1 -> movementMenu();
-            case 9 -> showTutorial();
-            case 0 -> {
-                gameRunning = false;
-                executeMenu();
+        changePlayerChoice();
+        while (gameRunning) {
+            switch (playerChoice) {
+                case 1 -> startGame();
+                case 9 -> showTutorial(); //GOTO Start game after
+                case 0 -> gameRunning = !ui.wantToQuitGame();
+                default -> ui.invalidInput();
             }
-            default -> ui.invalidInput();
+
         }
-        // TODO
     }
 
-    void movementMenu() {
+    private void movementMenu() {
         movementMenu.printMenu();
-        switch (playerChoice.nextInt()) {
-            case 1 -> player.moveNorth();
-            case 2 -> player.moveEast();
-            case 3 -> player.moveSouth();
-            case 4 -> player.moveWest();
-            case 5 -> player.promptPrintPlayerPosition();
+        changePlayerChoice();
+        while (gameRunning) {
+            switch (playerChoice) {
+                case 1 -> player.moveNorth();
+                case 2 -> player.moveEast();
+                case 3 -> player.moveSouth();
+                case 4 -> player.moveWest();
+                case 5 -> player.promptPrintPlayerPosition();
 
-            case 9 -> player.promptAvailableInfo();
-            case 0 -> {
-                gameRunning = !ui.wantToQuitGame();
-                if (!gameRunning) {
-                    executeMenu();
-                }
+                case 9 -> player.promptAvailableInfo();
+                case 0 -> gameRunning = !ui.wantToQuitGame();
+                default -> ui.invalidInput();
             }
-            default -> ui.invalidInput();
         }
     }
 
     private void combatMenu() {
         combatMenu.printMenu();
-        switch (playerChoice.nextInt()) {
-            case 1 -> player.attack();
-            case 2 -> player.flee();
-            case 9 -> player.promptAvailableInfo();
-            case 0 -> {
-                if (ui.wantToQuitGame())
-                    gameRunning = false;
-                executeMenu();
-            }
-            default -> ui.invalidInput();
+        changePlayerChoice();
+        while (gameRunning) {
+            switch (playerChoice) {
+                case 1 -> player.attack();
+                case 2 -> player.flee();
 
+                case 9 -> player.promptAvailableInfo();
+                case 0 -> gameRunning = ui.wantToQuitGame();
+                default -> ui.invalidInput();
+            }
         }
     }
 
-    // ------------------ OTHER ------------------
-
-//    private void promptMakeMapVisible() {        mapFrame.makeMapVisible(ui.makeMapVisible());        mapFrame.setVisible(true);    }
-
-//    private void promptMakeMapInvisible() {        mapFrame.makeMapVisible(ui.makeMapInvisible());    }
-
-    private void showTutorial() {
-        //TODO
-    }
+    // ------------------ PROMPTS ------------------
 
     public void promptWelcomeMessage() {
         ui.welcomeMessage();
@@ -137,4 +112,19 @@ public class MenuMaker {
         return ui.combatMenuPoints(player.getEscapeChance());
     }
 
+    // ------------------ OTHER ------------------
+
+    private void startGame() {
+        ui.playerMessage1(player.getPlayerName());
+        player.promptMakeMapVisible();
+        movementMenu();
+    }
+
+    public void changePlayerChoice() {
+        playerChoice = scanner.nextInt();
+    }
+
+    private void showTutorial() {
+        //TODO
+    }
 }

@@ -13,16 +13,7 @@ import java.util.Scanner;
 public class UI {
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
-    MapFrame mapFrame = new MapFrame(); // TODO UDEN MAPFRAM INSTANCIEREING
 
-
-    public void promptMakeMapVisible() {
-        mapFrame.setVisible(true);
-        mapFrame.makeMapVisible();
-    }
-    public void makeMapInvisible() {
-        mapFrame.setVisible(false);
-    }
     public void welcomeMessage() {
         System.out.print(ConsoleColors.PURPLE_BRIGHT + "MAGNOM ");
         sleepForOneSecond();
@@ -50,7 +41,7 @@ public class UI {
     }
 
 
-    boolean wantToQuitGame() {
+    public boolean wantToQuitGame() {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Are you sure you want to quit? (" + ConsoleColors.RED_BRIGHT
                 + "Y" + ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.GREEN_BRIGHT + "N" +
                 ConsoleColors.YELLOW_BRIGHT + ");" + ConsoleColors.RESET);
@@ -58,6 +49,7 @@ public class UI {
         String playerInput = scanner.nextLine().toUpperCase();
 
         if (playerInput.equalsIgnoreCase("Y")) {
+            printTimePlayed();
             return true;
         } else return false;
         // TODO
@@ -120,8 +112,6 @@ public class UI {
         System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! ");
         sleepForOneSecond();
 
-        promptMakeMapVisible();
-
     }
 
     public String selectName() { // TODO
@@ -156,17 +146,17 @@ public class UI {
 
     public String[] combatMenuPoints(int calculatedChanceToEscape) { // TODO
         return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Attack.", "2. Attempt to flee. (" +
-                calculatedChanceToEscape + ")", "9. Show available information.", "0. Rage quit." + ConsoleColors.RESET};
+                calculatedChanceToEscape + ")", "9. Show all available information.", "0. Rage quit." + ConsoleColors.RESET};
     }
 
     public String[] mainMenuPoints() {
-        return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Start game.", "9. Show tutorial",
-                "0. Quit game" + ConsoleColors.RESET};
+        return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Start game.", "9. Show tutorial.",
+                "0. Quit game." + ConsoleColors.RESET};
     }
 
     public String[] movementMenuPoints() {
         return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Move north.", "2. Move east.", "3. Move south.",
-                "4. Move west.", "5. See player position", "9. Show available information.", "0. Quit." + ConsoleColors.RESET};
+                "4. Move west.\n", "5. See player position.", "9. Show all available information.", "0. Quit." + ConsoleColors.RESET};
     }
     // ------------------ SLEEP-TIMERS ------------------
 
@@ -205,12 +195,12 @@ public class UI {
                                    String weaponName, int weaponDamage, int enemiesKilled, String armorName,
                                    double armorDefence) {
 
-        String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel +ConsoleColors.YELLOW_BRIGHT;
+        String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel + ConsoleColors.YELLOW_BRIGHT;
         String playerHealthPointsString = ConsoleColors.SEA_GREEN + playerHealthPoints + ConsoleColors.YELLOW_BRIGHT;
         String playerAgilityString = ConsoleColors.LIGHT_GOLD + playerAgility + ConsoleColors.YELLOW_BRIGHT;
-        String playerIntelligenceString = ConsoleColors.LIGHT_GOLD + playerIntelligence+ ConsoleColors.YELLOW_BRIGHT;
-        String playerStaminaString = ConsoleColors.LIGHT_GOLD + playerStamina+ConsoleColors.YELLOW_BRIGHT;
-        String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength+ConsoleColors.YELLOW_BRIGHT;
+        String playerIntelligenceString = ConsoleColors.LIGHT_GOLD + playerIntelligence + ConsoleColors.YELLOW_BRIGHT;
+        String playerStaminaString = ConsoleColors.LIGHT_GOLD + playerStamina + ConsoleColors.YELLOW_BRIGHT;
+        String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength + ConsoleColors.YELLOW_BRIGHT;
 //        weaponName = weaponName.getColor; TODO
 //        armorName = armorName.getColor; TODO
 
@@ -232,11 +222,11 @@ public class UI {
         //TODO KAN VARIABLERNE ALLEREDE VÆRE FARVEDE NÅR DE KOMMER?? ELLER FJERNER DET POINTEN MED UI KLASSEN?
     }
 
-    public String printPlayerPosition(int playerPositionX, int playerPositionY) {
-        return (ConsoleColors.YELLOW_BRIGHT + "Position: " + ConsoleColors.CYAN_BRIGHT + "X" +
-                ConsoleColors.YELLOW_BRIGHT + ": " + ConsoleColors.CYAN_BRIGHT + playerPositionX +
-                " Y" + ConsoleColors.YELLOW_BRIGHT + ": " + ConsoleColors.CYAN_BRIGHT + playerPositionY +
-                ConsoleColors.RESET);
+    public void printPlayerPosition(int playerPositionX, int playerPositionY) {
+        System.out.println((ConsoleColors.YELLOW_BRIGHT + "Position: " + ConsoleColors.CYAN_BRIGHT + "X" +
+                ConsoleColors.YELLOW_BRIGHT + " : " + ConsoleColors.CYAN_BRIGHT + "Y " +playerPositionX +
+                  ConsoleColors.YELLOW_BRIGHT + " : " + ConsoleColors.CYAN_BRIGHT + playerPositionY +
+                ConsoleColors.RESET));
     }
 
     public void cannotMoveFurtherEastMessage() {
@@ -264,8 +254,4 @@ public class UI {
         System.out.println(ConsoleColors.RED_BRIGHT + "You died. Game over." + ConsoleColors.RESET);
     }
 
-
-    public void updatePlayerPosition(int playerPositionX, int playerPositionY) {
-
-    }
 }

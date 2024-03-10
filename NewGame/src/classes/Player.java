@@ -29,6 +29,7 @@ public class Player {
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator = new WeaponCreator();
     private EnemyCreator enemyCreator;
+    private MapFrame mapFrame = MapFrame.getInstance();
 
     // ------------------ SETTERS ------------------
 
@@ -57,7 +58,8 @@ public class Player {
     }
 
     public void setPlayerLevel(int playerLevel) {
-        this.playerLevel = playerLevel;
+        if (playerLevel > 0)
+            this.playerLevel = playerLevel;
     }
 
     public void setPlayerStamina(int playerStamina) {
@@ -124,7 +126,13 @@ public class Player {
 
 
     // ------------------ OTHER ------------------
+    public void promptMakeMapVisible() {
+        mapFrame.makeMapVisible();
+    }
 
+    public void promptMakeMapInvisible() {
+        mapFrame.makeMapInvisible();
+    }
 
     // ------------------ PLAYER RELATED ------------------
 
@@ -194,8 +202,8 @@ public class Player {
                 playerArmor.getArmorDefence());
     }
 
-    public String promptPrintPlayerPosition() {
-        return ui.printPlayerPosition(playerPositionX, playerPositionY);
+    public void promptPrintPlayerPosition() {
+        ui.printPlayerPosition(playerPositionX, playerPositionY);
     }
 
     private void promptSelectName() {
@@ -225,13 +233,14 @@ public class Player {
     }
 
     public void promptUpdatePlayerPosition() {
-        ui.updatePlayerPosition(playerPositionX, playerPositionY);
+        mapFrame.updatePlayerPosition(playerPositionX, playerPositionY);
     }
 
     public void promptPrintWeaponsArrayInOrder() {
         ui.printWeaponsArraylistInOrder(weaponCreator.getWeapons());
     }
-    public void promptPrintEnemiesArrayInOrder(){
+
+    public void promptPrintEnemiesArrayInOrder() {
         ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());
     }
 }

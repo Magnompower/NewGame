@@ -35,9 +35,11 @@ public enum MapElement {
                 x == 27 & y == 25 || x == 6 && y == 18) {
             return GREEN.getColor();
         }
-        if (x == 10 && y == 8||x == 5 && y == 24){
+        if (x == 10 && y == 8 || x == 5 && y == 24) {
             return BLUE.getColor();
         }
+        if (x == 15 && y == 15)
+            return CYAN.getColor();
 
         return GRAY.getColor();
     }

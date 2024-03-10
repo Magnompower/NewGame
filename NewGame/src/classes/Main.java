@@ -4,9 +4,9 @@ import enemies.*;
 import weapons.*;
 
 public class Main {
-    MenuMaker menuMaker = new MenuMaker();
-    WeaponCreator weaponCreator = new WeaponCreator();
-    EnemyCreator enemyCreator = new EnemyCreator();
+    private MenuMaker menuMaker = new MenuMaker();
+    private WeaponCreator weaponCreator = new WeaponCreator();
+    private EnemyCreator enemyCreator = new EnemyCreator();
 
 
     public static void main(String[] args) {
@@ -17,16 +17,13 @@ public class Main {
 
         enemyCreator.instantiateEnemies();
         weaponCreator.instantiateWeapons();
-        menuMaker.mapFrame.createMapFrame();
-        menuMaker.mapFrame.makeMapVisible();
-        menuMaker.player.promptUpdatePlayerPosition();
 
 //        menuMaker.ui.printWeaponsArraylistInOrder(weaponCreator.getWeapons());
 //        menuMaker.ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());
 
         menuMaker.promptWelcomeMessage();
         menuMaker.promptSleepForOneAndAHalfSecond();
-        menuMaker.executeMenu();
+        menuMaker.executeMainMenu();
 //  TODO LIBGDX     When defeating an enemy you know its stats next fight.
     }
 }

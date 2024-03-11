@@ -65,7 +65,7 @@ public class Armor {
 
         calculateArmorDefence = damageReceived * armorDefencePercentage;
 
-        return calculateArmorDefence;
+        return (int) calculateArmorDefence;
     }
 
     public ArmorCondition getArmorCondition() {

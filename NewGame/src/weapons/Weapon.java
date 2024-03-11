@@ -7,9 +7,9 @@ import enums.WeaponType;
 public abstract class Weapon {
 
     private String weaponName;
-    private double weaponDamage;
+    private double weaponDamage = 1;
     private String weaponColor;
-    private WeaponType weaponType;
+    private WeaponType weaponType = WeaponType.DAGGER;
     private double calculatedWeaponDamage;
     private String weaponModifier;
     private WeaponCondition weaponCondition = WeaponCondition.BROKEN;
@@ -70,16 +70,21 @@ public abstract class Weapon {
         if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
                 weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
             calculatedWeaponDamage = Math.floor(getWeaponDamage() * 0.5);
-        } else if (weaponCondition == WeaponCondition.BROKEN) {
+        }
+        if (weaponCondition == WeaponCondition.BROKEN) {
             calculatedWeaponDamage = calculatedWeaponDamage * 0.25;
-        } else if (weaponCondition == WeaponCondition.RUSTY) {
+        }
+        if (weaponCondition == WeaponCondition.RUSTY) {
             calculatedWeaponDamage = calculatedWeaponDamage * 0.10;
-        } else if (weaponCondition == WeaponCondition.POLISHED) {
+        }
+        if (weaponCondition == WeaponCondition.POLISHED) {
             calculatedWeaponDamage = calculatedWeaponDamage * 1.10;
-        } else if (weaponCondition == WeaponCondition.SHARP) {
+        }
+        if (weaponCondition == WeaponCondition.SHARP) {
             calculatedWeaponDamage = calculatedWeaponDamage * 1.25;
         }
-        return calculatedWeaponDamage;
+        if (calculatedWeaponDamage < 1) calculatedWeaponDamage = 1;
+        return (int) calculatedWeaponDamage;
     }
 
     public WeaponCondition getWeaponCondition() {
@@ -95,7 +100,7 @@ public abstract class Weapon {
         String colorCodeWeaponDamage = ConsoleColors.LIGHT_GOLD;
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
 
-        String calculatedWeaponDamageString = String.valueOf(Math.round(getWeaponDamage()));
+        String calculatedWeaponDamageString = String.valueOf(getCalculatedWeaponDamage());
         weaponModifier = ConsoleColors.SALMON + "(" + ConsoleColors.LIGHT_GOLD +
                 weaponType.getModifier().toUpperCase() + ConsoleColors.SALMON + ")";
 

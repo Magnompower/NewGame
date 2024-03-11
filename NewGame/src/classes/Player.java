@@ -26,7 +26,7 @@ public class Player {
     private double playerCurrency = 0;
 
     UI ui = new UI();
-    private Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
+     Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator = new WeaponCreator();
     private EnemyCreator enemyCreator;
@@ -164,7 +164,7 @@ public class Player {
             playerDamage = playerDamage + playerIntelligence / 2;
         }
         setPlayerDamage((int) Math.round(playerDamage));
-        return playerDamage;
+        return (int) playerDamage;
         // TODO FORKERT? NEEDS UPDATE ALL THE TIME
     }
 
@@ -205,7 +205,7 @@ public class Player {
     void promptAvailableInfo() {
         ui.printAvailableInfo(playerLevel, playerHealthPoints, playerAgility, playerIntelligence,
                 playerStamina, playerStrength, playerPositionX, playerPositionY, enemiesKilled,
-                playerWeapon.toString(), playerArmor.toString());
+                playerWeapon.toString(), playerArmor.toString(),(int) getPlayerDamage());
     }
 
     public void promptPrintPlayerPosition() {
@@ -249,4 +249,5 @@ public class Player {
     public void promptPrintEnemiesArrayInOrder() {
         ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());
     }
+
 }

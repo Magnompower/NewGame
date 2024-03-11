@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class UI {
+public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
 
@@ -191,7 +191,8 @@ public class UI {
 
     public void printAvailableInfo(int playerLevel, int playerHealthPoints, int playerAgility,
                                    int playerIntelligence, int playerStamina, int playerStrength, int playerPositionX,
-                                   int playerPositionY, int enemiesKilled, String weaponDetails, String armorDetails) {
+                                   int playerPositionY, int enemiesKilled, String weaponDetails, String armorDetails,
+                                   int playerDamage) {
 
         String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel + ConsoleColors.YELLOW_BRIGHT;
         String playerHealthPointsString = ConsoleColors.SEA_GREEN + playerHealthPoints + ConsoleColors.YELLOW_BRIGHT;
@@ -213,7 +214,7 @@ public class UI {
 
         System.out.println("Position: " + ConsoleColors.SALMON + playerPositionX + ConsoleColors.YELLOW_BRIGHT +
                 ":" + ConsoleColors.SALMON + playerPositionY);
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Weapon: " + weaponDetails);//"/"+ playerDamage+ ); // TODO HOW TO GET PLAYERDAMAGE IN HERE??
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Weapon: " + weaponDetails +"/"+ playerDamage); // TODO HOW TO GET PLAYERDAMAGE IN HERE??
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Armor: " + armorDetails);
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Enemies killed: " + ConsoleColors.SALMON + enemiesKilled
                 + ConsoleColors.RESET); // TODO: Implement logic to count and display the number of enemies killed

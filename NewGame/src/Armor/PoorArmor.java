@@ -8,5 +8,6 @@ public class PoorArmor extends Armor {
         super(armorName);
         setArmorDefenceInDecimal(0.9);
         setArmorColor(ConsoleColors.GREY);
+        setRequiredStrength(0);
     }
 }

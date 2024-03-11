@@ -7,5 +7,6 @@ public class RareArmor extends Armor {
         super(armorName);
         setArmorDefenceInDecimal(0.5);
         setArmorColor(ConsoleColors.BLUE_BRIGHT);
+        setRequiredStrength(14);
     }
 }

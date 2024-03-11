@@ -7,5 +7,7 @@ public class EpicArmor extends Armor {
         super(armorName);
         setArmorDefenceInDecimal(0.4);
         setArmorColor(ConsoleColors.PURPLE_BRIGHT);
+        setRequiredStrength(18);
+
     }
 }

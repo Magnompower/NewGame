@@ -8,5 +8,6 @@ public class CommonArmor extends Armor {
         super(armorName);
         setArmorDefenceInDecimal(0.8);
         setArmorColor(ConsoleColors.WHITE_BRIGHT);
+        setRequiredStrength(10);
     }
 }

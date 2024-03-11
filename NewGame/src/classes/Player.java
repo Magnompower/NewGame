@@ -23,6 +23,7 @@ public class Player {
     private double playerDamage;
     private int escapeChance;
     private int enemiesKilled = 0;
+    private double playerCurrency = 0;
 
     UI ui = new UI();
     private Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
@@ -136,6 +137,12 @@ public class Player {
 
     // ------------------ PLAYER RELATED ------------------
 
+    public void equipNewArmor() {
+        if (playerStrength >= playerArmor.getRequiredStrength()) {
+            this.playerArmor = playerArmor;
+        } else ui.printUnfitArmorMessage();
+    }
+
     public void validatePlayerHealth() {
         if (playerHealthPoints <= 0) {
             ui.gameOver();
@@ -158,7 +165,7 @@ public class Player {
         }
         setPlayerDamage((int) Math.round(playerDamage));
         return playerDamage;
-        // TODO FORKERT?
+        // TODO FORKERT? NEEDS UPDATE ALL THE TIME
     }
 
     public void flee() {
@@ -197,9 +204,8 @@ public class Player {
 
     void promptAvailableInfo() {
         ui.printAvailableInfo(playerLevel, playerHealthPoints, playerAgility, playerIntelligence,
-                playerStamina, playerStrength, playerPositionX, playerPositionY, playerWeapon.getWeaponName(),
-                (int) playerWeapon.getCalculatedWeaponDamage(), enemiesKilled, playerArmor.getArmorName(),
-                playerArmor.getArmorDefence());
+                playerStamina, playerStrength, playerPositionX, playerPositionY, enemiesKilled,
+                playerWeapon.toString(), playerArmor.toString());
     }
 
     public void promptPrintPlayerPosition() {

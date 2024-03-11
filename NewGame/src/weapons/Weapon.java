@@ -12,7 +12,7 @@ public abstract class Weapon {
     private WeaponType weaponType;
     private double calculatedWeaponDamage;
     private String weaponModifier;
-    private WeaponCondition weaponCondition = WeaponCondition.NORMAL;
+    private WeaponCondition weaponCondition = WeaponCondition.BROKEN;
 
     public Weapon(WeaponType weaponType, String weaponName) {
         this.setWeaponType(weaponType);
@@ -66,7 +66,7 @@ public abstract class Weapon {
         return weaponModifier;
     }
 
-    public double getCalculatedWeaponDamage() { //TODO LOGIC IN GETTERS?
+    public double getCalculatedWeaponDamage() { //TODO LOGIC IN GETTERS? NOT A REAL GETTER...
         if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
                 weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
             calculatedWeaponDamage = Math.floor(getWeaponDamage() * 0.5);
@@ -95,12 +95,12 @@ public abstract class Weapon {
         String colorCodeWeaponDamage = ConsoleColors.LIGHT_GOLD;
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
 
-        calculatedWeaponDamage = (int) Math.round(getWeaponDamage());
+        String calculatedWeaponDamageString = String.valueOf(Math.round(getWeaponDamage()));
         weaponModifier = ConsoleColors.SALMON + "(" + ConsoleColors.LIGHT_GOLD +
-                weaponType.getModifier().toUpperCase() + colorCodeNormalText + ")";
+                weaponType.getModifier().toUpperCase() + ConsoleColors.SALMON + ")";
 
         String weaponDetails = weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeNormalText +
-                " : " + colorCodeWeaponDamage + calculatedWeaponDamage + ConsoleColors.RESET;
+                " : " + colorCodeWeaponDamage + calculatedWeaponDamageString + ConsoleColors.RESET; // TODO CHANGE PLACEMENT OF "DAMAGE" ??!!
         if (!weaponCondition.equals(WeaponCondition.NORMAL)) {
             weaponDetails += colorCodeNormalText + " : " + weaponCondition.getWeaponConditionColor() +
                     weaponCondition.getWeaponConditionText() + ConsoleColors.RESET;

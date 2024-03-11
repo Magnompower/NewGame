@@ -17,6 +17,7 @@ public class Main {
 
         enemyCreator.instantiateEnemies();
         weaponCreator.instantiateWeapons();
+        menuMaker.player.calculatedPlayerDamage(menuMaker.player.getPlayerDamage()); //TODO STUPID TO DO HERE?
 
 //        menuMaker.ui.printWeaponsArraylistInOrder(weaponCreator.getWeapons());
 //        menuMaker.ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());

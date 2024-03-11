@@ -7,5 +7,7 @@ public class LegendaryArmor extends Armor {
         super(armorName);
         setArmorDefenceInDecimal(0.2);
         setArmorColor(ConsoleColors.ORANGE);
+        setRequiredStrength(20);
+
     }
 }

@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MenuMaker {
     private UI ui = new UI();
     private Scanner scanner = new Scanner(System.in);
-    private Player player = new Player();
+    Player player = new Player();
     private MapFrame mapFrame = MapFrame.getInstance();
 
     private boolean gameRunning = true;
@@ -25,15 +25,17 @@ public class MenuMaker {
                 case 1 -> startGame();
                 case 9 -> showTutorial(); //GOTO Start game after
                 case 0 -> gameRunning = !ui.wantToQuitGame();
+
+                case 33 -> movementMenu(); // TEST PURPOSE
                 default -> ui.invalidInput();
             }
         }
     }
 
     private void mainMenu() {
-        mainMenu.printMenu();
-        changePlayerChoice();
         while (gameRunning) {
+            mainMenu.printMenu();
+            changePlayerChoice();
             switch (playerChoice) {
                 case 1 -> startGame();
                 case 9 -> showTutorial(); //GOTO Start game after
@@ -45,9 +47,9 @@ public class MenuMaker {
     }
 
     private void movementMenu() {
-        movementMenu.printMenu();
-        changePlayerChoice();
         while (gameRunning) {
+            movementMenu.printMenu();
+            changePlayerChoice();
             switch (playerChoice) {
                 case 1 -> player.moveNorth();
                 case 2 -> player.moveEast();
@@ -60,12 +62,13 @@ public class MenuMaker {
                 default -> ui.invalidInput();
             }
         }
+
     }
 
     private void combatMenu() {
-        combatMenu.printMenu();
-        changePlayerChoice();
         while (gameRunning) {
+            combatMenu.printMenu();
+            changePlayerChoice();
             switch (playerChoice) {
                 case 1 -> player.attack();
                 case 2 -> player.flee();

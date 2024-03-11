@@ -3,22 +3,22 @@ package enums;
 import classes.ConsoleColors;
 
 public enum ArmorCondition {
-    BROKEN(ConsoleColors.GREY, "Broken"),
-    DIRTY(ConsoleColors.WHITE_BRIGHT, "Dirty"),
-    NORMAL(ConsoleColors.YELLOW_BRIGHT, ""),
-    POLISHED(ConsoleColors.PURPLE_BRIGHT, "Polished"),
-    SHINING(ConsoleColors.ORANGE, "Shining");
+    BROKEN(ConsoleColors.GREY,"Broken"),
+    DIRTY(ConsoleColors.WHITE_BRIGHT,"Dirty"),
+    NORMAL(ConsoleColors.YELLOW_BRIGHT,""),
+    POLISHED(ConsoleColors.PURPLE_BRIGHT,"Polished"),
+    REINFORCED(ConsoleColors.ORANGE,"Reinforced");
 
-    private final String armorColor;
+    private final String armorConditionColor;
     private final String armorConditionText; // TODO FINAL?
 
-    ArmorCondition(String armorColor, String armorConditionText) {
-        this.armorColor = armorColor;
+    ArmorCondition(String armorConditionColor, String armorConditionText) {
+        this.armorConditionColor = armorConditionColor;
         this.armorConditionText = armorConditionText;
     }
 
-    public String getArmorColor() {
-        return armorColor;
+    public String getArmorConditionColor() {
+        return armorConditionColor;
     }
 
     public String getArmorConditionText() {

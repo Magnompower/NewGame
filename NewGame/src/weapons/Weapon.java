@@ -66,7 +66,7 @@ public abstract class Weapon {
         return weaponModifier;
     }
 
-    public double getCalculatedWeaponDamage() { //TODO LOGIC IN GETTERS? NOT A REAL GETTER...
+    public int getCalculatedWeaponDamage() { //TODO LOGIC IN GETTERS? NOT A REAL GETTER...
         if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
                 weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
             calculatedWeaponDamage = Math.floor(getWeaponDamage() * 0.5);
@@ -84,7 +84,7 @@ public abstract class Weapon {
             calculatedWeaponDamage = calculatedWeaponDamage * 1.25;
         }
         if (calculatedWeaponDamage < 1) calculatedWeaponDamage = 1;
-        return (int) calculatedWeaponDamage;
+        return (int) Math.round(calculatedWeaponDamage);
     }
 
     public WeaponCondition getWeaponCondition() {
@@ -94,18 +94,21 @@ public abstract class Weapon {
     // ------------------ OTHER ------------------
 
     @Override
-    public String toString() { //TODO GODT AT SKRIVE LOGIK I TOSTRING?
+    public String toString() {
 
         String colorCodeWeapon = getWeaponColor();
         String colorCodeWeaponDamage = ConsoleColors.LIGHT_GOLD;
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
+        String uniqueColor = ConsoleColors.SALMON;
 
-        String calculatedWeaponDamageString = String.valueOf(getCalculatedWeaponDamage());
-        weaponModifier = ConsoleColors.SALMON + "(" + ConsoleColors.LIGHT_GOLD +
-                weaponType.getModifier().toUpperCase() + ConsoleColors.SALMON + ")";
+        String placeHolderOfPlayerDamage = "%placeHolder%";
+
+        weaponModifier = uniqueColor + "(" + ConsoleColors.LIGHT_GOLD +
+                weaponType.getModifier().toUpperCase() + uniqueColor + ")";
 
         String weaponDetails = weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeNormalText +
-                " : " + colorCodeWeaponDamage + calculatedWeaponDamageString + ConsoleColors.RESET; // TODO CHANGE PLACEMENT OF "DAMAGE" ??!!
+                " : " + colorCodeWeaponDamage + getCalculatedWeaponDamage() + uniqueColor + "|" +
+                colorCodeWeaponDamage + placeHolderOfPlayerDamage + uniqueColor + " Damage" + ConsoleColors.RESET;
         if (!weaponCondition.equals(WeaponCondition.NORMAL)) {
             weaponDetails += colorCodeNormalText + " : " + weaponCondition.getWeaponConditionColor() +
                     weaponCondition.getWeaponConditionText() + ConsoleColors.RESET;

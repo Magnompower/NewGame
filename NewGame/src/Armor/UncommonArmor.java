@@ -6,7 +6,7 @@ public class UncommonArmor extends Armor {
 
     public UncommonArmor(String armorName) {
         super(armorName);
-        setArmorDefenceInDecimal(0.6);
+        setArmorDamageTakenPercentage(60);
         setArmorColor(ConsoleColors.GREEN_BRIGHT);
         setRequiredStrength(12);
     }

@@ -194,12 +194,15 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
                                    int playerPositionY, int enemiesKilled, String weaponDetails, String armorDetails,
                                    int playerDamage) {
 
+        String playerDamageString = String.valueOf(playerDamage);
+        weaponDetails = weaponDetails.replace("%placeHolder%", playerDamageString);
+
         String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel + ConsoleColors.YELLOW_BRIGHT;
         String playerHealthPointsString = ConsoleColors.SEA_GREEN + playerHealthPoints + ConsoleColors.YELLOW_BRIGHT;
         String playerAgilityString = ConsoleColors.LIGHT_GOLD + playerAgility + ConsoleColors.YELLOW_BRIGHT;
         String playerIntelligenceString = ConsoleColors.LIGHT_GOLD + playerIntelligence + ConsoleColors.YELLOW_BRIGHT;
         String playerStaminaString = ConsoleColors.LIGHT_GOLD + playerStamina + ConsoleColors.YELLOW_BRIGHT;
-        String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength + ConsoleColors.YELLOW_BRIGHT;
+        String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength + ConsoleColors.YELLOW_BRIGHT; //TODO PUT IN PLAYER!
 
         String playerInfo = String.format(
                 ConsoleColors.YELLOW_BRIGHT + "Level: %-3s HP: %-4s AGI: %-3s INT: %-3s STM: %-3s STR: %-3s",
@@ -207,15 +210,14 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
                 playerStaminaString, playerStrengthString);
         System.out.println(playerInfo);
 
-//        weaponDetails.split("damage");
 
         //TODO KAN VARIABLERNE ALLEREDE VÆRE FARVEDE NÅR DE KOMMER?? ELLER FJERNER DET POINTEN MED UI KLASSEN?
         // TODO THINK I FUCKED UP WITH COLORING. HAVING BOTH IN TOSTRING AND HERE.
 
         System.out.println("Position: " + ConsoleColors.SALMON + playerPositionX + ConsoleColors.YELLOW_BRIGHT +
                 ":" + ConsoleColors.SALMON + playerPositionY);
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Weapon: " + weaponDetails +"/"+ playerDamage); // TODO HOW TO GET PLAYERDAMAGE IN HERE??
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Armor: " + armorDetails);
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Weapon: " + weaponDetails);
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Armor:  " + armorDetails);
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Enemies killed: " + ConsoleColors.SALMON + enemiesKilled
                 + ConsoleColors.RESET); // TODO: Implement logic to count and display the number of enemies killed
 

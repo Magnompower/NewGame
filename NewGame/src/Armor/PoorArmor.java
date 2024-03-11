@@ -6,7 +6,7 @@ public class PoorArmor extends Armor {
 
     public PoorArmor(String armorName) {
         super(armorName);
-        setArmorDefenceInDecimal(0.9);
+        setArmorDamageTakenPercentage(90);
         setArmorColor(ConsoleColors.GREY);
         setRequiredStrength(0);
     }

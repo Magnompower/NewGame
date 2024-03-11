@@ -5,7 +5,7 @@ import classes.ConsoleColors;
 public class EpicArmor extends Armor {
     public EpicArmor(String armorName) {
         super(armorName);
-        setArmorDefenceInDecimal(0.4);
+        setArmorDamageTakenPercentage(40);
         setArmorColor(ConsoleColors.PURPLE_BRIGHT);
         setRequiredStrength(18);
 

@@ -1,10 +1,12 @@
 package classes;
 
 import enemies.EnemyCreator;
+import enums.ArmorCondition;
 import enums.WeaponType;
 
 import Armor.Armor;
 import Armor.PoorArmor;
+import Armor.LegendaryArmor;
 
 import weapons.Weapon;
 import weapons.WeaponCreator;
@@ -26,7 +28,7 @@ public class Player {
     private double playerCurrency = 0;
 
     UI ui = new UI();
-     Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
+    Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator = new WeaponCreator();
     private EnemyCreator enemyCreator;
@@ -78,6 +80,11 @@ public class Player {
     public void setEscapeChance(int escapeChance) {
         this.escapeChance = escapeChance;
     }
+
+    public void setPlayerArmorCondition(ArmorCondition condition){
+        playerArmor.setArmorCondition(condition);
+    }
+
     // ------------------ GETTERS ------------------
 
 
@@ -152,8 +159,8 @@ public class Player {
     }
 
 
-    public double calculatedPlayerDamage(double playerDamage) {
-        playerDamage = playerLevel + playerWeapon.getCalculatedWeaponDamage();
+    public int calculatedPlayerDamage(double playerDamage) {
+        playerDamage = playerWeapon.getCalculatedWeaponDamage() + playerLevel;
         if (playerWeapon.getWeaponType().equals("STR")) {
             playerDamage = playerDamage + playerStrength / 2;
         }
@@ -164,7 +171,7 @@ public class Player {
             playerDamage = playerDamage + playerIntelligence / 2;
         }
         setPlayerDamage((int) Math.round(playerDamage));
-        return (int) playerDamage;
+        return (int) Math.round(playerDamage);
         // TODO FORKERT? NEEDS UPDATE ALL THE TIME
     }
 
@@ -205,7 +212,7 @@ public class Player {
     void promptAvailableInfo() {
         ui.printAvailableInfo(playerLevel, playerHealthPoints, playerAgility, playerIntelligence,
                 playerStamina, playerStrength, playerPositionX, playerPositionY, enemiesKilled,
-                playerWeapon.toString(), playerArmor.toString(),(int) getPlayerDamage());
+                playerWeapon.toString(), playerArmor.toString(), calculatedPlayerDamage(playerDamage));
     }
 
     public void promptPrintPlayerPosition() {

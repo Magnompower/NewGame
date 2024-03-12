@@ -2,11 +2,11 @@ package classes;
 
 import enemies.EnemyCreator;
 import enums.ArmorCondition;
+import enums.WeaponCondition;
 import enums.WeaponType;
 
 import Armor.Armor;
 import Armor.PoorArmor;
-import Armor.LegendaryArmor;
 
 import weapons.Weapon;
 import weapons.WeaponCreator;
@@ -17,15 +17,16 @@ public class Player {
     private int playerPositionX = 15;
     private int playerPositionY = 15;
     private int playerLevel = 1; // can never go below 1.
-    private int playerAgility = 10;
-    private int playerIntelligence = 10;
-    private int playerStamina = 10;
-    private int playerStrength = 10;
-    private int playerHealthPoints = playerLevel * 5 + playerStamina * 3;
-    private double playerDamage;
+    private int playerAgility = 6;
+    private int playerIntelligence = 6;
+    private int playerStamina = 6;
+    private int playerStrength = 6;
+    private int playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7;
+    private int playerDamage;
     private int escapeChance;
     private int enemiesKilled = 0;
-    private double playerCurrency = 0;
+    private int playerAmountOfCoins = 0;
+    private int playerExperiencePoints; // XP needed to lvl = base(100) * level * level (100 lvl 1, 10000 lvl 10)
 
     UI ui = new UI();
     Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
@@ -81,7 +82,7 @@ public class Player {
         this.escapeChance = escapeChance;
     }
 
-    public void setPlayerArmorCondition(ArmorCondition condition){
+    public void setPlayerArmorCondition(ArmorCondition condition) {
         playerArmor.setArmorCondition(condition);
     }
 
@@ -158,21 +159,32 @@ public class Player {
         }
     }
 
+    public void checkPlayerLevel() {
+        switch (playerExperiencePoints) {
+            case 100 -> playerLevel = 2;
+//            case 400 -> playerLevel = 3;
+//            case 900 -> playerLevel =4;
+        }
+    }
+
+public void calculatePlayerHealth(){
+        playerHealthPoints = playerLevel *5 +playerStamina*3+7; // TODO MAKE BOTH ACTUAL AND MAXIMUM
+}
 
     public int calculatedPlayerDamage(double playerDamage) {
-        playerDamage = playerWeapon.getCalculatedWeaponDamage() + playerLevel;
+        playerDamage = playerWeapon.getActualWeaponDamage() + playerLevel;
         if (playerWeapon.getWeaponType().equals("STR")) {
-            playerDamage = playerDamage + playerStrength / 2;
+            playerDamage = playerDamage + (double) playerStrength / 2;
         }
         if (playerWeapon.getWeaponType().equals("AGI")) {
-            playerDamage = playerDamage + playerAgility / 2;
+            playerDamage = playerDamage + (double) playerAgility / 2;
         }
         if (playerWeapon.getWeaponType().equals("INT")) {
-            playerDamage = playerDamage + playerIntelligence / 2;
+            playerDamage = playerDamage + (double) playerIntelligence / 2;
         }
         setPlayerDamage((int) Math.round(playerDamage));
-        return (int) Math.round(playerDamage);
-        // TODO FORKERT? NEEDS UPDATE ALL THE TIME
+        return (int) playerDamage;
+        // TODO FORKERT? NEED VOID? NEEDS UPDATE ALL THE TIME
     }
 
     public void flee() {
@@ -210,9 +222,8 @@ public class Player {
     }
 
     void promptAvailableInfo() {
-        ui.printAvailableInfo(playerLevel, playerHealthPoints, playerAgility, playerIntelligence,
-                playerStamina, playerStrength, playerPositionX, playerPositionY, enemiesKilled,
-                playerWeapon.toString(), playerArmor.toString(), calculatedPlayerDamage(playerDamage));
+        ui.printAvailableInfo(toString(), calculatedPlayerDamage(playerDamage), getPlayerPositionX(), getPlayerPositionY(),
+                playerWeapon.toString(), playerArmor.toString(), enemiesKilled);
     }
 
     public void promptPrintPlayerPosition() {
@@ -245,6 +256,24 @@ public class Player {
 //      TODO  enemyHealth = enemyHealth - playerDamage;
     }
 
+    public String sharpenWeapon() {
+        switch (playerWeapon.getWeaponCondition()) { // Cannot sharpen a broken weapon.
+            case RUSTY -> playerWeapon.setWeaponCondition(WeaponCondition.NORMAL); // TODO SOUT WEAPON STATUS!
+            case NORMAL -> playerWeapon.setWeaponCondition(WeaponCondition.POLISHED);
+            case POLISHED -> playerWeapon.setWeaponCondition(WeaponCondition.SHARP);
+        }
+        return playerWeapon.getWeaponCondition().getWeaponConditionText();
+    }
+
+    public void repairArmor() { // TODO NAAMING: ARMOR MAINTANINCE?!
+        switch (playerArmor.getArmorCondition()) { //TODO CAN YOU REPAIR BROKEN ARMOR?!?
+            case BROKEN -> playerArmor.setArmorCondition(ArmorCondition.NORMAL);
+            case DIRTY -> playerArmor.setArmorCondition(ArmorCondition.NORMAL); //TODO SOUT STATUS
+            case NORMAL -> playerArmor.setArmorCondition(ArmorCondition.POLISHED);
+            case POLISHED -> playerArmor.setArmorCondition(ArmorCondition.REINFORCED);
+        }
+    }
+
     public void promptUpdatePlayerPosition() {
         mapFrame.updatePlayerPosition(playerPositionX, playerPositionY);
     }
@@ -257,4 +286,21 @@ public class Player {
         ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());
     }
 
+    @Override
+    public String toString() {
+
+        String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel + ConsoleColors.YELLOW_BRIGHT;
+        String playerHealthPointsString = ConsoleColors.SEA_GREEN + playerHealthPoints + ConsoleColors.YELLOW_BRIGHT;
+        String playerAgilityString = ConsoleColors.LIGHT_GOLD + playerAgility + ConsoleColors.YELLOW_BRIGHT;
+        String playerIntelligenceString = ConsoleColors.LIGHT_GOLD + playerIntelligence + ConsoleColors.YELLOW_BRIGHT;
+        String playerStaminaString = ConsoleColors.LIGHT_GOLD + playerStamina + ConsoleColors.YELLOW_BRIGHT;
+        String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength + ConsoleColors.YELLOW_BRIGHT;
+
+        String playerDetails = String.format(ConsoleColors.YELLOW_BRIGHT +
+                        "Level: %-3s HP: %-4s AGI: %-3s INT: %-3s STM: %-3s STR: %-3s",
+                playerLevelString, playerHealthPointsString, playerAgilityString,
+                playerIntelligenceString, playerStaminaString, playerStrengthString);
+
+        return playerDetails;
+    }
 }

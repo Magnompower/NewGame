@@ -7,7 +7,7 @@ public class LegendaryWeapon extends Weapon{
 
     public LegendaryWeapon(WeaponType weaponType, String weaponName) {
         super(weaponType, weaponName);
-        setWeaponDamage(15);
+        setBaseWeaponDamage(15);
         setWeaponColor(ConsoleColors.ORANGE);
     }
 }

@@ -6,7 +6,11 @@ public abstract class Enemy {
     private String enemyName;
     private double enemyAttackDamage;
     private double enemyHealthPoints;
+    private int baseExperiencePointsGranted = 100;
     private String enemyColor;
+    private int enemyPositionX;
+    private int enemyPositionY;
+    private int actualExperiencePointsGrated = (int) Math.floor(baseExperiencePointsGranted*getEnemyAttackDamage());
 
     public Enemy(String enemyName) {
         this.setEnemyName(enemyName);
@@ -30,6 +34,10 @@ public abstract class Enemy {
         this.enemyColor = enemyColor;
     }
 
+    public void setBaseExperiencePointsGranted(int baseExperiencePointsGranted) {
+        this.baseExperiencePointsGranted = baseExperiencePointsGranted;
+    }
+
     // ------------------ GETTERS ------------------
 
     public String getEnemyName() {
@@ -47,7 +55,15 @@ public abstract class Enemy {
     public String getEnemyColor() {
         return enemyColor;
     }
+
     // ------------------ OTHER ------------------
+
+   /* public void calculateEnemyExperiencePointsGranted() {
+        switch ((int) getEnemyHealthPoints()) {
+            case 20 -> actualExperiencePointsGrated = (int) Math.floor(baseExperiencePointsGranted*getEnemyAttackDamage());
+            case 40 -> actualExperiencePointsGrated = (int) Math.floor(baseExperiencePointsGranted*getEnemyAttackDamage());
+        }
+    }*///TODO STUPID WAY TO DO IT?
 
     @Override
     public String toString() {
@@ -59,8 +75,8 @@ public abstract class Enemy {
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
         String colorCodeReset = ConsoleColors.RESET;
 
-        int calculatedEnemyDamage = (int) Math.round(getEnemyAttackDamage());
-        int calculatedEnemyHealthPoints = (int) Math.round(getEnemyHealthPoints());
+        int calculatedEnemyDamage = (int) Math.floor(getEnemyAttackDamage());
+        int calculatedEnemyHealthPoints = (int) Math.floor(getEnemyHealthPoints());
 
         return colorCodeEnemy + enemyName + colorCodeNormalText + ": " + colorCodeHealth + calculatedEnemyHealthPoints
                 + colorCodeNormalText + " : " + colorCodeEnemyDamage + calculatedEnemyDamage + colorCodeReset;

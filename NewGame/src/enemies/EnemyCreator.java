@@ -5,7 +5,7 @@ import comparators.EnemyHealthComparator;
 import java.util.ArrayList;
 
 public class EnemyCreator {
-    private final ArrayList<Enemy> enemies = new ArrayList<>();
+    private static final ArrayList<Enemy> enemies = new ArrayList<>();
 
     public void instantiateEnemies() {
 
@@ -65,7 +65,8 @@ public class EnemyCreator {
     }
 
     public ArrayList<Enemy> getEnemies() {
-        return enemies;
+        ArrayList<Enemy> enemiesCopy = enemies;
+        return enemiesCopy;
     }
 
     public void printEnemyArraylistInOrder() {

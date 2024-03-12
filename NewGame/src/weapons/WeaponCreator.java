@@ -56,9 +56,7 @@ public class WeaponCreator {
 
         weapons.add(staffOfMindorr);
 
-
         weapons.add(swordOfKeilier);
-
 
         weapons.add(axeOfOddie);
     }

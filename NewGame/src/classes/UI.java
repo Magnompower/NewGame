@@ -155,8 +155,8 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public String[] movementMenuPoints() {
-        return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Move north.", "2. Move east.", "3. Move south.",
-                "4. Move west.\n", "5. See player position.", "9. Show all available information.", "0. Quit." + ConsoleColors.RESET};
+        return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "8. Move north.", "6. Move east.", "4. Move west.",
+                "2. Move south.\n", "5. See player position.", "9. Show all available information.", "0. Quit." + ConsoleColors.RESET};
     }
     // ------------------ SLEEP-TIMERS ------------------
 
@@ -189,47 +189,38 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         }
     }
 
-    public void printAvailableInfo(int playerLevel, int playerHealthPoints, int playerAgility,
-                                   int playerIntelligence, int playerStamina, int playerStrength, int playerPositionX,
-                                   int playerPositionY, int enemiesKilled, String weaponDetails, String armorDetails,
-                                   int playerDamage) {
+    public void printAvailableInfo(String playerDetails, int playerDamage, int playerPositionX, int playerPositionY,
+                                   String weaponDetails, String armorDetails, int enemiesKilled) {
+
+
+        System.out.println(playerDetails);
+
+        System.out.println((ConsoleColors.YELLOW_BRIGHT + "Position: " + ConsoleColors.SALMON + "X" +
+                ConsoleColors.YELLOW_BRIGHT + "|" + ConsoleColors.SALMON + "Y  " + playerPositionX +
+                ConsoleColors.YELLOW_BRIGHT + "|" + ConsoleColors.SALMON + playerPositionY +
+                ConsoleColors.RESET)); //TODO CAN BE DONE SMARTER. ALREADY HAVE METHOD
 
         String playerDamageString = String.valueOf(playerDamage);
         weaponDetails = weaponDetails.replace("%placeHolder%", playerDamageString);
 
-        String playerLevelString = ConsoleColors.LIGHT_GOLD + playerLevel + ConsoleColors.YELLOW_BRIGHT;
-        String playerHealthPointsString = ConsoleColors.SEA_GREEN + playerHealthPoints + ConsoleColors.YELLOW_BRIGHT;
-        String playerAgilityString = ConsoleColors.LIGHT_GOLD + playerAgility + ConsoleColors.YELLOW_BRIGHT;
-        String playerIntelligenceString = ConsoleColors.LIGHT_GOLD + playerIntelligence + ConsoleColors.YELLOW_BRIGHT;
-        String playerStaminaString = ConsoleColors.LIGHT_GOLD + playerStamina + ConsoleColors.YELLOW_BRIGHT;
-        String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength + ConsoleColors.YELLOW_BRIGHT; //TODO PUT IN PLAYER!
+        System.out.println(weaponDetails);
 
-        String playerInfo = String.format(
-                ConsoleColors.YELLOW_BRIGHT + "Level: %-3s HP: %-4s AGI: %-3s INT: %-3s STM: %-3s STR: %-3s",
-                playerLevelString, playerHealthPointsString, playerAgilityString, playerIntelligenceString,
-                playerStaminaString, playerStrengthString);
-        System.out.println(playerInfo);
+        System.out.println(armorDetails);
 
+//        System.out.println(enemiesKilled); //TODO COLOR IN PLAYER
 
-        //TODO KAN VARIABLERNE ALLEREDE VÆRE FARVEDE NÅR DE KOMMER?? ELLER FJERNER DET POINTEN MED UI KLASSEN?
         // TODO THINK I FUCKED UP WITH COLORING. HAVING BOTH IN TOSTRING AND HERE.
-
-        System.out.println("Position: " + ConsoleColors.SALMON + playerPositionX + ConsoleColors.YELLOW_BRIGHT +
-                ":" + ConsoleColors.SALMON + playerPositionY);
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Weapon: " + weaponDetails);
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Armor:  " + armorDetails);
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "Enemies killed: " + ConsoleColors.SALMON + enemiesKilled
                 + ConsoleColors.RESET); // TODO: Implement logic to count and display the number of enemies killed
-
-
         //TODO ARMOR
     }
 
     public void printPlayerPosition(int playerPositionX, int playerPositionY) {
-        System.out.println((ConsoleColors.YELLOW_BRIGHT + "Position: " + ConsoleColors.SALMON + "X" +
-                ConsoleColors.YELLOW_BRIGHT + " : " + ConsoleColors.SALMON + "Y " + playerPositionX +
-                ConsoleColors.YELLOW_BRIGHT + " : " + ConsoleColors.SALMON + playerPositionY +
-                ConsoleColors.RESET));
+        String playerPosition = (ConsoleColors.YELLOW_BRIGHT + "Position: " + ConsoleColors.SALMON + "X" +
+                ConsoleColors.YELLOW_BRIGHT + "|" + ConsoleColors.SALMON + "Y  " + playerPositionX +
+                ConsoleColors.YELLOW_BRIGHT + "|" + ConsoleColors.SALMON + playerPositionY +
+                ConsoleColors.RESET);
+        System.out.println(playerPosition);
     }
 
     public void cannotMoveFurtherEastMessage() {

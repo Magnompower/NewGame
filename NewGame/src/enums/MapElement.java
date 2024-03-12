@@ -8,7 +8,8 @@ public enum MapElement {
     RED(Color.RED),
     GREEN(Color.GREEN),
     YELLOW(Color.YELLOW),
-    BLUE(Color.BLUE);
+    BLUE(Color.BLUE),
+    LIGHT_GRAY(Color.LIGHT_GRAY);
 
     private final Color color;
 
@@ -31,7 +32,7 @@ public enum MapElement {
             return YELLOW.getColor();
         }
 
-        if (x == 15 && y == 8 || x == 26 && y == 26 || x == 27 && y == 26 || x == 26 && y == 25 ||
+        if (x == 15 && y == 11 || x == 26 && y == 26 || x == 27 && y == 26 || x == 26 && y == 25 ||
                 x == 27 & y == 25 || x == 6 && y == 18) {
             return GREEN.getColor();
         }
@@ -39,7 +40,7 @@ public enum MapElement {
             return BLUE.getColor();
         }
         if (x == 15 && y == 15)
-            return CYAN.getColor();
+            return LIGHT_GRAY.getColor();
 
         return GRAY.getColor();
     }

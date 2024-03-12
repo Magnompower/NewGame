@@ -4,70 +4,101 @@ import classes.ConsoleColors;
 import enums.ArmorCondition;
 import enums.WeaponCondition;
 
-public class Armor {
+public abstract class Armor {
     private String armorName;
-    private double armorDamageTakenPercentage; //TODO MAYBE NAME TO DECIBVAL?? CONFUSED NAMING?
     private String armorColor; // TODO COLORSWITCH NOT WORKING SAME WITH WEAPON
-    private double calculatedArmorDamageTakenPercentage = calculateArmorDamageTakenPercent();
-    private ArmorCondition armorCondition = ArmorCondition.DIRTY;
-    private double damageReceived; // TODO RECEIVES INFO FROM ENEMY SOMEHOW
     private int requiredStrength;
+    private double damageReceived; // TODO RECEIVES INFO FROM ENEMY SOMEHOW MAYBE PUT IN PLAYER?
+    private ArmorCondition armorCondition = ArmorCondition.DIRTY;
+    private int baseArmorDamageTakenPercentage;
+    private int actualArmorDamageTakenPercentage; //TODO INT HERE BUT DOUBLE OTHER PLACES!?
 
     public Armor(String armorName) {
         this.armorName = armorName;
     }
 
-
-    public String getArmorName() {
-        return armorName;
-    }
+    // ------------------ SETTERS ------------------
 
     public void setArmorName(String armorName) {
         this.armorName = armorName;
     }
 
-    public String getArmorColor() {
-        return armorColor;
+    public void setActualArmorDamageTakenPercentage(double actualArmorDamageTakenPercentage) {
+        if (actualArmorDamageTakenPercentage >= 100) {
+            actualArmorDamageTakenPercentage = 99;
+        }
+        this.actualArmorDamageTakenPercentage = (int) Math.floor(actualArmorDamageTakenPercentage);
     }
-
-    public void setArmorCondition(ArmorCondition armorCondition) {
-        this.armorCondition = armorCondition;
-    }
-
 
     public void setArmorColor(String armorColor) {
         this.armorColor = armorColor;
     }
 
-    public int calculateArmorDamageTakenPercent() { // TODO USE MATH.FLOOR ON ARMOR
-armorCondition = getArmorCondition();
-        if (armorCondition == ArmorCondition.BROKEN) {
-            armorDamageTakenPercentage = armorDamageTakenPercentage * 1.25; // 0,9 + 0,25 = 1,15 -- YOU TAKE MORE DAMAGE THAN WITHOUT ARMOR!!  TODO
-        }
-        if (armorCondition == ArmorCondition.DIRTY) {
-            armorDamageTakenPercentage = armorDamageTakenPercentage * 1.1; // 0.9 + 0.09=0.99
-        }
-        if (armorCondition == ArmorCondition.POLISHED) {
-            armorDamageTakenPercentage = armorDamageTakenPercentage * 0.9; // Will only be 1 with legendary armor
-        }
-        if (armorCondition == ArmorCondition.REINFORCED) {
-            armorDamageTakenPercentage = armorDamageTakenPercentage * 0.75; // Will still only be 1 with legendary armor
-        }
-        if (armorDamageTakenPercentage >= 1) armorDamageTakenPercentage = 0.99;
-
-        calculatedArmorDamageTakenPercentage = armorDamageTakenPercentage;
-
-        return (int) calculatedArmorDamageTakenPercentage; // MATH FLOOR? TODO
+    public void setArmorCondition(ArmorCondition armorCondition) {
+        if (armorCondition != null) this.armorCondition = armorCondition;
     }
 
-    public int calculateDamageReceived() { //TODO
-        damageReceived = damageReceived * calculateArmorDamageTakenPercent();
-        return (int) damageReceived;
+    public void setRequiredStrength(int requiredStrength) {
+        this.requiredStrength = requiredStrength;
+    }
+
+    public void setBaseArmorDamageTakenPercentage(int baseArmorDamageTakenPercentage) {
+        this.baseArmorDamageTakenPercentage = baseArmorDamageTakenPercentage;
+    }
+
+    // ------------------ GETTERS ------------------
+
+    public int getRequiredStrength() {
+        return requiredStrength;
+    }
+
+    public double getActualArmorDamageTakenPercentage() {
+        return actualArmorDamageTakenPercentage;
+    }
+
+    public String getArmorName() {
+        return armorName;
+    }
+
+
+    public String getArmorColor() {
+        return armorColor;
     }
 
     public ArmorCondition getArmorCondition() {
         return armorCondition;
     }
+
+    // ------------------ CALCULATE METHODS ------------------
+
+    public void calculateActualArmorDamageTakenPercentage() { //TODO NEVER USED
+        switch (armorCondition) { // TODO MAKE OTHER PLACES
+            case BROKEN -> setActualArmorDamageTakenPercentage(baseArmorDamageTakenPercentage * 1.25);// 0,9 * 1,25 = >100
+            case DIRTY -> setActualArmorDamageTakenPercentage(baseArmorDamageTakenPercentage * 1.1);
+            case NORMAL -> setActualArmorDamageTakenPercentage(baseArmorDamageTakenPercentage);
+            case POLISHED -> setActualArmorDamageTakenPercentage(baseArmorDamageTakenPercentage * 0.9);
+            case REINFORCED -> setActualArmorDamageTakenPercentage(baseArmorDamageTakenPercentage * 0.75);
+        }
+    }
+
+    public int calculateDamageReductionPercentage() {
+        calculateActualArmorDamageTakenPercentage();
+        int calculatedDamageReduction = 100 - actualArmorDamageTakenPercentage;
+        return calculatedDamageReduction;
+    }
+
+    public int calculateDamageReceived() { //TODO PUT IN PLAYER?
+        damageReceived = damageReceived * actualArmorDamageTakenPercentage;
+        return (int) Math.floor(damageReceived);
+    }
+
+
+    private int calculateReinforcedArmorDamageTakenPercent() { //TODO MATH.FLOOR ALLE STEDER!!!.
+        return (int) Math.floor(100 - baseArmorDamageTakenPercentage * 0.75); //TODO SAME TYPE OF MATH. WHEN SOUTING AND CALCULATING
+    }
+
+
+    // ------------------ OTHER ------------------
 
     @Override
     public String toString() {
@@ -77,32 +108,16 @@ armorCondition = getArmorCondition();
         String colorCodeArmorDefence = ConsoleColors.LIGHT_GOLD;
         String uniqueColor = ConsoleColors.SALMON;
 
-        int armorDefencePercentage = calculateArmorDamageTakenPercent(); //TODO FIX LOGIC! NEED HELP!
         String requiredStrengthString = uniqueColor + "(" + ConsoleColors.LIGHT_GOLD + getRequiredStrength() + uniqueColor + ")";
 
-        String armorDetails = requiredStrengthString + " " + colorCodeArmor + armorName + colorCodeNormalText +
-                " : " + colorCodeArmorDefence + armorDefencePercentage + "%" + uniqueColor + " Reduction" +
-                ConsoleColors.RESET; // TODO CHANGE calculatedReceivedDamage Maybe add another vartialble??
+        String armorDetails = String.format("%sArmor:  %s   %s%-20.20s%s:%s%2s%s%s|%s%2s%s%s Reduction%s",
+                colorCodeNormalText, requiredStrengthString, colorCodeArmor, armorName, colorCodeNormalText,
+                colorCodeArmorDefence, calculateDamageReductionPercentage(), "%", uniqueColor, colorCodeArmorDefence,
+                calculateReinforcedArmorDamageTakenPercent(), "%", uniqueColor, ConsoleColors.RESET);
         if (!armorCondition.equals(WeaponCondition.NORMAL)) {
-            armorDetails += colorCodeNormalText + " : " + armorCondition.getArmorConditionColor() +
-                    armorCondition.getArmorConditionText() + ConsoleColors.RESET;
+            armorDetails += String.format("%s : %s%s%s", colorCodeNormalText, armorCondition.getArmorConditionColor(),
+                    armorCondition.getArmorConditionText(), ConsoleColors.RESET);
         }
         return armorDetails;
-    }
-
-    public int getRequiredStrength() {
-        return requiredStrength;
-    }
-
-    public void setRequiredStrength(int requiredStrength) {
-        this.requiredStrength = requiredStrength;
-    }
-
-    public double getArmorDamageTakenPercentage() {
-        return armorDamageTakenPercentage;
-    }
-
-    public void setArmorDamageTakenPercentage(double armorDamageTakenPercentage) {
-        this.armorDamageTakenPercentage = armorDamageTakenPercentage;
     }
 }

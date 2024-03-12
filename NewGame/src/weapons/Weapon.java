@@ -7,12 +7,12 @@ import enums.WeaponType;
 public abstract class Weapon {
 
     private String weaponName;
-    private double weaponDamage = 1;
     private String weaponColor;
-    private WeaponType weaponType = WeaponType.DAGGER;
-    private double calculatedWeaponDamage;
     private String weaponModifier;
+    private WeaponType weaponType = WeaponType.DAGGER;
     private WeaponCondition weaponCondition = WeaponCondition.BROKEN;
+    private int baseWeaponDamage;
+    private int actualWeaponDamage;
 
     public Weapon(WeaponType weaponType, String weaponName) {
         this.setWeaponType(weaponType);
@@ -27,12 +27,15 @@ public abstract class Weapon {
         }
     }
 
-    public void setWeaponDamage(double weaponDamage) {
-        if (weaponDamage <= 0) {
-            weaponDamage = 1;
-        } else if (weaponDamage > 0) {
-            this.weaponDamage = weaponDamage;
+    public void setActualWeaponDamage(double actualWeaponDamage) {
+        if (actualWeaponDamage<= 0) {
+            actualWeaponDamage = 1;
         }
+        this.actualWeaponDamage = (int) Math.round(actualWeaponDamage);
+    }
+
+    public void setBaseWeaponDamage(int baseWeaponDamage) {
+        this.baseWeaponDamage = baseWeaponDamage;
     }
 
     public void setWeaponColor(String weaponColor) {
@@ -49,12 +52,17 @@ public abstract class Weapon {
 
     // ------------------ GETTERS ------------------
 
+
+    public int getActualWeaponDamage() {
+        return actualWeaponDamage;
+    }
+
     public String getWeaponName() {
         return weaponName;
     }
 
-    public double getWeaponDamage() {
-        return weaponDamage;
+    public double getBaseWeaponDamage() {
+        return baseWeaponDamage;
     }
 
     public String getWeaponColor() {
@@ -66,29 +74,26 @@ public abstract class Weapon {
         return weaponModifier;
     }
 
-    public int getCalculatedWeaponDamage() { //TODO LOGIC IN GETTERS? NOT A REAL GETTER...
-        if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
-                weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
-            calculatedWeaponDamage = Math.floor(getWeaponDamage() * 0.5);
-        }
-        if (weaponCondition == WeaponCondition.BROKEN) {
-            calculatedWeaponDamage = calculatedWeaponDamage * 0.25;
-        }
-        if (weaponCondition == WeaponCondition.RUSTY) {
-            calculatedWeaponDamage = calculatedWeaponDamage * 0.10;
-        }
-        if (weaponCondition == WeaponCondition.POLISHED) {
-            calculatedWeaponDamage = calculatedWeaponDamage * 1.10;
-        }
-        if (weaponCondition == WeaponCondition.SHARP) {
-            calculatedWeaponDamage = calculatedWeaponDamage * 1.25;
-        }
-        if (calculatedWeaponDamage < 1) calculatedWeaponDamage = 1;
-        return (int) Math.round(calculatedWeaponDamage);
-    }
-
     public WeaponCondition getWeaponCondition() {
         return weaponCondition;
+    }
+
+    // ------------------ CALCULATE METHODS ------------------
+
+    public void calculateActualWeaponDamage() { //TODO PROBLEM DEN IKKE RETURNERER FORDI DEN IKKE INSTACIERES?!?
+
+        if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
+                weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
+            baseWeaponDamage = (int) Math.round(baseWeaponDamage * 0.5);
+        }
+        switch (weaponCondition) {
+            case BROKEN -> setActualWeaponDamage(baseWeaponDamage * 0.75);
+            case RUSTY -> setActualWeaponDamage(baseWeaponDamage * 0.9);
+            case NORMAL -> setActualWeaponDamage(baseWeaponDamage);
+            case POLISHED -> setActualWeaponDamage(baseWeaponDamage * 1.1);
+            case SHARP -> setActualWeaponDamage(baseWeaponDamage * 1.25);
+        }
+
     }
 
     // ------------------ OTHER ------------------
@@ -103,16 +108,29 @@ public abstract class Weapon {
 
         String placeHolderOfPlayerDamage = "%placeHolder%";
 
+       /* private static String centerString(String text, int width) {
+            if (text.length() >= width) {
+                return text.substring(0, width); //TODO MAYBE
+            }
+            int leftPadding = (width - text.length()) / 2;
+            int rightPadding = width - leftPadding - text.length();
+            return String.format("%" + leftPadding + "s%s%" + rightPadding + "s", "", text, "");
+        }
+        String centeredWeaponName = centerString(getWeaponName(),20);*/
+
         weaponModifier = uniqueColor + "(" + ConsoleColors.LIGHT_GOLD +
                 weaponType.getModifier().toUpperCase() + uniqueColor + ")";
 
-        String weaponDetails = weaponModifier + " " + colorCodeWeapon + weaponName + colorCodeNormalText +
-                " : " + colorCodeWeaponDamage + getCalculatedWeaponDamage() + uniqueColor + "|" +
-                colorCodeWeaponDamage + placeHolderOfPlayerDamage + uniqueColor + " Damage" + ConsoleColors.RESET;
+        String weaponDetails = String.format("%sWeapon: %s %s%-20.20s%s:%s %2s%s|%s%2s %s  Damage%s",
+                colorCodeNormalText, weaponModifier, colorCodeWeapon, weaponName, colorCodeNormalText,
+                colorCodeWeaponDamage, getActualWeaponDamage(), uniqueColor, colorCodeWeaponDamage,
+                placeHolderOfPlayerDamage, uniqueColor, ConsoleColors.RESET);
+
         if (!weaponCondition.equals(WeaponCondition.NORMAL)) {
-            weaponDetails += colorCodeNormalText + " : " + weaponCondition.getWeaponConditionColor() +
-                    weaponCondition.getWeaponConditionText() + ConsoleColors.RESET;
+            weaponDetails += String.format("%s    : %s%s%s", colorCodeNormalText, weaponCondition.getWeaponConditionColor(),
+                    weaponCondition.getWeaponConditionText(), ConsoleColors.RESET);
         }
         return weaponDetails;
+        // MAYBE COULD HAVE SAVED THIS BY MAKING UI CLASS SMART SINCE BASICALLY THE SAME IS HAPPENING IN ARMOR AND PLAYER
     }
 }

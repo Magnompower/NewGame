@@ -6,7 +6,7 @@ package weapons;
 public class EpicWeapon extends Weapon{
     public EpicWeapon(WeaponType weaponType, String weaponName) {
         super(weaponType, weaponName);
-        setWeaponDamage(10);
+        setBaseWeaponDamage(10);
         setWeaponColor(ConsoleColors.PURPLE_BRIGHT);
     }
 }

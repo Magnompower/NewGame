@@ -51,16 +51,19 @@ public class MenuMaker {
             movementMenu.printMenu();
             changePlayerChoice();
             switch (playerChoice) {
-                case 1 -> player.moveNorth();
-                case 2 -> player.moveEast();
-                case 3 -> player.moveSouth();
+                case 2 -> player.moveSouth();
                 case 4 -> player.moveWest();
                 case 5 -> player.promptPrintPlayerPosition();
+                case 8 -> player.moveNorth();
+                case 6 -> player.moveEast();
+
+
 
                 case 9 -> player.promptAvailableInfo();
                 case 0 -> gameRunning = !ui.wantToQuitGame();
                 default -> ui.invalidInput();
             }
+//            checkForEncounter();TODO
         }
 
     }

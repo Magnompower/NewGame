@@ -1,4 +1,4 @@
-package Armor;
+package armor;
 
 import classes.ConsoleColors;
 

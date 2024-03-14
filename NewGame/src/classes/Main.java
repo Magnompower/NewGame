@@ -1,11 +1,16 @@
 package classes;
 
-import Armor.ArmorCreator;
+import armor.ArmorCreator;
 import enemies.*;
+import menus.MenuMaker;
 import weapons.*;
 
-public class Main {
-    private MenuMaker menuMaker = new MenuMaker();
+public class Main { //TODO TOO MANY INSTANCES?
+
+    private UI ui = new UI();
+    private Player player = new Player();
+    private MapFrame mapFrame = MapFrame.getInstance(); // Assuming MapFrame also needs UI and Player
+    private MenuMaker menuMaker = new MenuMaker(ui,player,mapFrame);
     private WeaponCreator weaponCreator = new WeaponCreator();
     private EnemyCreator enemyCreator = new EnemyCreator();
     private ArmorCreator armorCreator = new ArmorCreator();
@@ -21,7 +26,7 @@ public class Main {
         weaponCreator.instantiateWeapons();
         armorCreator.instantiateArmor();
 
-        menuMaker.player.playerWeapon.calculateActualWeaponDamage(); //TODO STUDPID HERE! BUT WHERE ELSE?
+//        menuMaker.player.playerWeapon.calculateActualWeaponDamage(); //TODO STUDPID HERE! BUT WHERE ELSE?
 //        menuMaker.player.calculatedPlayerDamage(menuMaker.player.getPlayerDamage()); //TODO STUPID TO DO HERE?
 
 //        menuMaker.ui.printWeaponsArraylistInOrder(weaponCreator.getWeapons());
@@ -29,7 +34,7 @@ public class Main {
 
         menuMaker.promptWelcomeMessage();
         menuMaker.promptSleepForOneAndAHalfSecond();
-        menuMaker.executeMainMenu();
+        menuMaker.executeMenus();
 //  TODO LIBGDX     When defeating an enemy you know its stats next fight.
     }
 

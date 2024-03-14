@@ -1,4 +1,4 @@
-package Armor;
+package armor;
 
 import classes.ConsoleColors;
 import enums.ArmorCondition;
@@ -67,6 +67,10 @@ public abstract class Armor {
 
     public ArmorCondition getArmorCondition() {
         return armorCondition;
+    }
+
+    public int getBaseArmorDamageTakenPercentage() {
+        return baseArmorDamageTakenPercentage;
     }
 
     // ------------------ CALCULATE METHODS ------------------

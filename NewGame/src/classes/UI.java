@@ -1,5 +1,6 @@
 package classes;
 
+import armor.Armor;
 import comparators.EnemyHealthComparator;
 import comparators.WeaponDamageComparator;
 import enemies.Enemy;
@@ -77,16 +78,20 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public void printWeaponsArraylistInOrder(ArrayList<Weapon> weapons) {
-        weapons.sort(new WeaponDamageComparator());
         for (Weapon weapon : weapons) {
             System.out.println(weapon);
         }
     }
 
     public void printEnemiesArraylistInOrder(ArrayList<Enemy> enemies) {
-        enemies.sort(new EnemyHealthComparator());
         for (Enemy enemy : enemies) {
             System.out.println(enemy);
+        }
+    }
+
+    public void printArmorArrayListInOrder(ArrayList<Armor> armoury) {
+        for (Armor armor : armoury) {
+            System.out.println(armor);
         }
     }
 
@@ -112,6 +117,10 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! ");
         sleepForOneSecond();
 
+    }
+
+    public void printErrorGettingArmorMessage(){
+        System.out.println(ConsoleColors.RED_BRIGHT+"Armor not found." + ConsoleColors.RESET);
     }
 
     public String selectName() { // TODO
@@ -144,23 +153,32 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         return ConsoleColors.MENU_COLOR_SANDY_BROWN + "COMBAT MENU" + ConsoleColors.RESET;
     }
 
-    public String[] combatMenuPoints(int calculatedChanceToEscape) { // TODO
+    public String[] printCombatMenuPoints(int calculatedChanceToEscape) { // TODO
         return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Attack.", "2. Attempt to flee. (" +
                 calculatedChanceToEscape + ")", "9. Show all available information.", "0. Rage quit." + ConsoleColors.RESET};
     }
 
-    public String[] mainMenuPoints() {
+    public String[] printMainMenuPoints() {
         return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "1. Start game.", "9. Show tutorial.",
                 "0. Quit game." + ConsoleColors.RESET};
     }
 
-    public String[] movementMenuPoints() {
+    public String[] printMovementMenuPoints() {
         return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "8. Move north.", "6. Move east.", "4. Move west.",
                 "2. Move south.\n", "5. See player position.", "9. Show all available information.", "0. Quit." + ConsoleColors.RESET};
     }
+
+    public String printCheatMenuHeader() {
+        return ConsoleColors.CYAN_BRIGHT + "CHEAT MENU" + ConsoleColors.RESET;
+    }
+
+    public String[] printCheatMenuPoints() {
+        return new String[]{ConsoleColors.CYAN_BRIGHT + "1. Make map visible.", "2.Make map invisble" + ConsoleColors.RESET};
+    }
+
     // ------------------ SLEEP-TIMERS ------------------
 
-    void sleepForOneSecond() {
+    public void sleepForOneSecond() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -172,7 +190,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further west!" + ConsoleColors.RESET);
     }
 
-    void sleepForHalfASecond() {
+    public void sleepForHalfASecond() {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -252,4 +270,10 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.RED_BRIGHT + "You do not have the required STR to equip this!" +
                 ConsoleColors.RESET);
     }
+
+    public void printErrorGettingEnemyMessage() {
+        System.out.println(ConsoleColors.RED_BRIGHT + "Enemy not found."+ConsoleColors.RESET);}
+
+    public void printErrorGettingWeaponMessage() {
+        System.out.println(ConsoleColors.RED_BRIGHT+"Weapon not found."+ConsoleColors.RESET);}
 }

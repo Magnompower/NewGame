@@ -3,16 +3,18 @@ package enums;
 import java.awt.*;
 
 public enum MapElement {
-    GRAY(Color.GRAY),
-    CYAN(Color.CYAN),
-    RED(Color.RED),
-    GREEN(Color.GREEN),
-    YELLOW(Color.YELLOW),
-    BLUE(Color.BLUE),
-    LIGHT_GRAY(Color.LIGHT_GRAY);
+    PLAYER_LOCATION(Color.PINK),
+    VISITED(Color.LIGHT_GRAY),
+    VISITED_SPECIAL_LOCATION((new Color(155,255,255))),
+    UNVISITED(Color.GRAY),
+    CITIES(Color.GREEN),
+    POINT_OF_INTEREST(Color.BLUE),
+    SUSPICIOUS_AREA(Color.YELLOW),
+    LEGENDARY_ENEMY(new Color(244,164,96)),
+    BOSS_ENEMY(Color.RED),
+    DEFAULT_BORDER(Color.BLACK);
 
     private final Color color;
-
 
     MapElement(Color color) {
         this.color = color;
@@ -22,26 +24,4 @@ public enum MapElement {
         return color;
     }
 
-    public static Color getColor(int x, int y) {
-        if (x == 30 && y == 0 || x == 3 && y == 28) {
-            return RED.getColor();
-        }
-
-        if (x == 10 && y == 18 || x == 4 && y == 10 || x == 22 && y == 20 || x == 3 && y == 3 ||
-                x == 18 && y == 27 || x == 24 && y == 5 || x == 22 && y == 12) {
-            return YELLOW.getColor();
-        }
-
-        if (x == 15 && y == 11 || x == 26 && y == 26 || x == 27 && y == 26 || x == 26 && y == 25 ||
-                x == 27 & y == 25 || x == 6 && y == 18) {
-            return GREEN.getColor();
-        }
-        if (x == 10 && y == 8 || x == 5 && y == 24) {
-            return BLUE.getColor();
-        }
-        if (x == 15 && y == 15)
-            return LIGHT_GRAY.getColor();
-
-        return GRAY.getColor();
-    }
 }

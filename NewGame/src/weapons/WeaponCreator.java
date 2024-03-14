@@ -1,5 +1,6 @@
 package weapons;
 
+import classes.UI;
 import comparators.WeaponDamageComparator;
 import enums.WeaponType;
 
@@ -7,27 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeaponCreator {
+    UI ui;
     private final ArrayList<Weapon> weapons = new ArrayList<>();
 
     public void instantiateWeapons() {
 
-        Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDEDMACE, "Poor Club");
-        Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDEDMACE, "Common Club");
-        Weapon clubUncommon = new UncommonWeapon(WeaponType.ONEHANDEDMACE, "Uncommon Club");
+        Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDEDMACE, "Poor club");
+        Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDEDMACE, "Common club");
+        Weapon clubUncommon = new UncommonWeapon(WeaponType.ONEHANDEDMACE, "Uncommon club");
 
-        Weapon warHammerPoor = new PoorWeapon(WeaponType.TWOHANDEDMACE, "Poor Warhammer");
-        Weapon warHammerCommon = new CommonWeapon(WeaponType.TWOHANDEDMACE, "Common Warhammer");
-        Weapon warHammerUncommon = new UncommonWeapon(WeaponType.TWOHANDEDMACE, "Uncommon Warhammer");
-
-
-        Weapon shortSwordPoor = new PoorWeapon(WeaponType.ONEHANDEDSWORD, "Poor Shortsword");
-        Weapon shortSwordCommon = new CommonWeapon(WeaponType.ONEHANDEDSWORD, "Common Shortsword");
-        Weapon shortSwordUncommon = new UncommonWeapon(WeaponType.ONEHANDEDSWORD, "Uncommon Shortsword");
+        Weapon warHammerPoor = new PoorWeapon(WeaponType.TWOHANDEDMACE, "Poor war hammer");
+        Weapon warHammerCommon = new CommonWeapon(WeaponType.TWOHANDEDMACE, "Common war hammer");
+        Weapon warHammerUncommon = new UncommonWeapon(WeaponType.TWOHANDEDMACE, "Uncommon war hammer");
 
 
-        Weapon longswordPoor = new PoorWeapon(WeaponType.TWOHANDEDSWORD, "Poor Longsword");
-        Weapon longswordCommon = new CommonWeapon(WeaponType.TWOHANDEDSWORD, "Common Longsword");
-        Weapon longswordUncommon = new UncommonWeapon(WeaponType.TWOHANDEDSWORD, "Uncommon Longsword");
+        Weapon shortSwordPoor = new PoorWeapon(WeaponType.ONEHANDEDSWORD, "Poor short sword");
+        Weapon shortSwordCommon = new CommonWeapon(WeaponType.ONEHANDEDSWORD, "Common short sword");
+        Weapon shortSwordUncommon = new UncommonWeapon(WeaponType.ONEHANDEDSWORD, "Uncommon short sword");
+
+
+        Weapon longswordPoor = new PoorWeapon(WeaponType.TWOHANDEDSWORD, "Poor longsword");
+        Weapon longswordCommon = new CommonWeapon(WeaponType.TWOHANDEDSWORD, "Common longsword");
+        Weapon longswordUncommon = new UncommonWeapon(WeaponType.TWOHANDEDSWORD, "Uncommon longsword");
 
 
         Weapon staffOfMindorr = new RareWeapon(WeaponType.STAFF, "Staff of Mindorr");
@@ -37,6 +39,8 @@ public class WeaponCreator {
 
 
         Weapon axeOfOddie = new LegendaryWeapon(WeaponType.TWOHANDEDAXE, "Axe of Oddie");
+
+//        weapons.addAll(Weapon); TODO
 
         weapons.add(clubPoor);
         weapons.add(clubCommon);
@@ -61,16 +65,21 @@ public class WeaponCreator {
         weapons.add(axeOfOddie);
     }
 
-    public void printWeaponsArraylistInOrder() {
-        List<Weapon> weaponsSortedByDamage = new ArrayList<>(weapons); // Creates a copy of the list
-        weaponsSortedByDamage.sort(new WeaponDamageComparator());
-        for (Weapon weapon : weaponsSortedByDamage) {
-            System.out.println(weapon);
+    ArrayList<Weapon> weaponsCopy = weapons;
+
+    public Weapon getWeaponByName(String name) {
+        for (Weapon specificWeapon : weaponsCopy) {
+            if (specificWeapon.getWeaponName().equals(name)) {
+                return specificWeapon;
+            }
         }
+         ui.printErrorGettingWeaponMessage();
+        System.out.println("No weapon with that name!"); //TODO PLACE IN UI:
+        return null;
     }
 
-    public ArrayList<Weapon> getWeapons() {
-        ArrayList<Weapon> weaponsCopy = weapons;
+    public ArrayList<Weapon> getWeaponsCopyArraylistInOrder() {
+        weaponsCopy.sort(new WeaponDamageComparator());
         return weaponsCopy;
     }
 

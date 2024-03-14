@@ -1,12 +1,13 @@
 package classes;
 
+import armor.ArmorCreator;
 import enemies.EnemyCreator;
 import enums.ArmorCondition;
 import enums.WeaponCondition;
 import enums.WeaponType;
 
-import Armor.Armor;
-import Armor.PoorArmor;
+import armor.Armor;
+import armor.PoorArmor;
 
 import weapons.Weapon;
 import weapons.WeaponCreator;
@@ -34,6 +35,7 @@ public class Player {
     private WeaponCreator weaponCreator = new WeaponCreator();
     private EnemyCreator enemyCreator;
     private MapFrame mapFrame = MapFrame.getInstance();
+    private ArmorCreator armorCreator;
 
     // ------------------ SETTERS ------------------
 
@@ -167,9 +169,9 @@ public class Player {
         }
     }
 
-public void calculatePlayerHealth(){
-        playerHealthPoints = playerLevel *5 +playerStamina*3+7; // TODO MAKE BOTH ACTUAL AND MAXIMUM
-}
+    public void calculatePlayerHealth() {
+        playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7; // TODO MAKE BOTH ACTUAL AND MAXIMUM
+    }
 
     public int calculatedPlayerDamage(double playerDamage) {
         playerDamage = playerWeapon.getActualWeaponDamage() + playerLevel;
@@ -221,7 +223,7 @@ public void calculatePlayerHealth(){
         }
     }
 
-    void promptAvailableInfo() {
+    public void promptAvailableInfo() {
         ui.printAvailableInfo(toString(), calculatedPlayerDamage(playerDamage), getPlayerPositionX(), getPlayerPositionY(),
                 playerWeapon.toString(), playerArmor.toString(), enemiesKilled);
     }
@@ -249,6 +251,8 @@ public void calculatePlayerHealth(){
             ui.cannotMoveFurtherNorthMessage();
         }
     }
+
+
 
     public void attack() {
         calculatedPlayerDamage(getPlayerDamage());
@@ -279,11 +283,14 @@ public void calculatePlayerHealth(){
     }
 
     public void promptPrintWeaponsArrayInOrder() {
-        ui.printWeaponsArraylistInOrder(weaponCreator.getWeapons());
+        ui.printWeaponsArraylistInOrder(weaponCreator.getWeaponsCopyArraylistInOrder());
     }
 
     public void promptPrintEnemiesArrayInOrder() {
-        ui.printEnemiesArraylistInOrder(enemyCreator.getEnemies());
+        ui.printEnemiesArraylistInOrder(enemyCreator.getEnemiesCopyArraylistInOrder());
+    }
+    public void promptPrintArmoryArrayInOrder(){
+        ui.printArmorArrayListInOrder(armorCreator.getArmouryCopyArraylistInOrder());
     }
 
     @Override

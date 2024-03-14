@@ -1,10 +1,14 @@
-package Armor;
+package armor;
+
+import classes.UI;
+import comparators.ArmorDamageTakenPercentageComparator;
 
 import java.util.ArrayList;
 
 public class ArmorCreator {
-
+    UI ui;
     private final ArrayList<Armor> armorPieces = new ArrayList<>();
+
     public void instantiateArmor() { //TODO
 
         Armor poorBreastplate = new PoorArmor("Poor breastplate");
@@ -30,11 +34,51 @@ public class ArmorCreator {
         Armor splintOfKeilier = new EpicArmor("Splint of Keilier");
 
         Armor breastplateOfOddie = new LegendaryArmor("Breastplate of Oddie");
-        Armor hideOfOzra = new LegendaryArmor("Hide of Ozra"); // Ozra the legendary dragon
+        Armor hideOfOzra = new LegendaryArmor("Hide of Ozra"); // Ozra the legendary dragon TODO MAKE
 
         armorPieces.add(poorBreastplate);
         armorPieces.add(commonBreastplate);
         armorPieces.add(uncommonBreastplate);
 
+        armorPieces.add(poorLeatherArmor);
+        armorPieces.add(commonLeatherArmor);
+        armorPieces.add(uncommonLeatherArmor);
+
+        armorPieces.add(poorChainmail);
+        armorPieces.add(commonChainmail);
+        armorPieces.add(uncommonChainmail);
+
+        armorPieces.add(poorSplint);
+        armorPieces.add(commonSplint);
+        armorPieces.add(uncommonSplint);
+
+        armorPieces.add(breastplateOfBeebus);
+        armorPieces.add(wickedChainmail);
+
+        armorPieces.add(breastplateOfKeilier);
+        armorPieces.add(splintOfKeilier);
+
+        armorPieces.add(breastplateOfOddie);
+        armorPieces.add(hideOfOzra);
+
     }
+
+    ArrayList<Armor> armorPiecesCopy = armorPieces;
+
+    public Armor getArmorByName(String name) {
+        for (Armor specificArmorPiece : armorPiecesCopy) {
+            if (specificArmorPiece.getArmorName().equals((name))) {
+                return specificArmorPiece;
+            }
+        }
+        ui.printErrorGettingArmorMessage();
+        return null; // Somehow return the message is better?
+    }
+
+
+    public ArrayList<Armor> getArmouryCopyArraylistInOrder() {
+        armorPiecesCopy.sort(new ArmorDamageTakenPercentageComparator());
+        return armorPiecesCopy;
+    }
+
 }

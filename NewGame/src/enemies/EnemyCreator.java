@@ -1,10 +1,12 @@
 package enemies;
 
+import classes.UI;
 import comparators.EnemyHealthComparator;
 
 import java.util.ArrayList;
 
 public class EnemyCreator {
+    UI ui;
     private static final ArrayList<Enemy> enemies = new ArrayList<>();
 
     public void instantiateEnemies() {
@@ -25,8 +27,8 @@ public class EnemyCreator {
 
 
         Enemy elephant = new EpicEnemy("Elephant");
-        Enemy giraf = new EpicEnemy("War Giraf");
-        Enemy buffalo = new EpicEnemy("Buffalo");
+        Enemy otto = new EpicEnemy("Otto Otto");
+        Enemy anders = new EpicEnemy("Anders the duck");
 
 
         Enemy hussein = new LegendaryEnemy("Hussein");
@@ -52,8 +54,8 @@ public class EnemyCreator {
         enemies.add(bear);
 
         enemies.add(elephant);
-        enemies.add(giraf);
-        enemies.add(buffalo);
+        enemies.add(anders);
+        enemies.add(otto);
 
         enemies.add(hussein);
         enemies.add(hasan);
@@ -63,16 +65,20 @@ public class EnemyCreator {
         enemies.add(zlats);
         enemies.add(mossTheMad);
     }
+    ArrayList<Enemy> enemiesCopy = enemies;
 
-    public ArrayList<Enemy> getEnemies() {
-        ArrayList<Enemy> enemiesCopy = enemies;
-        return enemiesCopy;
+    public Enemy getEnemiesByName(String name) {
+        for (Enemy specificEnemy : enemiesCopy) {
+            if (specificEnemy.getEnemyName().equals(name)) {
+                return specificEnemy;
+            }
+        }
+        ui.printErrorGettingEnemyMessage();
+        return null;
     }
 
-    public void printEnemyArraylistInOrder() {
-        enemies.sort(new EnemyHealthComparator());
-        for (Enemy enemy : enemies) {
-            System.out.println(enemy);
-        }
+    public ArrayList<Enemy> getEnemiesCopyArraylistInOrder() {
+        enemiesCopy.sort(new EnemyHealthComparator());
+        return enemiesCopy;
     }
 }

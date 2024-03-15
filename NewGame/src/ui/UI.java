@@ -108,25 +108,48 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         sleepForTwoSeconds();
         System.out.print("Something is pounding in the back of your head. ");
         sleepForOneSecond();
-        System.out.print("You realize it simply is a massive BULE. ");
+        System.out.print("You realize it simply is a massive bump. ");
         sleepForTwoSeconds();
-        System.out.print("As you struggle to try and remember you hear a old and crisp voice:\n\n");
+        System.out.print("Before you can manage to think a single thought you hear a old and crisp voice:\n\n");
         sleepForOneSecond();
         System.out.print(ConsoleColors.CYAN_BRIGHT + "Oh dear. It's a miracle you're still alive. " +
-                "What is your name?\n\n" + ConsoleColors.RESET);
+                "What is your name young one?\n\n" + ConsoleColors.RESET);
 
         playerName = selectName();
 
-        System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! ");
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! " +
+                "I patched you up as well as i could. In time - you should be able to make a full recovery! " +
+                "Why are you out here in the middle of nowhere by yourself? " + ConsoleColors.RESET);
         sleepForOneSecond();
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "You see an old man with white robes kneeling over you " +
+                "before you take a movement to try and remember what happened. " +
+                ConsoleColors.RESET);
+        sleepForTwoSeconds();
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Hmmmm....." + ConsoleColors.RESET);
+        sleepForTwoSeconds();
+        System.out.println(ConsoleColors.GREEN_BRIGHT + "The last thing i remember is seeing a lot of people riding " +
+                "towards me at high speeds." + ConsoleColors.RESET);
+        sleepForOneSecond();
+        System.out.println(ConsoleColors.GREEN_BRIGHT + "I think it was... BANDITS!" + ConsoleColors.RESET);
+        sleepForOneSecond();
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "You are not the first one to be attacked by bandits around " +
+                "these parts. Anyway i found this map lying besides you. Here you go." + ConsoleColors.RESET);
+        sleepForTwoSeconds();
+//        ui.makeMapVisible();
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "I would suggest that you go to Haewen City and get fixed up. " +
+                "You dont exactly look fantastic. " + ConsoleColors.YELLOW_BRIGHT + "The old man smirks. " +
+                ConsoleColors.CYAN_BRIGHT + "It is just 5 kilometers north from here as you can see on the map. " +
+                "Safe journeys friend. " + ConsoleColors.YELLOW_BRIGHT + "You stare after the man that moves" +
+                " surprisingly quickly. After you have gathered you remaining items and gotten on you feet you look" +
+                " towards the old man again and can just barely see him far away in the distance. " + ConsoleColors.RESET);
 
     }
 
 
     public String selectName() { // TODO make strings array.
         String playerName = null;
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal\n2. I am Hisha\n" +
-                "3. Howdy partner. I am Bobb\n4. Hello mister my name is Kim.\n5. Me name Jeff\n6. I am Null" +
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal.\n2. I am Hisha.\n" +
+                "3. Howdy partner. I am Bobb.\n4. Hello mister my name is Kim.\n5. Me name Jeff.\n6. I am Null.\n7. I dont remember." +
                 ConsoleColors.RESET);
         int playerInput = scanner.nextInt();
         switch (playerInput) {
@@ -136,6 +159,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
             case 4 -> playerName = "Kim";
             case 5 -> playerName = "Jeff";
             case 6 -> playerName = "Null";
+            case 7 -> playerName = "Nameless";
         }
         return playerName;
     }
@@ -330,7 +354,11 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public void printCannotSharpenBrokenWeapon(String weaponConditionText, String weaponConditionColor) {
-        System.out.println(ConsoleColors.CYAN_BRIGHT+"You cannot sharpen a "+ weaponConditionColor+weaponConditionText
-        + " weapon!"+ ConsoleColors.RESET);
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "You cannot sharpen a " + weaponConditionColor + weaponConditionText
+                + " weapon!" + ConsoleColors.RESET);
+    }
+
+    public void printMenu(String printString) {
+        System.out.println("\n" + printString);
     }
 }

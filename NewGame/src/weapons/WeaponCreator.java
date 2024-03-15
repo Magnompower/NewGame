@@ -12,32 +12,32 @@ public class WeaponCreator {
 
     public void instantiateWeapons() {
 
-        Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDEDMACE, "Poor club");
-        Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDEDMACE, "Common club");
-        Weapon clubUncommon = new UncommonWeapon(WeaponType.ONEHANDEDMACE, "Uncommon club");
+        Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDED_MACE, "Poor club");
+        Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDED_MACE, "Common club");
+        Weapon clubUncommon = new UncommonWeapon(WeaponType.ONEHANDED_MACE, "Uncommon club");
 
-        Weapon warHammerPoor = new PoorWeapon(WeaponType.TWOHANDEDMACE, "Poor war hammer");
-        Weapon warHammerCommon = new CommonWeapon(WeaponType.TWOHANDEDMACE, "Common war hammer");
-        Weapon warHammerUncommon = new UncommonWeapon(WeaponType.TWOHANDEDMACE, "Uncommon war hammer");
-
-
-        Weapon shortSwordPoor = new PoorWeapon(WeaponType.ONEHANDEDSWORD, "Poor short sword");
-        Weapon shortSwordCommon = new CommonWeapon(WeaponType.ONEHANDEDSWORD, "Common short sword");
-        Weapon shortSwordUncommon = new UncommonWeapon(WeaponType.ONEHANDEDSWORD, "Uncommon short sword");
+        Weapon warHammerPoor = new PoorWeapon(WeaponType.TWOHANDED_MACE, "Poor war hammer");
+        Weapon warHammerCommon = new CommonWeapon(WeaponType.TWOHANDED_MACE, "Common war hammer");
+        Weapon warHammerUncommon = new UncommonWeapon(WeaponType.TWOHANDED_MACE, "Uncommon war hammer");
 
 
-        Weapon longswordPoor = new PoorWeapon(WeaponType.TWOHANDEDSWORD, "Poor longsword");
-        Weapon longswordCommon = new CommonWeapon(WeaponType.TWOHANDEDSWORD, "Common longsword");
-        Weapon longswordUncommon = new UncommonWeapon(WeaponType.TWOHANDEDSWORD, "Uncommon longsword");
+        Weapon shortSwordPoor = new PoorWeapon(WeaponType.ONEHANDED_SWORD, "Poor short sword");
+        Weapon shortSwordCommon = new CommonWeapon(WeaponType.ONEHANDED_SWORD, "Common short sword");
+        Weapon shortSwordUncommon = new UncommonWeapon(WeaponType.ONEHANDED_SWORD, "Uncommon short sword");
+
+
+        Weapon longswordPoor = new PoorWeapon(WeaponType.TWOHANDED_SWORD, "Poor longsword");
+        Weapon longswordCommon = new CommonWeapon(WeaponType.TWOHANDED_SWORD, "Common longsword");
+        Weapon longswordUncommon = new UncommonWeapon(WeaponType.TWOHANDED_SWORD, "Uncommon longsword");
 
 
         Weapon staffOfMindorr = new RareWeapon(WeaponType.STAFF, "Staff of Mindorr");
 
 
-        Weapon swordOfKeilier = new EpicWeapon(WeaponType.TWOHANDEDSWORD, "Sword of Keilier");
+        Weapon swordOfKeilier = new EpicWeapon(WeaponType.TWOHANDED_SWORD, "Sword of Keilier");
 
 
-        Weapon axeOfOddie = new LegendaryWeapon(WeaponType.TWOHANDEDAXE, "Axe of Oddie");
+        Weapon axeOfOddie = new LegendaryWeapon(WeaponType.TWOHANDED_AXE, "Axe of Oddie");
 
         Weapon lilleLom = new ModWeapon(WeaponType.STAFF, "Lille Lom");
 

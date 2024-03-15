@@ -10,6 +10,8 @@ import enemies.EnemyCreator;
 import menus.inheritance.*;
 import weapons.WeaponCreator;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Scanner;
 
 public class MenuCreator {
@@ -21,12 +23,14 @@ public class MenuCreator {
     ArmorCreator armorCreator = new ArmorCreator();
     EnemyCreator enemyCreator = new EnemyCreator();
 
+    Deque<Menu> menuStack = new ArrayDeque<>();
     private final MainMenu mainMenu = new MainMenu(ui);
     private final MovementMenu movementMenu = new MovementMenu(ui);
     private final CheatMenu cheatMenu = new CheatMenu(ui);
     private final CombatMenu combatMenu = new CombatMenu(ui, player);
 
     public void executeMainMenu() {
+        //TODO ADD configurestartgame();
         weaponCreator.instantiateWeapons();
         armorCreator.instantiateArmor();
         enemyCreator.instantiateEnemies();
@@ -34,7 +38,7 @@ public class MenuCreator {
         promptWelcomeMessage();
         promptSleepForOneAndAHalfSecond();
 
-        mainMenu.printMenu();
+        mainMenu.promptPrintMenu();
         String returnValueFromMainMenu = mainMenu.returnUserInput();
         switch (returnValueFromMainMenu) {
             case "Start game" -> startGame();
@@ -51,7 +55,7 @@ public class MenuCreator {
     private void promptMovementMenu() {
         boolean combat = checkForCombat();
         while (!combat) {
-            movementMenu.printMenu();
+            movementMenu.promptPrintMenu();
             String returnValueFromMovementMenu = movementMenu.returnUserInput();
             switch (returnValueFromMovementMenu) {
                 case "Move north" -> player.moveNorth();
@@ -71,7 +75,7 @@ public class MenuCreator {
     private void promptCombatMenu() {
         boolean combat = checkForCombat();
         while (combat)
-            combatMenu.printMenu();
+            combatMenu.promptPrintMenu();
         String returnValueFromCombatMenu = combatMenu.returnUserInput();
         switch (returnValueFromCombatMenu) {
             case "Attack" -> player.attack();
@@ -86,9 +90,9 @@ public class MenuCreator {
     }
 
     private void promptCheatMenu() {
-        boolean cheatsActivated = true;
+        boolean cheatsActivated = evaluateCheatsActivated();
         while (cheatsActivated) {
-            cheatMenu.printMenu();
+            cheatMenu.promptPrintMenu();
             String returnValueFromCheatMenu = cheatMenu.returnUserInput();
             {
                 switch (returnValueFromCheatMenu) {
@@ -104,13 +108,20 @@ public class MenuCreator {
                     case "Sharpen weapon" -> player.sharpenWeapon();
                     case "Repair armor" -> player.repairArmor();
                     case "Show Available information" -> player.promptPrintAvailableInfo();
-                    case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // working title
+                    case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
 //                    case null -> invalidInput(); // need java preview to use
                     default -> invalidInput();
                 }
             }
+//            validateCheatsActivated(); //TODO
             determinePreviousMenuAndGoThere(); // TODO go out of cheat menu
         }
+    }
+
+    private boolean evaluateCheatsActivated() {
+//        if (in cheats menu){
+            return true;
+//        }else return false;
     }
 
     public void promptWelcomeMessage() {
@@ -156,10 +167,18 @@ public class MenuCreator {
 //        } else return false;
     }
 
+    public void switchMenu(Menu newMenu) {
+        menuStack.push(newMenu);
+        newMenu.promptPrintMenu(); //TODO Dont print here?
+    }
+
     private boolean determinePreviousMenuAndGoThere() { // return String TODO
-//        if ()
-        return true;
-//    else
+        if (!menuStack.isEmpty()) {
+            Menu previousMenu = menuStack.pop();
+            previousMenu.promptPrintMenu();
+            return true;
+        }
+        return false;
     }
 
     private void grantPlayerWeaponByName() {

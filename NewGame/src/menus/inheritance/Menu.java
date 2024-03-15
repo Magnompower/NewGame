@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public abstract class Menu {
 
+    UI ui = new UI();
     private final String[] menuPoints;
     private final String menuHeader;
 
@@ -14,11 +15,11 @@ public abstract class Menu {
         this.menuPoints = menuPoints;
     }
 
-    public void printMenu() {
+    public void promptPrintMenu() {
         String printString = menuHeader + "\n";
         for (int i = 0; i < menuPoints.length; i++) printString += menuPoints[i] + "\n";
         {
-            System.out.println("\n" + printString);
+            ui.printMenu(printString);
         }
     }
 

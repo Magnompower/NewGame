@@ -2,20 +2,20 @@ package weapons;
 
 public enum WeaponType {
     // One-handed == AGI. Two-handed == STR STAFF == INT/STR/AGI
-    ONEHANDEDSWORD("AGI"),
-    ONEHANDEDAXE("AGI"),
-    ONEHANDEDMACE("AGI"),
-    TWOHANDEDSWORD("STR"),
-    TWOHANDEDMACE("STR"),
-    TWOHANDEDAXE("STR"),
+    ONEHANDED_SWORD("AGI"),
+    ONEHANDED_AXE("AGI"),
+    ONEHANDED_MACE("AGI"),
+    ONEHANDED_DAGGER("AGI"),
+    TWOHANDED_SWORD("STR"),
+    TWOHANDED_MACE("STR"),
+    TWOHANDED_AXE("STR"),
     STAFF("INT, STR, AGI"),
-    DAGGER("AGI"),
     ;
 
     private final String modifier;
 
-    WeaponType(String modifier){
-        this.modifier=modifier;
+    WeaponType(String modifier) {
+        this.modifier = modifier;
     }
 
     public String getModifier() {

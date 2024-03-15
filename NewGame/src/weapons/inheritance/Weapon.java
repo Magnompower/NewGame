@@ -9,7 +9,7 @@ public abstract class Weapon {
     private String weaponName;
     private String weaponColor;
     private String weaponModifier;
-    private WeaponType weaponType = WeaponType.DAGGER;
+    private WeaponType weaponType = WeaponType.ONEHANDED_DAGGER;
     private WeaponCondition weaponCondition = WeaponCondition.BROKEN;
     private int baseWeaponDamage;
     private int actualWeaponDamage;
@@ -28,7 +28,7 @@ public abstract class Weapon {
     }
 
     public void setActualWeaponDamage(double actualWeaponDamage) {
-        if (actualWeaponDamage<= 0) {
+        if (actualWeaponDamage <= 0) {
             actualWeaponDamage = 1;
         }
         this.actualWeaponDamage = (int) Math.round(actualWeaponDamage);
@@ -70,9 +70,8 @@ public abstract class Weapon {
         return weaponColor;
     }
 
-    public String getWeaponType() {
-        weaponModifier = weaponType.getModifier();
-        return weaponModifier;
+    public WeaponType getWeaponType() {
+        return weaponType;
     }
 
     public WeaponCondition getWeaponCondition() {
@@ -83,8 +82,8 @@ public abstract class Weapon {
 
     public void calculateActualWeaponDamage() { //TODO PROBLEM DEN IKKE RETURNERER FORDI DEN IKKE INSTACIERES?!?
 
-        if (weaponType == WeaponType.ONEHANDEDMACE || weaponType == WeaponType.ONEHANDEDSWORD ||
-                weaponType == WeaponType.ONEHANDEDAXE || weaponType == WeaponType.DAGGER) {
+        if (weaponType == WeaponType.ONEHANDED_MACE || weaponType == WeaponType.ONEHANDED_SWORD ||
+                weaponType == WeaponType.ONEHANDED_AXE || weaponType == WeaponType.ONEHANDED_DAGGER) {
             baseWeaponDamage = (int) Math.round(baseWeaponDamage * 0.5);
         }
         switch (weaponCondition) {

@@ -16,10 +16,13 @@ import weapons.inheritance.Weapon;
 import weapons.WeaponCreator;
 import weapons.inheritance.PoorWeapon;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class Player {
 
     UI ui = new UI(); // TODO MAKING new everywhere is bad?
-    Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
+    Weapon playerWeapon = new PoorWeapon(WeaponType.ONEHANDED_DAGGER, "Poor dagger"); // START WEAPON
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator;
     private EnemyCreator enemyCreator;
@@ -189,27 +192,34 @@ public class Player {
         playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7; // TODO MAKE BOTH ACTUAL AND MAXIMUM
     }
 
-    public int calculatePlayerDamageTakenPercentage(){
+    public int calculatePlayerDamageTakenPercentage() {// TODO USE AND SEND TO UI
+        Set<WeaponType> oneHandedWeaponTypes = EnumSet.of(WeaponType.ONEHANDED_AXE, WeaponType.ONEHANDED_DAGGER,
+                WeaponType.ONEHANDED_MACE, WeaponType.ONEHANDED_SWORD);
+
         int calculatedDamageTakenPercentage;
-        calculatedDamageTakenPercentage = playerArmor.calculateDamageReductionPercentage()+playerAgility/2;
+        calculatedDamageTakenPercentage = playerArmor.calculateDamageReductionPercentage() - playerAgility / 2;
+        if (oneHandedWeaponTypes.contains(playerWeapon.getWeaponType())) {
+
+            calculatedDamageTakenPercentage = calculatedDamageTakenPercentage - 10; // Take 10% less dmg with shield.
+        }
 
         return calculatedDamageTakenPercentage;
     }
 
-    public int calculatePlayerdamage() { //TODO METODEN KAN RAFINERERS
+    public int calculatePlayerDamage() { //TODO METODEN KAN RAFINERERS
         int calcualtedPlayerDamage;
         calcualtedPlayerDamage = playerWeapon.getActualWeaponDamage() + playerLevel * 2;
-        if (playerWeapon.getWeaponType().equals("STR")) {
-            calcualtedPlayerDamage = calcualtedPlayerDamage +  playerStrength / 2;
+        if (playerWeapon.getWeaponType().getModifier().equals("STR")) {
+            calcualtedPlayerDamage = calcualtedPlayerDamage + playerStrength / 2;
         }
-        if (playerWeapon.getWeaponType().equals("AGI")) {
-            calcualtedPlayerDamage = calcualtedPlayerDamage +  playerAgility / 2;
+        if (playerWeapon.getWeaponType().getModifier().equals("AGI")) {
+            calcualtedPlayerDamage = calcualtedPlayerDamage + playerAgility / 2;
         }
-        if (playerWeapon.getWeaponType().equals("INT")) {
-            calcualtedPlayerDamage = calcualtedPlayerDamage +  playerIntelligence / 2;
+        if (playerWeapon.getWeaponType().getModifier().equals("INT")) {
+            calcualtedPlayerDamage = calcualtedPlayerDamage + playerIntelligence / 2;
         }
-        setPlayerDamage((int) Math.round(calcualtedPlayerDamage));
-        return (int) calcualtedPlayerDamage;
+        setPlayerDamage(calcualtedPlayerDamage);
+        return calcualtedPlayerDamage;
         // TODO FORKERT? NEED VOID? NEEDS UPDATE ALL THE TIME
     }
 
@@ -248,7 +258,7 @@ public class Player {
     }
 
     public void promptPrintAvailableInfo() {
-        ui.printAvailableInfo(toString(), calculatePlayerdamage(), getPlayerPositionX(), getPlayerPositionY(),
+        ui.printAvailableInfo(toString(), calculatePlayerDamage(), getPlayerPositionX(), getPlayerPositionY(),
                 playerWeapon.toString(), playerArmor.toString(), enemiesKilled);
     }
 
@@ -278,7 +288,7 @@ public class Player {
 
 
     public void attack() {
-        calculatePlayerdamage();
+        calculatePlayerDamage();
         ui.displayDamageDealt(playerDamage);
 //      TODO  enemyHealth = enemyHealth - playerDamage;
     }
@@ -310,9 +320,10 @@ public class Player {
     }
 
     private void promptPrintCannotSharpenBrokenWeapon() {
-    ui.printCannotSharpenBrokenWeapon(playerWeapon.getWeaponCondition().getWeaponConditionText(),
-            playerWeapon.getWeaponCondition().getWeaponConditionColor());
+        ui.printCannotSharpenBrokenWeapon(playerWeapon.getWeaponCondition().getWeaponConditionText(),
+                playerWeapon.getWeaponCondition().getWeaponConditionColor());
     }
+
     private void promptPrintCannotRepairArmorAnyFurther() {
         ui.printCannotRepairArmorAnyFurther(playerArmor.getArmorCondition().getArmorConditionText(),
                 playerArmor.getArmorCondition().getArmorConditionColor());
@@ -350,11 +361,9 @@ public class Player {
         String playerStaminaString = ConsoleColors.LIGHT_GOLD + playerStamina + ConsoleColors.YELLOW_BRIGHT;
         String playerStrengthString = ConsoleColors.LIGHT_GOLD + playerStrength + ConsoleColors.YELLOW_BRIGHT;
 
-        String playerDetails = String.format(ConsoleColors.YELLOW_BRIGHT +
+        return String.format(ConsoleColors.YELLOW_BRIGHT +
                         "Level: %-3s HP: %-4s AGI: %-3s INT: %-3s STM: %-3s STR: %-3s",
                 playerLevelString, playerHealthPointsString, playerAgilityString,
                 playerIntelligenceString, playerStaminaString, playerStrengthString);
-
-        return playerDetails;
     }
 }

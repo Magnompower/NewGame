@@ -1,6 +1,6 @@
 package comparators;
 
-import enemies.Enemy;
+import enemies.inheritance.Enemy;
 
 import java.util.Comparator;
 

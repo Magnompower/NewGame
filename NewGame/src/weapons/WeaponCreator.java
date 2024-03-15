@@ -1,14 +1,13 @@
 package weapons;
 
-import classes.UI;
+import ui.UI;
 import comparators.WeaponDamageComparator;
-import enums.WeaponType;
+import weapons.inheritance.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class WeaponCreator {
-    UI ui;
+    UI ui = new UI();
     private final ArrayList<Weapon> weapons = new ArrayList<>();
 
     public void instantiateWeapons() {
@@ -40,6 +39,8 @@ public class WeaponCreator {
 
         Weapon axeOfOddie = new LegendaryWeapon(WeaponType.TWOHANDEDAXE, "Axe of Oddie");
 
+        Weapon lilleLom = new ModWeapon(WeaponType.STAFF, "Lille Lom");
+
 //        weapons.addAll(Weapon); TODO
 
         weapons.add(clubPoor);
@@ -63,6 +64,8 @@ public class WeaponCreator {
         weapons.add(swordOfKeilier);
 
         weapons.add(axeOfOddie);
+
+        weapons.add(lilleLom);
     }
 
     ArrayList<Weapon> weaponsCopy = weapons;
@@ -70,11 +73,11 @@ public class WeaponCreator {
     public Weapon getWeaponByName(String name) {
         for (Weapon specificWeapon : weaponsCopy) {
             if (specificWeapon.getWeaponName().equals(name)) {
+                ui.printConfirmationGettingItem();
                 return specificWeapon;
             }
         }
-         ui.printErrorGettingWeaponMessage();
-        System.out.println("No weapon with that name!"); //TODO PLACE IN UI:
+        ui.printErrorGettingitemMessage();
         return null;
     }
 

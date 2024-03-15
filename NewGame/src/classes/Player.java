@@ -2,18 +2,30 @@ package classes;
 
 import armor.ArmorCreator;
 import enemies.EnemyCreator;
-import enums.ArmorCondition;
-import enums.WeaponCondition;
-import enums.WeaponType;
+import armor.ArmorCondition;
+import weapons.WeaponCondition;
+import weapons.WeaponType;
 
-import armor.Armor;
-import armor.PoorArmor;
+import armor.inheritance.Armor;
+import armor.inheritance.PoorArmor;
 
-import weapons.Weapon;
+import map_logic.MapFrame;
+import ui.ConsoleColors;
+import ui.UI;
+import weapons.inheritance.Weapon;
 import weapons.WeaponCreator;
-import weapons.PoorWeapon;
+import weapons.inheritance.PoorWeapon;
 
 public class Player {
+
+    UI ui = new UI(); // TODO MAKING new everywhere is bad?
+    Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
+    private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
+    private WeaponCreator weaponCreator;
+    private EnemyCreator enemyCreator;
+    private MapFrame mapFrame = MapFrame.getInstance(); // TODO move to UI somehow
+    private ArmorCreator armorCreator;
+
     private String playerName;
     private int playerPositionX = 15;
     private int playerPositionY = 15;
@@ -29,15 +41,17 @@ public class Player {
     private int playerAmountOfCoins = 0;
     private int playerExperiencePoints; // XP needed to lvl = base(100) * level * level (100 lvl 1, 10000 lvl 10)
 
-    UI ui = new UI();
-    Weapon playerWeapon = new PoorWeapon(WeaponType.DAGGER, "Poor dagger"); // START WEAPON
-    private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
-    private WeaponCreator weaponCreator = new WeaponCreator();
-    private EnemyCreator enemyCreator;
-    private MapFrame mapFrame = MapFrame.getInstance();
-    private ArmorCreator armorCreator;
 
     // ------------------ SETTERS ------------------
+
+
+    public void setPlayerArmor(Armor playerArmor) {
+
+        if (playerStrength >= playerArmor.getRequiredStrength()) {
+            this.playerArmor = playerArmor;
+        } else ui.printNotEnoughtStrengthToEquipArmorMessage(playerStrength, playerArmor.getRequiredStrength(),
+                playerArmor.getArmorName(), playerArmor.getArmorColor());
+    }
 
     public void setPlayerPositionX(int playerPositionX) {
         this.playerPositionX = playerPositionX;
@@ -90,6 +104,13 @@ public class Player {
 
     // ------------------ GETTERS ------------------
 
+    public Weapon getPlayerWeapon() {
+        return playerWeapon;
+    }
+
+    public Armor getPlayerArmor() {
+        return playerArmor;
+    }
 
     public String getPlayerName() {
         return playerName;
@@ -137,6 +158,7 @@ public class Player {
 
 
     // ------------------ OTHER ------------------
+
     public void promptMakeMapVisible() {
         mapFrame.makeMapVisible();
     }
@@ -146,12 +168,6 @@ public class Player {
     }
 
     // ------------------ PLAYER RELATED ------------------
-
-    public void equipNewArmor() {
-        if (playerStrength >= playerArmor.getRequiredStrength()) {
-            this.playerArmor = playerArmor;
-        } else ui.printUnfitArmorMessage();
-    }
 
     public void validatePlayerHealth() {
         if (playerHealthPoints <= 0) {
@@ -173,19 +189,27 @@ public class Player {
         playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7; // TODO MAKE BOTH ACTUAL AND MAXIMUM
     }
 
-    public int calculatedPlayerDamage(double playerDamage) {
-        playerDamage = playerWeapon.getActualWeaponDamage() + playerLevel;
+    public int calculatePlayerDamageTakenPercentage(){
+        int calculatedDamageTakenPercentage;
+        calculatedDamageTakenPercentage = playerArmor.calculateDamageReductionPercentage()+playerAgility/2;
+
+        return calculatedDamageTakenPercentage;
+    }
+
+    public int calculatePlayerdamage() { //TODO METODEN KAN RAFINERERS
+        int calcualtedPlayerDamage;
+        calcualtedPlayerDamage = playerWeapon.getActualWeaponDamage() + playerLevel * 2;
         if (playerWeapon.getWeaponType().equals("STR")) {
-            playerDamage = playerDamage + (double) playerStrength / 2;
+            calcualtedPlayerDamage = calcualtedPlayerDamage +  playerStrength / 2;
         }
         if (playerWeapon.getWeaponType().equals("AGI")) {
-            playerDamage = playerDamage + (double) playerAgility / 2;
+            calcualtedPlayerDamage = calcualtedPlayerDamage +  playerAgility / 2;
         }
         if (playerWeapon.getWeaponType().equals("INT")) {
-            playerDamage = playerDamage + (double) playerIntelligence / 2;
+            calcualtedPlayerDamage = calcualtedPlayerDamage +  playerIntelligence / 2;
         }
-        setPlayerDamage((int) Math.round(playerDamage));
-        return (int) playerDamage;
+        setPlayerDamage((int) Math.round(calcualtedPlayerDamage));
+        return (int) calcualtedPlayerDamage;
         // TODO FORKERT? NEED VOID? NEEDS UPDATE ALL THE TIME
     }
 
@@ -223,8 +247,8 @@ public class Player {
         }
     }
 
-    public void promptAvailableInfo() {
-        ui.printAvailableInfo(toString(), calculatedPlayerDamage(playerDamage), getPlayerPositionX(), getPlayerPositionY(),
+    public void promptPrintAvailableInfo() {
+        ui.printAvailableInfo(toString(), calculatePlayerdamage(), getPlayerPositionX(), getPlayerPositionY(),
                 playerWeapon.toString(), playerArmor.toString(), enemiesKilled);
     }
 
@@ -253,21 +277,24 @@ public class Player {
     }
 
 
-
     public void attack() {
-        calculatedPlayerDamage(getPlayerDamage());
+        calculatePlayerdamage();
         ui.displayDamageDealt(playerDamage);
 //      TODO  enemyHealth = enemyHealth - playerDamage;
     }
 
-    public String sharpenWeapon() {
+    public void sharpenWeapon() {
         switch (playerWeapon.getWeaponCondition()) { // Cannot sharpen a broken weapon.
+            case BROKEN -> promptPrintCannotSharpenBrokenWeapon();
             case RUSTY -> playerWeapon.setWeaponCondition(WeaponCondition.NORMAL); // TODO SOUT WEAPON STATUS!
             case NORMAL -> playerWeapon.setWeaponCondition(WeaponCondition.POLISHED);
             case POLISHED -> playerWeapon.setWeaponCondition(WeaponCondition.SHARP);
+            case SHARP -> promptPrintCannotSharpenAnyFurther();
         }
-        return playerWeapon.getWeaponCondition().getWeaponConditionText();
+        ui.printNewWeaponCondition(playerWeapon.getWeaponCondition().getWeaponConditionText(),
+                playerWeapon.getWeaponCondition().getWeaponConditionColor());
     }
+
 
     public void repairArmor() { // TODO NAAMING: ARMOR MAINTANINCE?!
         switch (playerArmor.getArmorCondition()) { //TODO CAN YOU REPAIR BROKEN ARMOR?!?
@@ -275,7 +302,20 @@ public class Player {
             case DIRTY -> playerArmor.setArmorCondition(ArmorCondition.NORMAL); //TODO SOUT STATUS
             case NORMAL -> playerArmor.setArmorCondition(ArmorCondition.POLISHED);
             case POLISHED -> playerArmor.setArmorCondition(ArmorCondition.REINFORCED);
+            case REINFORCED -> promptPrintCannotRepairArmorAnyFurther();
         }
+        ui.printNewArmorCondition(playerArmor.getArmorCondition().getArmorConditionText(),
+                playerArmor.getArmorCondition().getArmorConditionColor());
+
+    }
+
+    private void promptPrintCannotSharpenBrokenWeapon() {
+    ui.printCannotSharpenBrokenWeapon(playerWeapon.getWeaponCondition().getWeaponConditionText(),
+            playerWeapon.getWeaponCondition().getWeaponConditionColor());
+    }
+    private void promptPrintCannotRepairArmorAnyFurther() {
+        ui.printCannotRepairArmorAnyFurther(playerArmor.getArmorCondition().getArmorConditionText(),
+                playerArmor.getArmorCondition().getArmorConditionColor());
     }
 
     public void promptUpdatePlayerPosition() {
@@ -289,8 +329,15 @@ public class Player {
     public void promptPrintEnemiesArrayInOrder() {
         ui.printEnemiesArraylistInOrder(enemyCreator.getEnemiesCopyArraylistInOrder());
     }
-    public void promptPrintArmoryArrayInOrder(){
-        ui.printArmorArrayListInOrder(armorCreator.getArmouryCopyArraylistInOrder());
+
+    public void promptPrintArmoryArrayInOrder() {
+        ui.printArmorArrayListInOrder(armorCreator.getArmorPiecesCopyArraylistInOrder());
+    }
+
+
+    private void promptPrintCannotSharpenAnyFurther() {
+        ui.PrintCannotSharpenWeaponFurther(playerWeapon.getWeaponCondition().getWeaponConditionText(),
+                playerWeapon.getWeaponCondition().getWeaponConditionColor());
     }
 
     @Override

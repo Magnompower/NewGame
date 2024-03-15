@@ -1,6 +1,6 @@
 package comparators;
 
-import weapons.Weapon;
+import weapons.inheritance.Weapon;
 
 import java.util.Comparator;
 

@@ -1,12 +1,13 @@
 package armor;
 
-import classes.UI;
+import armor.inheritance.*;
+import ui.UI;
 import comparators.ArmorDamageTakenPercentageComparator;
 
 import java.util.ArrayList;
 
 public class ArmorCreator {
-    UI ui;
+    UI ui = new UI();
     private final ArrayList<Armor> armorPieces = new ArrayList<>();
 
     public void instantiateArmor() { //TODO
@@ -36,6 +37,8 @@ public class ArmorCreator {
         Armor breastplateOfOddie = new LegendaryArmor("Breastplate of Oddie");
         Armor hideOfOzra = new LegendaryArmor("Hide of Ozra"); // Ozra the legendary dragon TODO MAKE
 
+        Armor pyjamas = new PlotArmor("Pyjamas");
+
         armorPieces.add(poorBreastplate);
         armorPieces.add(commonBreastplate);
         armorPieces.add(uncommonBreastplate);
@@ -61,6 +64,7 @@ public class ArmorCreator {
         armorPieces.add(breastplateOfOddie);
         armorPieces.add(hideOfOzra);
 
+        armorPieces.add(pyjamas);
     }
 
     ArrayList<Armor> armorPiecesCopy = armorPieces;
@@ -71,12 +75,12 @@ public class ArmorCreator {
                 return specificArmorPiece;
             }
         }
-        ui.printErrorGettingArmorMessage();
+        ui.printInfoToSelectItemByName();
         return null; // Somehow return the message is better?
     }
 
 
-    public ArrayList<Armor> getArmouryCopyArraylistInOrder() {
+    public ArrayList<Armor> getArmorPiecesCopyArraylistInOrder() {
         armorPiecesCopy.sort(new ArmorDamageTakenPercentageComparator());
         return armorPiecesCopy;
     }

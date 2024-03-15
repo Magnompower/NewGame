@@ -1,7 +1,8 @@
 package enemies;
 
-import classes.UI;
+import ui.UI;
 import comparators.EnemyHealthComparator;
+import enemies.inheritance.*;
 
 import java.util.ArrayList;
 

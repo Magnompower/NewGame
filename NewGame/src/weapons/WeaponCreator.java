@@ -1,7 +1,7 @@
 package weapons;
 
 import ui.UI;
-import comparators.WeaponDamageComparator;
+import ui.comparators.WeaponDamageComparator;
 import weapons.inheritance.*;
 
 import java.util.ArrayList;

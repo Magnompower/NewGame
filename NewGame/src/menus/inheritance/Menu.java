@@ -2,8 +2,6 @@ package menus.inheritance;
 
 import ui.UI;
 
-import java.util.Scanner;
-
 public abstract class Menu {
 
     UI ui = new UI();
@@ -24,12 +22,10 @@ public abstract class Menu {
     }
 
     public String returnUserInput() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+        return ui.getSpecificStringInput();
     }
 
     public String changeUserInput() {
-        Scanner userInput = new Scanner(System.in);
-        return userInput.nextLine();
+        return ui.getSpecificStringInput();
     }
 }

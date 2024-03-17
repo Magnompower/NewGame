@@ -49,7 +49,6 @@ public class Player {
 
 
     public void setPlayerArmor(Armor playerArmor) {
-
         if (playerStrength >= playerArmor.getRequiredStrength()) {
             this.playerArmor = playerArmor;
         } else ui.printNotEnoughtStrengthToEquipArmorMessage(playerStrength, playerArmor.getRequiredStrength(),

@@ -2,14 +2,17 @@ package ui;
 
 import armor.inheritance.Armor;
 import enemies.inheritance.Enemy;
+import map_logic.MapFrame;
 import weapons.inheritance.Weapon;
 
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
+    MapFrame mapFrame = MapFrame.getInstance();
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
 
@@ -41,13 +44,13 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
 
     public boolean wantToQuitGame() {
-        System.out.println(ConsoleColors.YELLOW_BRIGHT + "Are you sure you want to quit? (" + ConsoleColors.RED_BRIGHT
-                + "Y" + ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.GREEN_BRIGHT + "N" +
-                ConsoleColors.YELLOW_BRIGHT + ");" + ConsoleColors.RESET);
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "\nType " + ConsoleColors.RED_BRIGHT
+                + "yes" + ConsoleColors.YELLOW_BRIGHT + " if you want to quit. Everything else will " + ConsoleColors.GREEN_BRIGHT + "continue" +
+                ConsoleColors.YELLOW_BRIGHT + " the game." + ConsoleColors.RESET);
 
-        String playerInput = scanner.nextLine().toUpperCase();
+        String playerInput = scanner.nextLine().trim();
 
-        if (playerInput.equalsIgnoreCase("Y")) {
+        if (playerInput.trim().equalsIgnoreCase("YES") || playerInput.trim().equalsIgnoreCase("Y")) {
             printTimePlayed();
             return true;
         } else return false;
@@ -56,7 +59,6 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
 
     public void printTimePlayed() {
-
         Duration duration = Duration.between(timeWhenGameStart, LocalTime.now());
 
         long minutesPlayed = duration.toMinutes();
@@ -96,14 +98,14 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         }
     }
 
-    public void invalidInput() {
+    public void printInvalidInput() {
         System.out.println(ConsoleColors.RED_BRIGHT + "Invalid input. Try again." + ConsoleColors.RESET);
         //TODO
     }
     // TODO When defeating an enemy you know its stats next fight.
 
 
-    public void playerMessage1(String playerName) {
+    public void printPlayerMessage1(String playerName) {
         System.out.print(ConsoleColors.YELLOW_BRIGHT + "You wake up feeling very disoriented. ");
         sleepForTwoSeconds();
         System.out.print("Something is pounding in the back of your head. ");
@@ -117,7 +119,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
         playerName = selectName();
 
-        System.out.println(ConsoleColors.CYAN_BRIGHT + "\nYou should be very thankful " + playerName + "! " +
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "You should be very thankful " + playerName + "! " +
                 "I patched you up as well as i could. In time - you should be able to make a full recovery! " +
                 "Why are you out here in the middle of nowhere by yourself? " + ConsoleColors.RESET);
         sleepForOneSecond();
@@ -139,7 +141,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.CYAN_BRIGHT + "I would suggest that you go to Haewen City and get fixed up. " +
                 "You dont exactly look fantastic. " + ConsoleColors.YELLOW_BRIGHT + "The old man smirks. " +
                 ConsoleColors.CYAN_BRIGHT + "It is just 5 kilometers north from here as you can see on the map. " +
-                "Safe journeys friend. " + ConsoleColors.YELLOW_BRIGHT + "You stare after the man that moves" +
+                "Safe journeys friend. " + ConsoleColors.YELLOW_BRIGHT + "\n\nYou stare after the man that moves" +
                 " surprisingly quickly. After you have gathered you remaining items and gotten on you feet you look" +
                 " towards the old man again and can just barely see him far away in the distance. " + ConsoleColors.RESET);
 
@@ -151,17 +153,28 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal.\n2. I am Hisha.\n" +
                 "3. Howdy partner. I am Bobb.\n4. Hello mister my name is Kim.\n5. Me name Jeff.\n6. I am Null.\n7. I dont remember." +
                 ConsoleColors.RESET);
-        int playerInput = scanner.nextInt();
-        switch (playerInput) {
-            case 1 -> playerName = "Micheal";
-            case 2 -> playerName = "Hisha";
-            case 3 -> playerName = "Bobb";
-            case 4 -> playerName = "Kim";
-            case 5 -> playerName = "Jeff";
-            case 6 -> playerName = "Null";
-            case 7 -> playerName = "Nameless";
+        try {
+            int playerInput = scanner.nextInt();
+            switch (playerInput) {
+                case 1 -> playerName = "Micheal";
+                case 2 -> playerName = "Hisha";
+                case 3 -> playerName = "Bobb";
+                case 4 -> playerName = "Kim";
+                case 5 -> playerName = "Jeff";
+                case 6 -> playerName = "Null";
+                case 7 -> playerName = "Nameless";
+                default -> printNotAName();
+            }
+        } catch (InputMismatchException e) {
+            printNotAName();
         }
         return playerName;
+    }
+
+    private void printNotAName() {
+        System.out.println(ConsoleColors.CYAN_BRIGHT + "I dont think that is a name. I will call you Null - " +
+                "just like one of my good friends. Anyway! ");
+        sleepForOneSecond();
     }
 
     // ------------------ MENU'S ------------------
@@ -188,8 +201,9 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public String[] printMovementMenuPoints() {
-        return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "8. Move north.", "6. Move east.", "4. Move west.",
-                "2. Move south.\n", "5. See player position.", "9. Show all available information.", "0. Quit." + ConsoleColors.RESET};
+        return new String[]{ConsoleColors.MENU_COLOR_SANDY_BROWN + "W/8. Move north.", "A/4. Move west.",
+                "S/2. Move south.", "D/6. Move east.", "5. See player position.",
+                "9. Show all available information.", "0. Quit game." + ConsoleColors.RESET};
     }
 
     public String printCheatMenuHeader() {
@@ -200,7 +214,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         return new String[]{ConsoleColors.CYAN_BRIGHT + "W/A/S/D. Move around.", "1. Make map visible.",
                 "2. Make map invisible.", "3. Grant yourself a weapon.", "4. Grant yourself a piece of armor.",
                 "5. Change attributes.", "6. Sharpen weapon.", "7. Repair armor",
-                "9. Show all Available information.", "33. Go to previous menu."};
+                "9. Show all Available information.", "0. Quit game.", "33. Go to previous menu."};
     }
 
     // ------------------ SLEEP-TIMERS ------------------
@@ -360,5 +374,22 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
     public void printMenu(String printString) {
         System.out.println("\n" + printString);
+    }
+
+    public String getSpecificStringInput() {
+//        try { // TODO MAKE SURE TRYCATCH WITH ALL INPUT
+            return scanner.nextLine().trim();
+//        } catch (InputMismatchException e) {
+//            printInvalidInput();
+//        } return ???
+    }
+
+    public int getSpecificIntInput() {
+//        try {
+            return scanner.nextInt();
+//        } catch (InputMismatchException e) {
+//            printInvalidInput();
+//        }
+//        return ...
     }
 }

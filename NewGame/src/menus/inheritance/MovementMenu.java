@@ -18,6 +18,7 @@ public class MovementMenu extends Menu {
             case "D", "6" -> "Move east";
             case "5" -> "Show player position";
             case "9" -> "Show available information";
+            case "0" -> "Want to quit?";
             case "33" -> "Go to cheat menu";
             default -> null;
         };

@@ -1,4 +1,4 @@
-package comparators;
+package ui.comparators;
 
 import weapons.inheritance.Weapon;
 

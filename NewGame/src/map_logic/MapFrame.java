@@ -56,7 +56,7 @@ public final class MapFrame extends JFrame {
     public void placeEnemiesOnMapLocations() {
         enemyLocations.put(finalBossZlatsLocation, enemyCreator.getEnemiesByName("Hungry Zlats"));
         enemyLocations.put(bossBlobLocation, enemyCreator.getEnemiesByName("BLOB"));
-//        enemyLocations.put(bossMossLocation,enemyCreator.getEnemiesByName("Moss the mad"));
+//        enemyLocations.put(bossMossLocation,enemyCreator.getEnemiesByName("Moss the mad")); TODO
 
         enemyLocations.put(legendaryEnemyHusasanLocation, enemyCreator.getEnemiesByName("HUSASAN"));
 //        enemyLocations.put(legendaryEnemyHusseinLocation,enemyCreator.getEnemiesByName("Hussein"));
@@ -185,7 +185,6 @@ public final class MapFrame extends JFrame {
         }
     }
 
-
     public void makeMapVisible() {
         setVisible(true);
     }
@@ -234,12 +233,10 @@ public final class MapFrame extends JFrame {
             revealNewLocationsFromSuspiciousArea5();
         }
 
-
 //        if (visitedLocations.contains(pointOfInterestX)){revalY} TODO
 
         Component[] components = getContentPane().getComponents();
         int playerIndex = playerPositionY * mapSize + playerPositionX;
-
 
         for (Point point : visitedLocations) { // Color visited locations.
             int visitedIndex = point.y * mapSize + point.x;
@@ -290,7 +287,6 @@ public final class MapFrame extends JFrame {
 
         refreshMapVisibility();
     }
-
 
     private void revealNewLocationsFromLogeCity() {
         revealedLocations.add(logeCityLocation);
@@ -408,7 +404,6 @@ public final class MapFrame extends JFrame {
         hubeCityDiscovered = true;
     }
 
-
     private void enemyLocations() {
 //        enemyPositions.put(finalBossLocation, enemyCreator.getEnemies(zlats));
     }
@@ -423,6 +418,5 @@ public final class MapFrame extends JFrame {
         waeegCityDiscovered = true;
         refreshMapVisibility();
     }
-
 
 }

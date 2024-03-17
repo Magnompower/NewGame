@@ -1,4 +1,4 @@
-package comparators;
+package ui.comparators;
 
 import enemies.inheritance.Enemy;
 

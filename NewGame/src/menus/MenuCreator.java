@@ -12,7 +12,7 @@ import weapons.WeaponCreator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class MenuCreator {
 
@@ -29,44 +29,53 @@ public class MenuCreator {
     private final CheatMenu cheatMenu = new CheatMenu(ui);
     private final CombatMenu combatMenu = new CombatMenu(ui, player);
 
+    private boolean gameRunning = true;
+    private boolean mainMenuNeeded = true;
+
     public void executeMainMenu() {
-        //TODO ADD configurestartgame();
-        weaponCreator.instantiateWeapons();
-        armorCreator.instantiateArmor();
-        enemyCreator.instantiateEnemies();
-
-        promptWelcomeMessage();
-        promptSleepForOneAndAHalfSecond();
-
-        mainMenu.promptPrintMenu();
-        String returnValueFromMainMenu = mainMenu.returnUserInput();
-        switch (returnValueFromMainMenu) {
-            case "Start game" -> startGame();
-            case "Show tutorial" -> showTutorial();
-            case "Want to quit?" -> wantToQuitGame();
-            case "Go to cheat menu" -> promptCheatMenu();
+        promptConfigureStartGame();
+        while (gameRunning && mainMenuNeeded) {
+            try {
+                mainMenu.promptPrintMenu();
+                String returnValueFromMainMenu = mainMenu.returnUserInput();
+                switch (returnValueFromMainMenu) {
+                    case "Start game" -> startGame();
+                    // LOAD GAME
+                    case "Show tutorial" -> showTutorial();
+                    case "Want to quit?" -> wantToQuitGame();
+                    case "Go to cheat menu" -> promptCheatMenu();
 //            case null -> invalidInput(); // need java preview to use
-            default -> invalidInput();
+                    default -> promptInvalidInput();
+                }
+            } catch (NullPointerException nullPointerException) {
+                promptInvalidInput();
+            }
         }
     }
 
     // ------------------ PROMPTS ------------------
 
     private void promptMovementMenu() {
+        mainMenuNeeded = false;
         boolean combat = checkForCombat();
-        while (!combat) {
-            movementMenu.promptPrintMenu();
-            String returnValueFromMovementMenu = movementMenu.returnUserInput();
-            switch (returnValueFromMovementMenu) {
-                case "Move north" -> player.moveNorth();
-                case "Move west" -> player.moveWest();
-                case "Move south" -> player.moveSouth();
-                case "Move east" -> player.moveEast();
-                case "Show player position" -> player.promptPrintPlayerPosition();
-                case "Show available information" -> player.promptPrintAvailableInfo();
-                case "Go to cheat menu" -> promptCheatMenu();
+        while (!combat && gameRunning) { //todo Dur ikke ordenligt...
+            try {
+                movementMenu.promptPrintMenu();
+                String returnValueFromMovementMenu = movementMenu.returnUserInput();
+                switch (returnValueFromMovementMenu) {
+                    case "Move north" -> player.moveNorth();
+                    case "Move west" -> player.moveWest();
+                    case "Move south" -> player.moveSouth();
+                    case "Move east" -> player.moveEast();
+                    case "Show player position" -> player.promptPrintPlayerPosition();
+                    case "Show available information" -> player.promptPrintAvailableInfo();
+                    case "Want to quit?" -> wantToQuitGame(); //TODO GOING TO MAIN MENU IF INVALID INPUT
+                    case "Go to cheat menu" -> promptCheatMenu();
 //                case null -> invalidInput(); // need java preview to use
-                default -> invalidInput();
+                    default -> promptInvalidInput();
+                }
+            } catch (InputMismatchException e) {
+                promptInvalidInput();
             }
         }
         if (combat) promptCombatMenu();
@@ -74,53 +83,72 @@ public class MenuCreator {
 
     private void promptCombatMenu() {
         boolean combat = checkForCombat();
-        while (combat)
-            combatMenu.promptPrintMenu();
-        String returnValueFromCombatMenu = combatMenu.returnUserInput();
-        switch (returnValueFromCombatMenu) {
-            case "Attack" -> player.attack();
-            case "Attempt to flee" -> player.flee();
+        while (combat && gameRunning)
+            try {
+                combatMenu.promptPrintMenu();
+                String returnValueFromCombatMenu = combatMenu.returnUserInput();
+                switch (returnValueFromCombatMenu) {
+                    case "Attack" -> player.attack();
+                    case "Attempt to flee" -> player.flee();
 // TODO more
-            case "Go to cheat menu" -> promptCheatMenu();
-            case "Show available information" -> player.promptPrintAvailableInfo();
+                    case "Want to quit?" -> wantToQuitGame();
+                    case "Show available information" -> player.promptPrintAvailableInfo();
+                    case "Go to cheat menu" -> promptCheatMenu();
 //            case null -> invalidInput(); // need java preview to use
-            default -> invalidInput();
-        }
+                    default -> promptInvalidInput();
+                }
+            } catch (InputMismatchException e) {
+                promptInvalidInput();
+            }
         if (!combat) promptMovementMenu(); // TODO Transition and loot
     }
 
     private void promptCheatMenu() {
         boolean cheatsActivated = evaluateCheatsActivated();
-        while (cheatsActivated) {
-            cheatMenu.promptPrintMenu();
-            String returnValueFromCheatMenu = cheatMenu.returnUserInput();
-            {
-                switch (returnValueFromCheatMenu) {
-                    case "Move north" -> player.moveNorth();
-                    case "Move west" -> player.moveWest();
-                    case "Move south" -> player.moveSouth();
-                    case "Move east" -> player.moveEast();
-                    case "Make map visible" -> mapFrame.makeMapVisible();
-                    case "Make map invisible" -> mapFrame.makeMapInvisible();
-                    case "Grant weapon" -> grantPlayerWeaponByName();
-                    case "Grant armor" -> grantPlayerArmorByName();
-                    case "Change attributes" -> chooseWhichAttributeToChange();
-                    case "Sharpen weapon" -> player.sharpenWeapon();
-                    case "Repair armor" -> player.repairArmor();
-                    case "Show Available information" -> player.promptPrintAvailableInfo();
-                    case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
+        while (cheatsActivated && gameRunning) {
+            try {
+                cheatMenu.promptPrintMenu();
+                String returnValueFromCheatMenu = cheatMenu.returnUserInput();
+                {
+                    switch (returnValueFromCheatMenu) {
+                        case "Move north" -> player.moveNorth();
+                        case "Move west" -> player.moveWest();
+                        case "Move south" -> player.moveSouth();
+                        case "Move east" -> player.moveEast();
+                        case "Make map visible" -> mapFrame.makeMapVisible();
+                        case "Make map invisible" -> mapFrame.makeMapInvisible();
+                        case "Grant weapon" -> grantPlayerWeaponByName();
+                        case "Grant armor" -> grantPlayerArmorByName();
+                        case "Change attributes" -> chooseWhichAttributeToChange();
+                        case "Sharpen weapon" -> player.sharpenWeapon();
+                        case "Repair armor" -> player.repairArmor();
+                        case "Show Available information" -> player.promptPrintAvailableInfo();
+                        case "Want to quit?" -> wantToQuitGame();
+                        case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
 //                    case null -> invalidInput(); // need java preview to use
-                    default -> invalidInput();
+                        default -> promptInvalidInput(); //TODO RETURNER TIL HOVEDMENU VED FAILED INPUT???????
+                    }
                 }
+            } catch (InputMismatchException e) {
+                promptInvalidInput();
             }
 //            validateCheatsActivated(); //TODO
             determinePreviousMenuAndGoThere(); // TODO go out of cheat menu
         }
     }
 
+    private void promptConfigureStartGame() {
+        weaponCreator.instantiateWeapons();
+        armorCreator.instantiateArmor();
+        enemyCreator.instantiateEnemies();
+
+        promptWelcomeMessage();
+        promptSleepForOneAndAHalfSecond();
+    }
+
     private boolean evaluateCheatsActivated() {
 //        if (in cheats menu){
-            return true;
+        return true;
 //        }else return false;
     }
 
@@ -133,25 +161,28 @@ public class MenuCreator {
         ui.sleepForHalfASecond();
     }
 
+    private void promptInvalidInput() {
+        ui.printInvalidInput();
+//        prompt last menu TODO
+    }
+
     // ------------------ OTHER ------------------
 
     private void wantToQuitGame() {
-        boolean quitGame = !ui.wantToQuitGame();
-        if (quitGame) {
-            ui.printTimePlayed();
-            System.exit(0); // TODO change to boolean?
+        gameRunning = !ui.wantToQuitGame();
+        if (!gameRunning) {
+            System.exit(0);
         } // TODO GOING BACK AFTER THIS?
     }
 
-    private void invalidInput() {
-//        prompt last menu
-        ui.invalidInput();
-
+    private void goToMainMenu() {
+        System.out.println();
     }
 
     public void startGame() {
-        ui.playerMessage1(player.getPlayerName());
+        ui.printPlayerMessage1(player.getPlayerName());
         player.promptMakeMapVisible();
+        promptMovementMenu();
     }
 
     public void showTutorial() {
@@ -161,9 +192,9 @@ public class MenuCreator {
         startGame();
     }
 
-    private boolean checkForCombat() {
+    private boolean checkForCombat() { //todo
 //        if (mapFrame.determineCombat) {
-        return true;
+        return false;
 //        } else return false;
     }
 
@@ -184,8 +215,7 @@ public class MenuCreator {
     private void grantPlayerWeaponByName() {
         ui.printWeaponsArraylistInOrder(weaponCreator.getWeaponsCopyArraylistInOrder());
         ui.printInfoToSelectItemByName();
-        Scanner scanner = new Scanner(System.in);
-        String specificWeaponName = scanner.nextLine();
+        String specificWeaponName = ui.getSpecificStringInput();
         player.setPlayerWeapon(weaponCreator.getWeaponByName(specificWeaponName));
         player.getPlayerWeapon().setWeaponCondition(WeaponCondition.NORMAL);
     }
@@ -193,8 +223,7 @@ public class MenuCreator {
     private void grantPlayerArmorByName() {
         ui.printArmorArrayListInOrder(armorCreator.getArmorPiecesCopyArraylistInOrder());
         ui.printInfoToSelectItemByName();
-        Scanner scanner = new Scanner(System.in);
-        String specificArmorName = scanner.nextLine();
+        String specificArmorName = ui.getSpecificStringInput();
         if (player.getPlayerStrength() < armorCreator.getArmorByName(specificArmorName).getRequiredStrength()) {
             player.setPlayerStrength(armorCreator.getArmorByName(specificArmorName).getRequiredStrength());
         }
@@ -205,10 +234,9 @@ public class MenuCreator {
 
     private void chooseWhichAttributeToChange() {
         ui.printChooseTheAmountOfTheAttribute();
-        Scanner scanner = new Scanner(System.in);
-        int attributeAmount = scanner.nextInt();
+        int attributeAmount = ui.getSpecificIntInput();
         ui.printChooseWhichAttributeToChange();
-        int userInput = scanner.nextInt();
+        int userInput = ui.getSpecificIntInput();
         switch (userInput) {
             case 1 -> player.setPlayerLevel(attributeAmount);
             case 2 -> player.setPlayerHealthPoints(attributeAmount);
@@ -216,7 +244,7 @@ public class MenuCreator {
             case 4 -> player.setPlayerIntelligence(attributeAmount);
             case 5 -> player.setPlayerStamina(attributeAmount);
             case 6 -> player.setPlayerStrength(attributeAmount);
-            default -> invalidInput();
+            default -> promptInvalidInput();
         }
         ui.printConfirmationChangingAttribute(); // Posibility to change things in correct order.
     }

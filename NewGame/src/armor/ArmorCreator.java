@@ -2,7 +2,7 @@ package armor;
 
 import armor.inheritance.*;
 import ui.UI;
-import comparators.ArmorDamageTakenPercentageComparator;
+import ui.comparators.ArmorDamageTakenPercentageComparator;
 
 import java.util.ArrayList;
 

@@ -3,13 +3,14 @@ package classes;
 import armor.ArmorCreator;
 import enemies.EnemyCreator;
 import armor.ArmorCondition;
+import enemies.inheritance.Enemy;
+import ui.UIMapFrame;
 import weapons.WeaponCondition;
 import weapons.WeaponType;
 
 import armor.inheritance.Armor;
 import armor.inheritance.PoorArmor;
 
-import map_logic.MapFrame;
 import ui.ConsoleColors;
 import ui.UI;
 import weapons.inheritance.Weapon;
@@ -26,8 +27,9 @@ public class Player {
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator;
     private EnemyCreator enemyCreator;
-    private MapFrame mapFrame = MapFrame.getInstance(); // TODO move to UI somehow
+    private UIMapFrame uiMapFrame = new UIMapFrame();
     private ArmorCreator armorCreator;
+    private Enemy enemy;
 
     private String playerName;
     private int playerPositionX = 15;
@@ -161,22 +163,15 @@ public class Player {
 
     // ------------------ OTHER ------------------
 
-    public void promptMakeMapVisible() {
-        mapFrame.makeMapVisible();
-    }
-
-    public void promptMakeMapInvisible() {
-        mapFrame.makeMapInvisible();
-    }
 
     // ------------------ PLAYER RELATED ------------------
 
-    public void validatePlayerHealth() {
+    public boolean validatePlayerHealth() {
         if (playerHealthPoints <= 0) {
             ui.gameOver();
-            //TODO LOGIC
-//            gameRunning=false;
-        }
+           return false; // Set gameRunning
+        }else return true; // Set gameRunning
+
     }
 
     public void checkPlayerLevel() {
@@ -188,7 +183,8 @@ public class Player {
     }
 
     public void calculatePlayerHealth() {
-        playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7; // TODO MAKE BOTH ACTUAL AND MAXIMUM
+        playerHealthPoints = playerHealthPoints - calculatePlayerDamageTaken();
+        validatePlayerHealth();
     }
 
     public int calculatePlayerDamageTakenPercentage() {// TODO USE AND SEND TO UI
@@ -204,6 +200,17 @@ public class Player {
 
         return calculatedDamageTakenPercentage;
     }
+
+    public int calculatePlayerDamageTaken() {
+        int calculatedEnemyDamage;
+        calculatedEnemyDamage = (int) Math.floor(enemy.getEnemyAttackDamage() * calculatePlayerDamageTakenPercentage());
+        return calculatedEnemyDamage;
+    }
+
+    public void promptPrintEnemyAttack() {
+        String enemyNameColored = enemy.getEnemyColor() + enemy.getEnemyName();
+        ui.printEnemyAttack(enemyNameColored, calculatePlayerDamageTaken());
+    } // TODO FLYT TIL ENEMEY?!
 
     public int calculatePlayerDamage() { //TODO METODEN KAN RAFINERERS
         int calcualtedPlayerDamage;
@@ -229,25 +236,25 @@ public class Player {
     public void moveNorth() {
         playerPositionY--;
         validatePlayerPosition();
-        promptUpdatePlayerPosition();
+//        promptUpdatePlayerPosition();
     }
 
     public void moveSouth() {
         playerPositionY++;
         validatePlayerPosition();
-        promptUpdatePlayerPosition();
+//        promptUpdatePlayerPosition();
     }
 
     public void moveEast() {
         playerPositionX++;
         validatePlayerPosition();
-        promptUpdatePlayerPosition();
+//        promptUpdatePlayerPosition();
     }
 
     public void moveWest() {
         playerPositionX--;
         validatePlayerPosition();
-        promptUpdatePlayerPosition();
+//        promptUpdatePlayerPosition();
     }
 
     public void setPlayerDamage(int playerDamage) {
@@ -304,10 +311,9 @@ public class Player {
                 playerWeapon.getWeaponCondition().getWeaponConditionColor());
     }
 
-
-    public void repairArmor() { // TODO NAAMING: ARMOR MAINTANINCE?!
+    public void repairAndCleanArmor() { // TODO NAAMING: ARMOR MAINTANINCE?!
         switch (playerArmor.getArmorCondition()) { //TODO CAN YOU REPAIR BROKEN ARMOR?!?
-            case BROKEN -> playerArmor.setArmorCondition(ArmorCondition.NORMAL);
+//            case BROKEN -> promptPrintCannotRepairBrokenArmor();
             case DIRTY -> playerArmor.setArmorCondition(ArmorCondition.NORMAL); //TODO SOUT STATUS
             case NORMAL -> playerArmor.setArmorCondition(ArmorCondition.POLISHED);
             case POLISHED -> playerArmor.setArmorCondition(ArmorCondition.REINFORCED);
@@ -328,9 +334,7 @@ public class Player {
                 playerArmor.getArmorCondition().getArmorConditionColor());
     }
 
-    public void promptUpdatePlayerPosition() {
-        mapFrame.updatePlayerPosition(playerPositionX, playerPositionY);
-    }
+//    public void promptUpdatePlayerPosition() {        uiMapFrame.promptUpdatePlayerPosition(playerPositionX, playerPositionY);    }
 
     public void promptPrintWeaponsArrayInOrder() {
         ui.printWeaponsArraylistInOrder(weaponCreator.getWeaponsCopyArraylistInOrder());

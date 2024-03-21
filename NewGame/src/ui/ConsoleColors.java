@@ -2,7 +2,7 @@ package ui;
 
 public class ConsoleColors {
     public static final String RESET = "\033[0m";                       // Text color Reset
-    public static final String YELLOW_BRIGHT = "\033[0;93m";            // NORMAL TEXT
+    public static final String YELLOW_BRIGHT = "\033[38;2;255;255;55m";            // NORMAL TEXT
     public static final String CYAN_BRIGHT = "\033[0;96m";              // WARNINGS
     public static final String RED_BRIGHT = "\033[0;91m";               // Quit red
     public static final String GREEN_BRIGHT = "\033[0;92m";             // Nudging green / Uncommon weapon

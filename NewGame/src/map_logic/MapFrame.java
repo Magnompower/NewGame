@@ -4,6 +4,7 @@ import armor.inheritance.Armor;
 import armor.ArmorCreator;
 import enemies.inheritance.Enemy;
 import enemies.EnemyCreator;
+import ui.UI;
 import weapons.inheritance.Weapon;
 import weapons.WeaponCreator;
 
@@ -13,14 +14,19 @@ import java.awt.*;
 import java.util.*;
 
 public final class MapFrame extends JFrame {
-    private EnemyCreator enemyCreator;
-    private WeaponCreator weaponCreator;// TODO needed here? = new WeaponCreator(); need instatiation?
-    private ArmorCreator armorCreator;
-    private static MapFrame instance; // Singleton instance
+    private final EnemyCreator enemyCreator = new EnemyCreator();
+    private final WeaponCreator weaponCreator = new WeaponCreator();// TODO needed here? = new WeaponCreator(); need instatiation?
+    private final ArmorCreator armorCreator = new ArmorCreator();
+    static MapFrame instance; // Singleton instance
+    UI ui = new UI();
     private final int mapSize = 31;
-    private final Map<Point, MapElement> specialLocations = new HashMap<>(); // All special locations
     private final Set<Point> visitedLocations = new HashSet<>(); // Keeps track of visited locations
     private final Set<Point> revealedLocations = new HashSet<>(); // Keeps trac of locations visible to the player
+    private final Map<Point, MapElement> specialLocations = new HashMap<>(); // All special locations
+    private Map<Point, Enemy> enemyLocations = new HashMap<>(); // Designate enemies posistions on the map TODO
+    private Map<Point, Weapon> weaponLocations = new HashMap<Point, Weapon>();
+    private Map<Point, Armor> armorLocations = new HashMap<>();
+
     private final Set<Point> cityLocations = new HashSet<>(Arrays.asList(
 
             new Point(15, 11), // Haewen City
@@ -47,9 +53,6 @@ public final class MapFrame extends JFrame {
             new Point(23, 1),
             new Point(24, 1)
     ));
-    private Map<Point, Enemy> enemyLocations = new HashMap<>(); // Designate enemies posistions on the map TODO
-    private Map<Point, Weapon> weaponLocations = new HashMap<Point, Weapon>();
-    private Map<Point, Armor> armorLocations = new HashMap<>();
     private boolean hubeCityDiscovered;
     private boolean waeegCityDiscovered;
 
@@ -118,6 +121,10 @@ public final class MapFrame extends JFrame {
     private MapFrame() { // Private constructor to prevent instantiation
         revealedLocations.add(haewenCityLocation); // Initially visible.
         visitedLocations.add(playerStartLocationOnMap); // Initially visible.
+
+        placeEnemiesOnMapLocations();
+        placeWeaponsOnMapLocations();
+        placeArmorOnMapLocations();
 
         specialLocations.put(haewenCityLocation, MapElement.CITIES);
         specialLocations.put(logeCityLocation, MapElement.CITIES);
@@ -193,17 +200,19 @@ public final class MapFrame extends JFrame {
         setVisible(false);
     }
 
-    public void updatePlayerPosition(int playerPositionX, int playerPositionY) {
+    public String updatePlayerPosition(int playerPositionX, int playerPositionY) {
         Point currentPlayerLocation = new Point(playerPositionX, playerPositionY);
         visitedLocations.add(currentPlayerLocation);
 
         if (enemyLocations.containsKey(currentPlayerLocation)) {
             Enemy enemy = enemyLocations.get(currentPlayerLocation);
+            return "Combat"; // Combat
 // TODO IMPLEMENT COMBAT LOGIC
         }
         if (weaponLocations.containsKey(currentPlayerLocation)) {
             Weapon weapon = weaponLocations.get(currentPlayerLocation);
-//        TODO IMPLEMENT LOOT LOGIC
+            return ui.printWeaponOnLocation(weapon);
+            //        TODO IMPLEMENT LOOT LOGIC
         }
         if (armorLocations.containsKey(currentPlayerLocation)) {
             Armor armor = armorLocations.get(currentPlayerLocation);
@@ -258,6 +267,7 @@ public final class MapFrame extends JFrame {
             JPanel playerPanel = (JPanel) components[playerIndex];
             playerPanel.setBackground(MapElement.PLAYER_LOCATION.getColor());
         }
+        return "nothing"; //TODO
     }
 
     private void revealNewLocationsFromHaewenCity() {
@@ -412,11 +422,12 @@ public final class MapFrame extends JFrame {
         SwingUtilities.invokeLater(() -> MapFrame.getInstance().makeMapVisible());
     }
 
-    public void showAllMapLocationsCHEAT() {
+    public void showAllMapLocationsCHEAT(int playerPositionX, int playerPositionY) {
         revealedLocations.addAll(specialLocations.keySet()); // Add all special locations to visible locations.
         hubeCityDiscovered = true;
         waeegCityDiscovered = true;
         refreshMapVisibility();
+        updatePlayerPosition(playerPositionX, playerPositionY);
     }
 
 }

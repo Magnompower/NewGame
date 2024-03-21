@@ -24,9 +24,9 @@ public class ArmorCreator {
         Armor commonChainmail = new CommonArmor("Common chainmail");
         Armor uncommonChainmail = new UncommonArmor("Uncommon chainmail");
 
-        Armor poorSplint = new PoorArmor("Poor Splint");
-        Armor commonSplint = new CommonArmor("Common Splint");
-        Armor uncommonSplint = new UncommonArmor("Uncommon Splint");
+        Armor poorSplint = new PoorArmor("Poor splint");
+        Armor commonSplint = new CommonArmor("Common splint");
+        Armor uncommonSplint = new UncommonArmor("Uncommon splint");
 
         Armor breastplateOfBeebus = new RareArmor("Breastplate of Beebus");
         Armor wickedChainmail = new RareArmor("Wicked chainmail");
@@ -70,12 +70,13 @@ public class ArmorCreator {
     ArrayList<Armor> armorPiecesCopy = armorPieces;
 
     public Armor getArmorByName(String name) {
+        instantiateArmor();
         for (Armor specificArmorPiece : armorPiecesCopy) {
             if (specificArmorPiece.getArmorName().equals((name))) {
                 return specificArmorPiece;
             }
         }
-        ui.printInfoToSelectItemByName();
+        ui.printErrorGettingitemMessage();
         return null; // Somehow return the message is better?
     }
 

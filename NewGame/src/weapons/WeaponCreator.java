@@ -71,9 +71,9 @@ public class WeaponCreator {
     ArrayList<Weapon> weaponsCopy = weapons;
 
     public Weapon getWeaponByName(String name) {
+        instantiateWeapons();
         for (Weapon specificWeapon : weaponsCopy) {
             if (specificWeapon.getWeaponName().equals(name)) {
-                ui.printConfirmationGettingItem();
                 return specificWeapon;
             }
         }

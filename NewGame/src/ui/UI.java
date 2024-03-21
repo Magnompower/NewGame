@@ -2,7 +2,6 @@ package ui;
 
 import armor.inheritance.Armor;
 import enemies.inheritance.Enemy;
-import map_logic.MapFrame;
 import weapons.inheritance.Weapon;
 
 import java.time.Duration;
@@ -12,7 +11,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
-    MapFrame mapFrame = MapFrame.getInstance();
+    //    UIMapFrame uiMapFrame = new UIMapFrame(); TODO PROBLEM WITH INSTANCIATION
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
 
@@ -68,7 +67,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         if (hoursPlayed > 0) {
             hoursAndMinutesPlayed = hoursPlayed + " hour" + (hoursPlayed == 1 ? "" : "s") + " and ";
         } else {
-            hoursAndMinutesPlayed = ""; // No hours, so leave this part empty
+            hoursAndMinutesPlayed = "";
         }
         hoursAndMinutesPlayed += minutesPlayed + " minute" + (minutesPlayed == 1 ? "" : "s");
 
@@ -137,16 +136,16 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.CYAN_BRIGHT + "You are not the first one to be attacked by bandits around " +
                 "these parts. Anyway i found this map lying besides you. Here you go." + ConsoleColors.RESET);
         sleepForTwoSeconds();
-//        ui.makeMapVisible();
+//        uiMapFrame.promptMakeMapVisible(); TODO
+        sleepForOneSecond();
         System.out.println(ConsoleColors.CYAN_BRIGHT + "I would suggest that you go to Haewen City and get fixed up. " +
                 "You dont exactly look fantastic. " + ConsoleColors.YELLOW_BRIGHT + "The old man smirks. " +
                 ConsoleColors.CYAN_BRIGHT + "It is just 5 kilometers north from here as you can see on the map. " +
-                "Safe journeys friend. " + ConsoleColors.YELLOW_BRIGHT + "\n\nYou stare after the man that moves" +
+                "Safe journeys friend. " + ConsoleColors.YELLOW_BRIGHT + "\n\nYou stare after the man. He moves" +
                 " surprisingly quickly. After you have gathered you remaining items and gotten on you feet you look" +
                 " towards the old man again and can just barely see him far away in the distance. " + ConsoleColors.RESET);
 
     }
-
 
     public String selectName() { // TODO make strings array.
         String playerName = null;
@@ -213,8 +212,9 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     public String[] printCheatMenuPoints() {
         return new String[]{ConsoleColors.CYAN_BRIGHT + "W/A/S/D. Move around.", "1. Make map visible.",
                 "2. Make map invisible.", "3. Grant yourself a weapon.", "4. Grant yourself a piece of armor.",
-                "5. Change attributes.", "6. Sharpen weapon.", "7. Repair armor",
-                "9. Show all Available information.", "0. Quit game.", "33. Go to previous menu."};
+                "5. Change attributes.", "6. Sharpen weapon.", "7. Repair armor.", "8. Show all map locations.",
+                "9. Show all Available information.", "10. Teleport to location.",
+                "\n0. Quit game.", "33. Go to previous menu."};
     }
 
     // ------------------ SLEEP-TIMERS ------------------
@@ -305,6 +305,8 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
     public void gameOver() {
         System.out.println(ConsoleColors.RED_BRIGHT + "You died. Game over." + ConsoleColors.RESET);
+        //print stats TODO
+        printTimePlayed();
     }
 
     public void printNotEnoughtStrengthToEquipArmorMessage(int playerStrength, int requiredStrength,
@@ -378,7 +380,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
     public String getSpecificStringInput() {
 //        try { // TODO MAKE SURE TRYCATCH WITH ALL INPUT
-            return scanner.nextLine().trim();
+        return scanner.nextLine().trim();
 //        } catch (InputMismatchException e) {
 //            printInvalidInput();
 //        } return ???
@@ -386,10 +388,24 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
     public int getSpecificIntInput() {
 //        try {
-            return scanner.nextInt();
+        return scanner.nextInt();
 //        } catch (InputMismatchException e) {
 //            printInvalidInput();
 //        }
 //        return ...
+    }
+
+    public void printEnemyAttack(String enemyNameColored, int enemyDamageAmount) { // todo maybe get enemycolor?
+        System.out.println(enemyNameColored + ConsoleColors.YELLOW_BRIGHT + " attacks you and deal " + ConsoleColors.LIGHT_GOLD +
+                enemyDamageAmount + ConsoleColors.YELLOW_BRIGHT + " damage " + ConsoleColors.RESET);
+    }
+
+    public String printWeaponOnLocation(Weapon weapon) {
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "You find " + weapon.getWeaponColor() + weapon.getWeaponName() +
+                ConsoleColors.YELLOW_BRIGHT + ". Do you want to equip it? Y/N");
+        String playerInput = scanner.nextLine();
+        if (playerInput.equalsIgnoreCase("YES") || playerInput.equalsIgnoreCase("Y")) {
+            return weapon.getWeaponName();
+        } else return "Keep old weapon"; // Todo
     }
 }

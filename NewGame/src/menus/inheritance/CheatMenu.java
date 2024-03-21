@@ -23,6 +23,7 @@ public class CheatMenu extends Menu {
             case "5" -> "Change attributes";
             case "6" -> "Sharpen weapon";
             case "7" -> "Repair armor";
+            case "8" -> "Show all map locations";
             case "9" -> "Show Available information";
             case "0" -> "Want to quit?";
             case "33" -> "Go to previous menu";

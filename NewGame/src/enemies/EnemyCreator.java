@@ -7,7 +7,7 @@ import enemies.inheritance.*;
 import java.util.ArrayList;
 
 public class EnemyCreator {
-    UI ui;
+    UI ui = new UI();
     private static final ArrayList<Enemy> enemies = new ArrayList<>();
 
     public void instantiateEnemies() {
@@ -69,8 +69,9 @@ public class EnemyCreator {
     ArrayList<Enemy> enemiesCopy = enemies;
 
     public Enemy getEnemiesByName(String name) {
+        instantiateEnemies();
         for (Enemy specificEnemy : enemiesCopy) {
-            if (specificEnemy.getEnemyName().equals(name)) {
+            if (specificEnemy.getEnemyName().equalsIgnoreCase(name)) {
                 return specificEnemy;
             }
         }

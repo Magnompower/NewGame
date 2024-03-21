@@ -77,13 +77,20 @@ public class MenuCreator {
             } catch (InputMismatchException e) {
                 promptInvalidInput();
             }
+            if (mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY()).equalsIgnoreCase("Combat")) {
+                combat = true;}
+//            else if (mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY()). // TODO NEED TO GET WEAPON AND GRANT TO PLAYER
+//                    equalsIgnoreCase(weaponCreator.getWeaponsCopyArraylistInOrder())){
+//                player.setPlayerWeapon(mapFrame.updatePlayerPosition(player.getPlayerPositionX(),player.getPlayerPositionY()));
         }
+
         if (combat) promptCombatMenu();
     }
 
+
     private void promptCombatMenu() {
         boolean combat = checkForCombat();
-        while (combat && gameRunning)
+        while (combat && gameRunning) {
             try {
                 combatMenu.promptPrintMenu();
                 String returnValueFromCombatMenu = combatMenu.returnUserInput();
@@ -100,7 +107,12 @@ public class MenuCreator {
             } catch (InputMismatchException e) {
                 promptInvalidInput();
             }
-        if (!combat) promptMovementMenu(); // TODO Transition and loot
+            // aiTurn
+            // combat = enemyTurn();
+            // loot logic
+            gameRunning = player.validatePlayerHealth();
+            if (!combat) promptMovementMenu(); // TODO Transition and loot
+        }
     }
 
     private void promptCheatMenu() {
@@ -121,7 +133,9 @@ public class MenuCreator {
                         case "Grant armor" -> grantPlayerArmorByName();
                         case "Change attributes" -> chooseWhichAttributeToChange();
                         case "Sharpen weapon" -> player.sharpenWeapon();
-                        case "Repair armor" -> player.repairArmor();
+                        case "Repair armor" -> player.repairAndCleanArmor();
+                        case "Show all map locations" ->
+                                mapFrame.showAllMapLocationsCHEAT(player.getPlayerPositionX(), player.getPlayerPositionY());
                         case "Show Available information" -> player.promptPrintAvailableInfo();
                         case "Want to quit?" -> wantToQuitGame();
                         case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
@@ -132,15 +146,20 @@ public class MenuCreator {
             } catch (InputMismatchException e) {
                 promptInvalidInput();
             }
+            mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY());
 //            validateCheatsActivated(); //TODO
             determinePreviousMenuAndGoThere(); // TODO go out of cheat menu
         }
     }
 
     private void promptConfigureStartGame() {
-        weaponCreator.instantiateWeapons();
-        armorCreator.instantiateArmor();
-        enemyCreator.instantiateEnemies();
+//        enemyCreator.instantiateEnemies(); TODO DUR IKKE HER ÅBENBART BRUGES I KLASSEN SELV
+//        weaponCreator.instantiateWeapons();
+//        armorCreator.instantiateArmor();
+
+//        mapFrame.placeEnemiesOnMapLocations();
+//        mapFrame.placeWeaponsOnMapLocations();
+//        mapFrame.placeArmorOnMapLocations();
 
         promptWelcomeMessage();
         promptSleepForOneAndAHalfSecond();
@@ -181,7 +200,6 @@ public class MenuCreator {
 
     public void startGame() {
         ui.printPlayerMessage1(player.getPlayerName());
-        player.promptMakeMapVisible();
         promptMovementMenu();
     }
 
@@ -218,6 +236,8 @@ public class MenuCreator {
         String specificWeaponName = ui.getSpecificStringInput();
         player.setPlayerWeapon(weaponCreator.getWeaponByName(specificWeaponName));
         player.getPlayerWeapon().setWeaponCondition(WeaponCondition.NORMAL);
+        ui.printConfirmationGettingItem();
+
     }
 
     private void grantPlayerArmorByName() {

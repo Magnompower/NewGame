@@ -1,10 +1,11 @@
 package classes;
 
 import menus.MenuCreator;
+import menus.StateMachine;
 
 public class Main {
-
-    MenuCreator menuCreator = new MenuCreator();
+    StateMachine stateMachine = new StateMachine(); // TODO ??
+    MenuCreator menuCreator = new MenuCreator(stateMachine);
 
     public static void main(String[] args) {
         new Main().run();

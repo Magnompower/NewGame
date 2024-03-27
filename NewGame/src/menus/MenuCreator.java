@@ -25,6 +25,7 @@ public class MenuCreator {
     WeaponCreator weaponCreator = new WeaponCreator();
     ArmorCreator armorCreator = new ArmorCreator();
     EnemyCreator enemyCreator = new EnemyCreator();
+    private StateMachine stateMachine;
 
     Deque<Menu> menuStack = new ArrayDeque<>();
     private final MainMenu mainMenu = new MainMenu(ui);
@@ -35,6 +36,21 @@ public class MenuCreator {
     private boolean gameRunning = true;
     private boolean mainMenuNeeded = true;
     boolean combat;
+
+    public MenuCreator(StateMachine stateMachine) {
+        this.stateMachine = stateMachine;
+    }
+
+    public void execute() {
+        while (gameRunning) {
+            switch (stateMachine.getCurrentState()) {
+                case MAIN_MENU -> executeMainMenu();
+                case MOVEMENT -> promptMovementMenu();
+                case ENTER_COMBAT -> promptCombatMenuWithCombatActive();
+                case QUIT_GAME -> wantToQuitGame();
+            }
+        }
+    }
 
     public void executeMainMenu() {
         promptConfigureStartGame();
@@ -162,8 +178,8 @@ public class MenuCreator {
                     case "Change attributes" -> chooseWhichAttributeToChange();
                     case "Sharpen weapon" -> player.sharpenWeapon();
                     case "Repair armor" -> player.repairAndCleanArmor();
-                    case "Show all map locations" ->
-                            mapFrame.showAllMapLocationsCHEAT(player.getPlayerPositionX(), player.getPlayerPositionY(), player.getPlayerLevel());
+                    case "Show all map locations" -> mapFrame.showAllMapLocationsCHEAT(player.getPlayerPositionX(),
+                            player.getPlayerPositionY(), player.getPlayerLevel());
                     case "Show Available information" -> player.promptPrintAvailableInfo();
                     case "Want to quit?" -> wantToQuitGame();
                     case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
@@ -171,7 +187,7 @@ public class MenuCreator {
 //                        default -> promptInvalidInput(); //TODO RETURNER TIL HOVEDMENU VED FAILED INPUT???????
                 }
                 String playerPositionReturnValue = mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY(), player.getPlayerLevel());
-                switch (playerPositionReturnValue) {//TODO VIL GØRE SMARTERE!
+                switch (playerPositionReturnValue) {//TODO VIL GØRE SMARTERE! SENDER PLAYERLEVEL MED FOR MANGE STEDER!
                     case "Combat, " -> promptCombatMenuWithCombatActive();
                     case "Common longsword, " ->
                             player.setPlayerWeapon(weaponCreator.getWeaponByName("Common longsword"));
@@ -210,7 +226,7 @@ public class MenuCreator {
     }
 
     private void promptConfigureStartGame() {
-//        enemyCreator.instantiateEnemies(); TODO DUR IKKE HER ÅBENBART BRUGES I KLASSEN SELV
+        enemyCreator.instantiateEnemies(); // TODO DUR IKKE HER ÅBENBART BRUGES I KLASSEN SELV
 //        weaponCreator.instantiateWeapons();
 //        armorCreator.instantiateArmor();
 
@@ -262,7 +278,7 @@ public class MenuCreator {
 
     public void startGame() {
         ui.printPlayerMessage1(player.getPlayerName());
-        promptMovementMenu();
+        stateMachine.changeState(GameState.MOVEMENT);
     }
 
     public void showTutorial() {

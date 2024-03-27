@@ -9,7 +9,6 @@ import enemies.EnemyCreator;
 import enemies.inheritance.Enemy;
 
 import ui.UI;
-import ui.UIMapFrame;
 import ui.ConsoleColors;
 
 import java.util.Set;
@@ -28,10 +27,9 @@ public class Player {
     Weapon playerWeapon = new PoorWeapon(WeaponType.ONEHANDED_DAGGER, "Poor dagger"); // START WEAPON
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator;
-    private EnemyCreator enemyCreator;
+    private EnemyCreator enemyCreator = new EnemyCreator();
     private ArmorCreator armorCreator;
     private Enemy enemy = enemyCreator.getEnemiesByName("Cow"); // TODO INSTANCIERERING
-
     private String playerName;
     private int playerPositionX = 15;
     private int playerPositionY = 15;

@@ -15,11 +15,11 @@ public abstract class Enemy {
     private String enemyColor;
     private int actualExperiencePointsGrated = (int) Math.floor(baseExperiencePointsGranted * getEnemyAttackDamage());
 
+    // ------------------ SETTERS ------------------
+
     public Enemy(String enemyName) {
         this.setEnemyName(enemyName);
     }
-
-    // ------------------ SETTERS ------------------
 
     public void setEnemyName(String enemyName) {
         this.enemyName = enemyName;
@@ -90,5 +90,7 @@ public abstract class Enemy {
         return colorCodeEnemy + enemyName + colorCodeNormalText + ": " + colorCodeHealth + calculatedEnemyHealthPoints
                 + colorCodeNormalText + " : " + colorCodeEnemyDamage + calculatedEnemyDamage + colorCodeReset;
     }
+
+
 
 }

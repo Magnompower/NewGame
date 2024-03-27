@@ -2,7 +2,7 @@ package menus.inheritance;
 
 import ui.UI;
 
-public class MainMenu extends Menu {
+public class MainMenu extends Menu /*implements GameState*/ {
 
     public MainMenu(UI ui) {
         super(ui, ui.printMainMenuHeader(), ui.printMainMenuPoints());
@@ -19,4 +19,22 @@ public class MainMenu extends Menu {
             default -> null;
         };
     }
+/*
+    @Override
+    public void enter() {
+        ui.menu
+
+    }
+
+    @Override
+    public void exit() {
+        GameEvent.QUIT_GAME;
+    }
+
+    @Override
+    public void handleEvent(GameEvent event) {
+        switch (event) {
+            case START_GAME -> GameStateMachine.changeState(new MovementState());
+        }
+    }*/
 }

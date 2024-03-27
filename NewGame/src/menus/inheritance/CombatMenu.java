@@ -1,12 +1,13 @@
 package menus.inheritance;
 
 import classes.Player;
+import enemies.inheritance.Enemy;
 import ui.UI;
 
 public class CombatMenu extends Menu {
 
-    public CombatMenu(UI ui, Player player) {
-        super(ui, ui.printCombatMenuHeader(), ui.printCombatMenuPoints(player.getEscapeChance()));
+    public CombatMenu(UI ui, Player player, Enemy enemy) {
+        super(ui, ui.printCombatMenuHeader(player.getPlayerName(), enemy.getEnemyName()), ui.printCombatMenuPoints(player.getEscapeChancePercentage()));
     }
 
     @Override

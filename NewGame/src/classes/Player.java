@@ -1,24 +1,26 @@
 package classes;
 
 import armor.ArmorCreator;
-import enemies.EnemyCreator;
 import armor.ArmorCondition;
-import enemies.inheritance.Enemy;
-import ui.UIMapFrame;
-import weapons.WeaponCondition;
-import weapons.WeaponType;
-
 import armor.inheritance.Armor;
 import armor.inheritance.PoorArmor;
 
-import ui.ConsoleColors;
+import enemies.EnemyCreator;
+import enemies.inheritance.Enemy;
+
 import ui.UI;
-import weapons.inheritance.Weapon;
+import ui.UIMapFrame;
+import ui.ConsoleColors;
+
+import java.util.Set;
+import java.util.EnumSet;
+
+import weapons.WeaponType;
 import weapons.WeaponCreator;
+import weapons.WeaponCondition;
+import weapons.inheritance.Weapon;
 import weapons.inheritance.PoorWeapon;
 
-import java.util.EnumSet;
-import java.util.Set;
 
 public class Player {
 
@@ -27,9 +29,8 @@ public class Player {
     private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
     private WeaponCreator weaponCreator;
     private EnemyCreator enemyCreator;
-    private UIMapFrame uiMapFrame = new UIMapFrame();
     private ArmorCreator armorCreator;
-    private Enemy enemy;
+    private Enemy enemy = enemyCreator.getEnemiesByName("Cow"); // TODO INSTANCIERERING
 
     private String playerName;
     private int playerPositionX = 15;
@@ -41,7 +42,7 @@ public class Player {
     private int playerStrength = 6;
     private int playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7;
     private int playerDamage;
-    private int escapeChance;
+    private int escapeChancePercentage;
     private int enemiesKilled = 0;
     private int playerAmountOfCoins = 0;
     private int playerExperiencePoints; // XP needed to lvl = base(100) * level * level (100 lvl 1, 10000 lvl 10)
@@ -98,8 +99,12 @@ public class Player {
         this.playerWeapon = playerWeapon;
     }
 
-    public void setEscapeChance(int escapeChance) {
-        this.escapeChance = escapeChance;
+    public void setPlayerWeaponCondition(WeaponCondition condition) {
+        playerWeapon.setWeaponCondition(condition);
+    }
+
+    public void setEscapeChancePercentage(int escapeChancePercentage) {
+        this.escapeChancePercentage = escapeChancePercentage;
     }
 
     public void setPlayerArmorCondition(ArmorCondition condition) {
@@ -120,8 +125,9 @@ public class Player {
         return playerName;
     }
 
-    public int getEscapeChance() {
-        return escapeChance;
+    public int getEscapeChancePercentage() {
+        calculateEscapeChancePercentage();
+        return escapeChancePercentage;
     }
 
     public int getPlayerHealthPoints() {
@@ -156,7 +162,7 @@ public class Player {
         return playerPositionX;
     }
 
-    public double getPlayerDamage() {
+    public int getPlayerDamage() {
         return playerDamage;
     }
 
@@ -169,8 +175,8 @@ public class Player {
     public boolean validatePlayerHealth() {
         if (playerHealthPoints <= 0) {
             ui.gameOver();
-           return false; // Set gameRunning
-        }else return true; // Set gameRunning
+            return false; // Set gameRunning
+        } else return true; // Set gameRunning
 
     }
 
@@ -212,9 +218,20 @@ public class Player {
         ui.printEnemyAttack(enemyNameColored, calculatePlayerDamageTaken());
     } // TODO FLYT TIL ENEMEY?!
 
+    public void calculateEscapeChancePercentage() { // TODO Logic
+        escapeChancePercentage = playerLevel * 10 - (int) Math.floor(enemy.getEnemyAttackDamage()) * 8;
+        if (escapeChancePercentage > 100) {
+            setEscapeChancePercentage(100);
+        }
+        // if bossenemy escapechance + 20
+        if (escapeChancePercentage < 40) {
+            setEscapeChancePercentage(40);
+        } else setEscapeChancePercentage(escapeChancePercentage);
+    }
+
     public int calculatePlayerDamage() { //TODO METODEN KAN RAFINERERS
         int calcualtedPlayerDamage;
-        calcualtedPlayerDamage = playerWeapon.getActualWeaponDamage() + playerLevel * 2;
+        calcualtedPlayerDamage = playerWeapon.getWeaponDamage() + playerLevel * 2;
         if (playerWeapon.getWeaponType().getModifier().equals("STR")) {
             calcualtedPlayerDamage = calcualtedPlayerDamage + playerStrength / 2;
         }
@@ -295,7 +312,8 @@ public class Player {
 
     public void attack() {
         calculatePlayerDamage();
-        ui.displayDamageDealt(playerDamage);
+        enemy.setEnemyHealthPoints(enemy.getEnemyHealthPoints() - playerDamage);
+        ui.displayDamageDealt(getPlayerDamage(), enemy.getEnemyHealthPoints(), enemy.getEnemyMaxHealthPoints()); //TODO
 //      TODO  enemyHealth = enemyHealth - playerDamage;
     }
 

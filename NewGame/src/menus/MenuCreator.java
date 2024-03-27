@@ -2,6 +2,8 @@ package menus;
 
 import armor.ArmorCreator;
 import armor.ArmorCondition;
+import enemies.inheritance.Enemy;
+import enemies.inheritance.UncommonEnemy;
 import weapons.WeaponCondition;
 import map_logic.MapFrame;
 import classes.Player;
@@ -18,6 +20,7 @@ public class MenuCreator {
 
     private UI ui = new UI(); // TODO make sure everything is instantiated only here.
     private Player player = new Player();
+    private Enemy enemy = new UncommonEnemy("Cow"); // TODO SKER FLERE GANGE RUNDT OMKRING. JEG SKAL INSTANTIERERE FORFRA FOR AT FÅ SYSTEMET I GANG.
     private MapFrame mapFrame = MapFrame.getInstance();
     WeaponCreator weaponCreator = new WeaponCreator();
     ArmorCreator armorCreator = new ArmorCreator();
@@ -27,10 +30,11 @@ public class MenuCreator {
     private final MainMenu mainMenu = new MainMenu(ui);
     private final MovementMenu movementMenu = new MovementMenu(ui);
     private final CheatMenu cheatMenu = new CheatMenu(ui);
-    private final CombatMenu combatMenu = new CombatMenu(ui, player);
+    private final CombatMenu combatMenu = new CombatMenu(ui, player, enemy);
 
     private boolean gameRunning = true;
     private boolean mainMenuNeeded = true;
+    boolean combat;
 
     public void executeMainMenu() {
         promptConfigureStartGame();
@@ -57,7 +61,6 @@ public class MenuCreator {
 
     private void promptMovementMenu() {
         mainMenuNeeded = false;
-        boolean combat = checkForCombat();
         while (!combat && gameRunning) { //todo Dur ikke ordenligt...
             try {
                 movementMenu.promptPrintMenu();
@@ -74,11 +77,32 @@ public class MenuCreator {
 //                case null -> invalidInput(); // need java preview to use
                     default -> promptInvalidInput();
                 }
+                String playerPositionReturnValue = mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY(), player.getPlayerLevel());
+                switch (playerPositionReturnValue) {//TODO VIL GØRE SMARTERE!
+                    case "Combat, " -> promptCombatMenuWithCombatActive();
+                    case "Common longsword, " ->
+                            player.setPlayerWeapon(weaponCreator.getWeaponByName("Common longsword"));
+                    case "Common splint, " -> player.setPlayerArmor(armorCreator.getArmorByName("Common splint"));
+
+                    case "Sword of Keilier, " ->
+                            player.setPlayerWeapon(weaponCreator.getWeaponByName("Sword of Keilier"));
+                    case "Splint of Keilier, " ->
+                            player.setPlayerArmor(armorCreator.getArmorByName("Splint of Keilier"));
+
+                    case "Sword of Keilier, Splint of Keilier" -> equipSetOfKeilierFromCorpse();
+                    case "Common longsword, Common splint" -> equipCommonSetFromHaewenCity();
+
+//                    case "Keep old item" -> System.out.println("lol"); // TEST TODO REMOVE
+                }
             } catch (InputMismatchException e) {
                 promptInvalidInput();
             }
-            if (mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY()).equalsIgnoreCase("Combat")) {
-                combat = true;}
+            // todo Move to seperate method?
+
+
+            if (mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY(), player.getPlayerLevel()).equalsIgnoreCase("Combat, ")) {
+                combat = true;
+            } // TODO ALSO INCLUDE PLACE WHERE ENEMY AND WEAPONS/ARMOR
 //            else if (mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY()). // TODO NEED TO GET WEAPON AND GRANT TO PLAYER
 //                    equalsIgnoreCase(weaponCreator.getWeaponsCopyArraylistInOrder())){
 //                player.setPlayerWeapon(mapFrame.updatePlayerPosition(player.getPlayerPositionX(),player.getPlayerPositionY()));
@@ -87,9 +111,12 @@ public class MenuCreator {
         if (combat) promptCombatMenu();
     }
 
+    private void promptCombatMenuWithCombatActive() {
+        combat = true;
+        promptCombatMenu();
+    }
 
     private void promptCombatMenu() {
-        boolean combat = checkForCombat();
         while (combat && gameRunning) {
             try {
                 combatMenu.promptPrintMenu();
@@ -107,7 +134,7 @@ public class MenuCreator {
             } catch (InputMismatchException e) {
                 promptInvalidInput();
             }
-            // aiTurn
+            enemyTurn();
             // combat = enemyTurn();
             // loot logic
             gameRunning = player.validatePlayerHealth();
@@ -116,40 +143,70 @@ public class MenuCreator {
     }
 
     private void promptCheatMenu() {
+        mapFrame.makeMapVisible();
         boolean cheatsActivated = evaluateCheatsActivated();
         while (cheatsActivated && gameRunning) {
-            try {
-                cheatMenu.promptPrintMenu();
-                String returnValueFromCheatMenu = cheatMenu.returnUserInput();
-                {
-                    switch (returnValueFromCheatMenu) {
-                        case "Move north" -> player.moveNorth();
-                        case "Move west" -> player.moveWest();
-                        case "Move south" -> player.moveSouth();
-                        case "Move east" -> player.moveEast();
-                        case "Make map visible" -> mapFrame.makeMapVisible();
-                        case "Make map invisible" -> mapFrame.makeMapInvisible();
-                        case "Grant weapon" -> grantPlayerWeaponByName();
-                        case "Grant armor" -> grantPlayerArmorByName();
-                        case "Change attributes" -> chooseWhichAttributeToChange();
-                        case "Sharpen weapon" -> player.sharpenWeapon();
-                        case "Repair armor" -> player.repairAndCleanArmor();
-                        case "Show all map locations" ->
-                                mapFrame.showAllMapLocationsCHEAT(player.getPlayerPositionX(), player.getPlayerPositionY());
-                        case "Show Available information" -> player.promptPrintAvailableInfo();
-                        case "Want to quit?" -> wantToQuitGame();
-                        case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
+//            try { // TODO HANDLE INPUTS (EXCEPTIONS) IN UI CLASSES.
+            cheatMenu.promptPrintMenu();
+            String returnValueFromCheatMenu = cheatMenu.returnUserInput();
+            {
+                switch (returnValueFromCheatMenu) {
+                    case "Move north" -> player.moveNorth();
+                    case "Move west" -> player.moveWest();
+                    case "Move south" -> player.moveSouth();
+                    case "Move east" -> player.moveEast();
+                    case "Make map visible" -> mapFrame.makeMapVisible();
+                    case "Make map invisible" -> mapFrame.makeMapInvisible();
+                    case "Grant weapon" -> grantPlayerWeaponByName();
+                    case "Grant armor" -> grantPlayerArmorByName();
+                    case "Change attributes" -> chooseWhichAttributeToChange();
+                    case "Sharpen weapon" -> player.sharpenWeapon();
+                    case "Repair armor" -> player.repairAndCleanArmor();
+                    case "Show all map locations" ->
+                            mapFrame.showAllMapLocationsCHEAT(player.getPlayerPositionX(), player.getPlayerPositionY(), player.getPlayerLevel());
+                    case "Show Available information" -> player.promptPrintAvailableInfo();
+                    case "Want to quit?" -> wantToQuitGame();
+                    case "Go to previous menu" -> determinePreviousMenuAndGoThere(); // TODO working title
 //                    case null -> invalidInput(); // need java preview to use
-                        default -> promptInvalidInput(); //TODO RETURNER TIL HOVEDMENU VED FAILED INPUT???????
-                    }
+//                        default -> promptInvalidInput(); //TODO RETURNER TIL HOVEDMENU VED FAILED INPUT???????
                 }
-            } catch (InputMismatchException e) {
-                promptInvalidInput();
+                String playerPositionReturnValue = mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY(), player.getPlayerLevel());
+                switch (playerPositionReturnValue) {//TODO VIL GØRE SMARTERE!
+                    case "Combat, " -> promptCombatMenuWithCombatActive();
+                    case "Common longsword, " ->
+                            player.setPlayerWeapon(weaponCreator.getWeaponByName("Common longsword"));
+                    case "Common splint, " -> player.setPlayerArmor(armorCreator.getArmorByName("Common splint"));
+
+                    case "Sword of Keilier, " ->
+                            player.setPlayerWeapon(weaponCreator.getWeaponByName("Sword of Keilier"));
+
+
+                    case "Sword of Keilier, Splint of Keilier" -> equipSetOfKeilierFromCorpse();
+
+//                        case "Nothing" -> System.out.println(); // TEST TODO REMOVE
+                }
             }
-            mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY());
+//            } catch (InputMismatchException e) {
+//                promptInvalidInput();
+//            }
+//            mapFrame.updatePlayerPosition(player.getPlayerPositionX(), player.getPlayerPositionY()); TODO NOT NEEDED?
 //            validateCheatsActivated(); //TODO
-            determinePreviousMenuAndGoThere(); // TODO go out of cheat menu
+            //   determinePreviousMenuAndGoThere(); // TODO go out of cheat menu
         }
+    }
+
+    private void equipSetOfKeilierFromCorpse() {
+        player.setPlayerWeapon(weaponCreator.getWeaponByName("Sword of Keilier"));
+        player.setPlayerWeaponCondition(WeaponCondition.RUSTY);
+        player.setPlayerArmor(armorCreator.getArmorByName("Splint of Keilier"));
+        player.setPlayerArmorCondition(ArmorCondition.DIRTY);
+    }
+
+    private void equipCommonSetFromHaewenCity() {
+        player.setPlayerWeapon(weaponCreator.getWeaponByName("Common longsword"));
+        player.setPlayerWeaponCondition(WeaponCondition.NORMAL);
+        player.setPlayerArmor(armorCreator.getArmorByName("Common splint"));
+        player.setPlayerArmorCondition(ArmorCondition.NORMAL);
     }
 
     private void promptConfigureStartGame() {
@@ -165,7 +222,7 @@ public class MenuCreator {
         promptSleepForOneAndAHalfSecond();
     }
 
-    private boolean evaluateCheatsActivated() {
+    private boolean evaluateCheatsActivated() { // TODO
 //        if (in cheats menu){
         return true;
 //        }else return false;
@@ -186,6 +243,11 @@ public class MenuCreator {
     }
 
     // ------------------ OTHER ------------------
+
+    private void enemyTurn() {
+        player.setPlayerHealthPoints(player.getPlayerHealthPoints() - (int) Math.floor(enemy.getEnemyAttackDamage()));
+        ui.printEnemyTurn(enemy.getEnemyName(), (int) enemy.getEnemyAttackDamage(), player.getPlayerHealthPoints());
+    }
 
     private void wantToQuitGame() {
         gameRunning = !ui.wantToQuitGame();
@@ -210,11 +272,11 @@ public class MenuCreator {
         startGame();
     }
 
-    private boolean checkForCombat() { //todo
+//    private boolean checkForCombat() { //todo
 //        if (mapFrame.determineCombat) {
-        return false;
+//        return false;
 //        } else return false;
-    }
+//    }
 
     public void switchMenu(Menu newMenu) {
         menuStack.push(newMenu);
@@ -269,4 +331,7 @@ public class MenuCreator {
         ui.printConfirmationChangingAttribute(); // Posibility to change things in correct order.
     }
 
+    public void setEnemy(Enemy enemy) {
+        this.enemy = enemy;
+    }
 }

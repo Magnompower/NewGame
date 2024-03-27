@@ -12,7 +12,7 @@ public class EnemyCreator {
 
     public void instantiateEnemies() {
 
-        Enemy human = new CommonEnemy("Human");
+        Enemy human = new CommonEnemy("Bandit");
         Enemy dog = new CommonEnemy("Dog");
         Enemy honeyBadger = new CommonEnemy("Honey badger");
 

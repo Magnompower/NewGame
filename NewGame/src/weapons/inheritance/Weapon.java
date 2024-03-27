@@ -53,7 +53,7 @@ public abstract class Weapon {
     // ------------------ GETTERS ------------------
 
 
-    public int getActualWeaponDamage() {
+    public int getWeaponDamage() {
         calculateActualWeaponDamage();
         return actualWeaponDamage;
     }
@@ -90,10 +90,14 @@ public abstract class Weapon {
             case BROKEN -> setActualWeaponDamage(baseWeaponDamage * 0.75);
             case RUSTY -> setActualWeaponDamage(baseWeaponDamage * 0.9);
             case NORMAL -> setActualWeaponDamage(baseWeaponDamage);
-            case POLISHED -> setActualWeaponDamage(baseWeaponDamage * 1.1);
-            case SHARP -> setActualWeaponDamage(baseWeaponDamage * 1.25);
+            case POLISHED -> setActualWeaponDamage(baseWeaponDamage * 1.25); //TODO BALANCE
+            case SHARP -> setActualWeaponDamage(baseWeaponDamage * 1.5);
         }
 
+    }
+
+    private int calculateSharpWeaponDamage() {
+        return (int) Math.round(baseWeaponDamage * 1.5);
     }
 
     // ------------------ OTHER ------------------
@@ -106,7 +110,8 @@ public abstract class Weapon {
         String colorCodeNormalText = ConsoleColors.YELLOW_BRIGHT;
         String uniqueColor = ConsoleColors.SALMON;
 
-        String placeHolderOfPlayerDamage = "%placeHolder%";
+        String placeHolderOfPlayerDamage = "%placeHolder1%";
+        String placeHolderOfMaximumPlayerDamage = "%placeholder2%"; // TODO
 
        /* private static String centerString(String text, int width) {
             if (text.length() >= width) {
@@ -123,7 +128,7 @@ public abstract class Weapon {
 
         String weaponDetails = String.format("%sWeapon: %s %s%-20.20s%s:%s %2s%s|%s%2s %s Damage%s",
                 colorCodeNormalText, weaponModifier, colorCodeWeapon, weaponName, colorCodeNormalText,
-                colorCodeWeaponDamage, getActualWeaponDamage(), uniqueColor, colorCodeWeaponDamage,
+                colorCodeWeaponDamage, getWeaponDamage(), uniqueColor, colorCodeWeaponDamage,
                 placeHolderOfPlayerDamage, uniqueColor, ConsoleColors.RESET);
 
         if (!weaponCondition.equals(WeaponCondition.NORMAL)) {

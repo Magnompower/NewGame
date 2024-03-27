@@ -5,7 +5,7 @@ import ui.ConsoleColors;
 public enum WeaponCondition {
     BROKEN(ConsoleColors.GREY,"Broken"),
     RUSTY(ConsoleColors.WHITE_BRIGHT,"Rusty"),
-    NORMAL(ConsoleColors.YELLOW_BRIGHT,""),
+    NORMAL(ConsoleColors.YELLOW_BRIGHT,"Normal"),
     POLISHED(ConsoleColors.PURPLE_BRIGHT,"Polished"),
     SHARP(ConsoleColors.ORANGE,"Sharp");
 

@@ -1,14 +1,19 @@
 package enemies.inheritance;
 
 import ui.ConsoleColors;
+import ui.UI;
+
+import java.util.stream.Stream;
 
 public abstract class Enemy {
+    UI ui = new UI();
     private String enemyName;
     private double enemyAttackDamage;
-    private double enemyHealthPoints;
+    private int enemyHealthPoints;
+    private int enemyMaxHealthPoints = 20;
     private int baseExperiencePointsGranted = 100;
     private String enemyColor;
-    private int actualExperiencePointsGrated = (int) Math.floor(baseExperiencePointsGranted*getEnemyAttackDamage());
+    private int actualExperiencePointsGrated = (int) Math.floor(baseExperiencePointsGranted * getEnemyAttackDamage());
 
     public Enemy(String enemyName) {
         this.setEnemyName(enemyName);
@@ -24,8 +29,11 @@ public abstract class Enemy {
         this.enemyAttackDamage = enemyAttackDamage;
     }
 
-    public void setEnemyHealthPoints(double enemyHealthPoints) {
-        this.enemyHealthPoints = enemyHealthPoints;
+    public void setEnemyHealthPoints(int enemyHealthPoints) {
+        int currentLoot = 1; // TODO CALCULATE LOOT
+        if (enemyHealthPoints > 0) {
+            this.enemyHealthPoints = enemyHealthPoints;
+        } else ui.printEnemyIsDead(getEnemyName(), currentLoot); //TODO MAKE SURE ITS COLORED
     }
 
     public void setEnemyColor(String enemyColor) {
@@ -46,7 +54,7 @@ public abstract class Enemy {
         return enemyAttackDamage;
     }
 
-    public double getEnemyHealthPoints() {
+    public int getEnemyHealthPoints() {
         return enemyHealthPoints;
     }
 
@@ -54,6 +62,9 @@ public abstract class Enemy {
         return enemyColor;
     }
 
+    public int getEnemyMaxHealthPoints() {
+        return enemyMaxHealthPoints;
+    }
     // ------------------ OTHER ------------------
 
    /* public void calculateEnemyExperiencePointsGranted() {
@@ -79,4 +90,5 @@ public abstract class Enemy {
         return colorCodeEnemy + enemyName + colorCodeNormalText + ": " + colorCodeHealth + calculatedEnemyHealthPoints
                 + colorCodeNormalText + " : " + colorCodeEnemyDamage + calculatedEnemyDamage + colorCodeReset;
     }
+
 }

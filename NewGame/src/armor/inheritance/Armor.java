@@ -9,7 +9,7 @@ public abstract class Armor {
     private String armorColor; // TODO COLORSWITCH NOT WORKING SAME WITH WEAPON
     private int requiredStrength;
     private double damageReceived; // TODO RECEIVES INFO FROM ENEMY SOMEHOW MAYBE PUT IN PLAYER?
-    private ArmorCondition armorCondition = ArmorCondition.DIRTY;
+    private ArmorCondition armorCondition = ArmorCondition.BROKEN;
     private int baseArmorDamageTakenPercentage;
     private int actualArmorDamageTakenPercentage; //TODO INT HERE BUT DOUBLE OTHER PLACES!?
 

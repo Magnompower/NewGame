@@ -2,6 +2,7 @@ package ui;
 
 import armor.inheritance.Armor;
 import enemies.inheritance.Enemy;
+import map_logic.MapFrame;
 import weapons.inheritance.Weapon;
 
 import java.time.Duration;
@@ -11,7 +12,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
-    //    UIMapFrame uiMapFrame = new UIMapFrame(); TODO PROBLEM WITH INSTANCIATION
+    //    UIMapFrame uiMapFrame;// = new UIMapFrame(); // TODO PROBLEM WITH INSTANCIATION
     Scanner scanner = new Scanner(System.in);
     LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
 
@@ -136,7 +137,8 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.CYAN_BRIGHT + "You are not the first one to be attacked by bandits around " +
                 "these parts. Anyway i found this map lying besides you. Here you go." + ConsoleColors.RESET);
         sleepForTwoSeconds();
-//        uiMapFrame.promptMakeMapVisible(); TODO
+//    TODO    uiMapFrame.promptMakeMapVisible();
+//        mapFrame.makeMapVisible();
         sleepForOneSecond();
         System.out.println(ConsoleColors.CYAN_BRIGHT + "I would suggest that you go to Haewen City and get fixed up. " +
                 "You dont exactly look fantastic. " + ConsoleColors.YELLOW_BRIGHT + "The old man smirks. " +
@@ -185,8 +187,9 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         return ConsoleColors.MENU_COLOR_SANDY_BROWN + "MOVEMENT MENU" + ConsoleColors.RESET;
     }
 
-    public String printCombatMenuHeader() {
-        return ConsoleColors.MENU_COLOR_SANDY_BROWN + "COMBAT MENU" + ConsoleColors.RESET;
+    public String printCombatMenuHeader(String playerNameColored, String enemyNameColored) {
+        return ConsoleColors.MENU_COLOR_SANDY_BROWN + "COMBAT MENU" + ConsoleColors.RESET + "\n           " + playerNameColored +
+                " versus " + enemyNameColored + ConsoleColors.RESET;
     }
 
     public String[] printCombatMenuPoints(int calculatedChanceToEscape) { // TODO
@@ -260,7 +263,9 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
                 ConsoleColors.RESET)); //TODO CAN BE DONE SMARTER. ALREADY HAVE METHOD
 
         String playerDamageString = String.valueOf(playerDamage);
-        weaponDetails = weaponDetails.replace("%placeHolder%", playerDamageString);
+        weaponDetails = weaponDetails.replace("%placeHolder1%", playerDamageString);
+
+//        String playerMaximumAmountOfDamageString = String.valueOf(playerDamage+ weaponDetails. TODO
 
         System.out.println(weaponDetails);
 
@@ -294,13 +299,17 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.CYAN_BRIGHT + "You can't move further north!" + ConsoleColors.RESET);
     }
 
-    public void displayDamageDealt(double playerDamage) {
+    public void displayDamageDealt(double playerDamage, int enemyActualhealth, int enemyMaxHealth) {
         if (playerDamage == 1) {
-            System.out.println(ConsoleColors.YELLOW_BRIGHT + "You attack. You deal " + ConsoleColors.LIGHT_GOLD +
+            System.out.print(ConsoleColors.YELLOW_BRIGHT + "You attack. You deal " + ConsoleColors.LIGHT_GOLD +
                     playerDamage + ConsoleColors.YELLOW_BRIGHT + " point of damage" + ConsoleColors.RESET);
         } else
-            System.out.println(ConsoleColors.YELLOW_BRIGHT + "Your attack deals " + ConsoleColors.LIGHT_GOLD +
+            System.out.print(ConsoleColors.YELLOW_BRIGHT + "Your attack deals " + ConsoleColors.LIGHT_GOLD +
                     playerDamage + ConsoleColors.YELLOW_BRIGHT + " points of damage." + ConsoleColors.RESET);
+
+        if (enemyActualhealth <= enemyMaxHealth / 2) { //TODO CORRECT MATH
+            System.out.println(ConsoleColors.YELLOW_BRIGHT + "Your enemy looks damaged!");
+        }
     }
 
     public void gameOver() {
@@ -312,8 +321,9 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     public void printNotEnoughtStrengthToEquipArmorMessage(int playerStrength, int requiredStrength,
                                                            String armorName, String armorColor) {
         System.out.println(ConsoleColors.RED_BRIGHT + "You only have " + ConsoleColors.LIGHT_GOLD + playerStrength +
-                ConsoleColors.RED_BRIGHT + " strength and " + armorColor + armorName + " requires " +
-                ConsoleColors.LIGHT_GOLD + requiredStrength + ConsoleColors.RED_BRIGHT + " strength to equip." + ConsoleColors.RESET);
+                ConsoleColors.RED_BRIGHT + " strength and " + armorColor + armorName + ConsoleColors.GREEN_BRIGHT +
+                " requires " + ConsoleColors.LIGHT_GOLD + requiredStrength + ConsoleColors.RED_BRIGHT +
+                " strength to equip." + ConsoleColors.RESET);
     }
 
     public void printErrorGettingEnemyMessage() {
@@ -345,17 +355,17 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public void printConfirmationChangingAttribute() {
-        System.out.println(ConsoleColors.CYAN_BRIGHT + "Attributes changed!" + ConsoleColors.RESET);
+        System.out.println(ConsoleColors.GREEN_BRIGHT + "Attribute changed!" + ConsoleColors.RESET);
     }
 
     public void printNewWeaponCondition(String weaponConditionText, String weaponConditionColor) {
         System.out.println(ConsoleColors.CYAN_BRIGHT + "Your weapon has been sharpened and its condition is now: " +
-                weaponConditionColor + weaponConditionText + "." + ConsoleColors.RESET);
+                weaponConditionColor + weaponConditionText + ConsoleColors.YELLOW_BRIGHT + "." + ConsoleColors.RESET);
     }
 
     public void printNewArmorCondition(String armorConditionText, String armorConditionColor) {
         System.out.println(ConsoleColors.CYAN_BRIGHT + "Your armor has been repaired and its condition is now: " +
-                armorConditionColor + armorConditionText + ConsoleColors.RESET);
+                armorConditionColor + armorConditionText + ConsoleColors.YELLOW_BRIGHT + "." + ConsoleColors.RESET);
     }
 
     public void PrintCannotSharpenWeaponFurther(String weaponConditionText, String weaponConditionColor) {
@@ -402,10 +412,47 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
 
     public String printWeaponOnLocation(Weapon weapon) {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "You find " + weapon.getWeaponColor() + weapon.getWeaponName() +
-                ConsoleColors.YELLOW_BRIGHT + ". Do you want to equip it? Y/N");
+                ConsoleColors.YELLOW_BRIGHT + ". Do you want to equip it?" + ConsoleColors.GREEN_BRIGHT + " Y" +
+                ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.RED_BRIGHT + "N");
+        String playerInput = scanner.nextLine();
+        if (playerInput.equalsIgnoreCase("YES") || playerInput.equalsIgnoreCase("Y")) { // TODO MOVE SOUT LOGIC AFTER IT IS ACUALLY DONE
+            System.out.println(ConsoleColors.YELLOW_BRIGHT + "You have now equipped " + weapon.getWeaponColor() +
+                    weapon.getWeaponName() + ConsoleColors.YELLOW_BRIGHT + "." + ConsoleColors.RESET);
+            return weapon.getWeaponName();
+        }
+        if (playerInput.equalsIgnoreCase("NO") || playerInput.equalsIgnoreCase("N")) {
+            return "Keep old item"; // Todo
+        } else printInvalidInput();
+        return null; // TODO ?? MAYBE NO GOOD
+    }
+
+    public String printArmorOnLocation(Armor armor) {
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "You find " + armor.getArmorColor() + armor.getArmorName() +
+                ConsoleColors.YELLOW_BRIGHT + ". Do you want to equip it?" + ConsoleColors.GREEN_BRIGHT + " Y" +
+                ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.RED_BRIGHT + "N");
         String playerInput = scanner.nextLine();
         if (playerInput.equalsIgnoreCase("YES") || playerInput.equalsIgnoreCase("Y")) {
-            return weapon.getWeaponName();
-        } else return "Keep old weapon"; // Todo
+            System.out.println(ConsoleColors.YELLOW_BRIGHT + "You have now equipped " + armor.getArmorColor() +
+                    armor.getArmorName() + ConsoleColors.YELLOW_BRIGHT + "." + ConsoleColors.RESET);
+            return armor.getArmorName();
+        } else return "Keep old item"; // Todo
+
+    }
+
+    public void printCombatInfo(String enemyToSpawnColored) {
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "You hear a roar! ");
+        sleepForOneSecond();
+        System.out.println("A " + enemyToSpawnColored + ConsoleColors.YELLOW_BRIGHT + " appears as you draw arms." + ConsoleColors.RESET);
+    }
+
+    public void printEnemyIsDead(String deadEnemyNameColored, int currentLoot) {
+        System.out.println(deadEnemyNameColored + ConsoleColors.YELLOW_BRIGHT + " is dead. You search the dead body and find "
+                + ConsoleColors.LIGHT_GOLD + currentLoot + ConsoleColors.YELLOW_BRIGHT + " coin." + ConsoleColors.RESET); //TODO ALTER LOOT
+    }
+
+    public void printEnemyTurn(String enemyName, int enemyAttackDamage, int playerHealthPoints) {
+        System.out.println(ConsoleColors.YELLOW_BRIGHT + "The " + enemyName + ConsoleColors.YELLOW_BRIGHT +
+                " attacks you and deal " + enemyAttackDamage + ConsoleColors.YELLOW_BRIGHT +
+                " your remaining health is " + playerHealthPoints + ConsoleColors.RESET);
     }
 }

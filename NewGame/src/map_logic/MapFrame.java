@@ -20,6 +20,7 @@ public final class MapFrame extends JFrame {
     static MapFrame instance; // Singleton instance
     UI ui = new UI();
     private final int mapSize = 31;
+    Random random = new Random();
     private final Set<Point> visitedLocations = new HashSet<>(); // Keeps track of visited locations
     private final Set<Point> revealedLocations = new HashSet<>(); // Keeps trac of locations visible to the player
     private final Map<Point, MapElement> specialLocations = new HashMap<>(); // All special locations
@@ -81,6 +82,7 @@ public final class MapFrame extends JFrame {
         weaponLocations.put(pointOfInterest5, weaponCreator.getWeaponByName("Sword of Keilier"));
     }
 
+    // TODO SoK ON PoI1!
     public void placeArmorOnMapLocations() {
         armorLocations.put(haewenCityLocation, armorCreator.getArmorByName("Common splint"));
         armorLocations.put(pointOfInterest5, armorCreator.getArmorByName("Splint of Keilier"));
@@ -200,25 +202,20 @@ public final class MapFrame extends JFrame {
         setVisible(false);
     }
 
-    public String updatePlayerPosition(int playerPositionX, int playerPositionY) {
+    public String updatePlayerPosition(int playerPositionX, int playerPositionY, int playerLevel) { // TODO DÅRLIG METODE? OPMÆRKOSM PÅ RÆKKEFØLGEN
         Point currentPlayerLocation = new Point(playerPositionX, playerPositionY);
-        visitedLocations.add(currentPlayerLocation);
+        StringBuilder result = new StringBuilder();
 
-        if (enemyLocations.containsKey(currentPlayerLocation)) {
-            Enemy enemy = enemyLocations.get(currentPlayerLocation);
-            return "Combat"; // Combat
-// TODO IMPLEMENT COMBAT LOGIC
+        if (!visitedLocations.contains(currentPlayerLocation)) {
+            int randomNumber = random.nextInt(11);
+            if (randomNumber >= 5) {
+                Enemy enemyToSpawn = decideEnemyBasedOnLevel(playerLevel);
+                enemyLocations.put(currentPlayerLocation, enemyToSpawn);
+                ui.printCombatInfo(enemyToSpawn.getEnemyColor() + enemyToSpawn.getEnemyName());
+                result.append("Combat"); // Combat
+                if (result.length() > 0) result.append(", "); //TODO MAKE SMARTER
+            }
         }
-        if (weaponLocations.containsKey(currentPlayerLocation)) {
-            Weapon weapon = weaponLocations.get(currentPlayerLocation);
-            return ui.printWeaponOnLocation(weapon);
-            //        TODO IMPLEMENT LOOT LOGIC
-        }
-        if (armorLocations.containsKey(currentPlayerLocation)) {
-            Armor armor = armorLocations.get(currentPlayerLocation);
-//        TODO IMPLEMENT LOOT LOGIC
-        }
-
         if (visitedLocations.contains(haewenCityLocation)) {
             revealNewLocationsFromHaewenCity(); // Boss, cities and points of interest.
         }
@@ -242,8 +239,6 @@ public final class MapFrame extends JFrame {
             revealNewLocationsFromSuspiciousArea5();
         }
 
-//        if (visitedLocations.contains(pointOfInterestX)){revalY} TODO
-
         Component[] components = getContentPane().getComponents();
         int playerIndex = playerPositionY * mapSize + playerPositionX;
 
@@ -252,7 +247,6 @@ public final class MapFrame extends JFrame {
             if (visitedIndex >= 0 && visitedIndex < components.length &&
                     !(visitedIndex >= 0 && visitedIndex < playerPositionY)) {
                 JPanel visitedPanel = (JPanel) components[visitedIndex];
-
 
                 if (cityLocations.contains(point)) {
                     visitedPanel.setBackground(MapElement.CITIES.getColor());
@@ -263,11 +257,79 @@ public final class MapFrame extends JFrame {
                 }
             }
         }
+
         if (playerIndex >= 0 && playerIndex < components.length) { // Color player location
             JPanel playerPanel = (JPanel) components[playerIndex];
             playerPanel.setBackground(MapElement.PLAYER_LOCATION.getColor());
         }
-        return "nothing"; //TODO
+
+        if (enemyLocations.containsKey(currentPlayerLocation)) {
+            // bossfight or legendary
+        }
+        if (weaponLocations.containsKey(currentPlayerLocation) && !visitedLocations.contains(currentPlayerLocation)) {
+            Weapon weapon = weaponLocations.get(currentPlayerLocation);
+            result.append(ui.printWeaponOnLocation(weapon));
+            if (result.length() > 0) result.append(", ");
+        }
+        if (armorLocations.containsKey(currentPlayerLocation) && !visitedLocations.contains(currentPlayerLocation)) {
+            Armor armor = armorLocations.get(currentPlayerLocation);
+            result.append(ui.printArmorOnLocation(armor));
+        }
+
+        visitedLocations.add(currentPlayerLocation);
+        if (result.isEmpty()) {
+            result.append("Nothing");
+        }
+        return result.toString(); //TODO
+    }
+
+    private Enemy decideEnemyBasedOnLevel(int playerLevel) {
+        int randomNumber = random.nextInt(3);
+        if (playerLevel < 5) {
+            if (randomNumber == 0) {
+                return enemyCreator.getEnemiesByName("Bandit");
+            }
+            if (randomNumber == 1) {
+                return enemyCreator.getEnemiesByName("Dog");
+            }
+            if (randomNumber == 2) {
+                return enemyCreator.getEnemiesByName("Honey badger");
+            }
+        }
+        if (playerLevel > 4 && playerLevel < 10) {
+            if (randomNumber == 0) {
+                return enemyCreator.getEnemiesByName("Wolf");
+            }
+            if (randomNumber == 1) {
+                return enemyCreator.getEnemiesByName("Zombie");
+            }
+            if (randomNumber == 2) {
+                return enemyCreator.getEnemiesByName("Skeleton");
+            }
+        }
+        if (playerLevel > 9 && playerLevel < 15) {
+            if (randomNumber == 0) {
+                return enemyCreator.getEnemiesByName("Centaur");
+            }
+            if (randomNumber == 1) {
+                return enemyCreator.getEnemiesByName("Bear");
+            }
+            if (randomNumber == 2) {
+                return enemyCreator.getEnemiesByName("Tiger");
+            }
+        }
+        if (playerLevel > 14) {
+            if (randomNumber == 0) {
+                return enemyCreator.getEnemiesByName("Elephant");
+            }
+            if (randomNumber == 1) {
+                return enemyCreator.getEnemiesByName("Otto Otto");
+            }
+            if (randomNumber == 2) {
+                return enemyCreator.getEnemiesByName("Anders the duck");
+            }
+        }
+        return enemyCreator.getEnemiesByName("Bandit"); // TODO?
     }
 
     private void revealNewLocationsFromHaewenCity() {
@@ -422,12 +484,12 @@ public final class MapFrame extends JFrame {
         SwingUtilities.invokeLater(() -> MapFrame.getInstance().makeMapVisible());
     }
 
-    public void showAllMapLocationsCHEAT(int playerPositionX, int playerPositionY) {
+    public void showAllMapLocationsCHEAT(int playerPositionX, int playerPositionY, int playerLevel) {
         revealedLocations.addAll(specialLocations.keySet()); // Add all special locations to visible locations.
         hubeCityDiscovered = true;
         waeegCityDiscovered = true;
         refreshMapVisibility();
-        updatePlayerPosition(playerPositionX, playerPositionY);
+        updatePlayerPosition(playerPositionX, playerPositionY, playerLevel); // TODO NOT NEEDED PLAYERLEVEL HERE?!
     }
 
 }

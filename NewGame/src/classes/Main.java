@@ -1,11 +1,9 @@
 package classes;
 
 import menus.MenuCreator;
-import menus.StateMachine;
 
 public class Main {
-    StateMachine stateMachine = new StateMachine(); // TODO ??
-    MenuCreator menuCreator = new MenuCreator(stateMachine);
+    MenuCreator menuCreator = new MenuCreator();
 
     public static void main(String[] args) {
         new Main().run();
@@ -13,7 +11,8 @@ public class Main {
 
     private void run() {
 
-        menuCreator.executeMainMenu();
+        menuCreator.promptConfigureGameBeforeStart();
+        menuCreator.executeProgram();
 
     }
 }

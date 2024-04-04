@@ -10,7 +10,7 @@ public class CheatMenu extends Menu {
 
     @Override
     public String returnUserInput() {
-        String userInput = changeUserInput().toUpperCase();
+        String userInput = changeUserStringInput().toUpperCase();
         return switch (userInput) {
             case "W" -> "Move north";
             case "A" -> "Move west";
@@ -26,7 +26,7 @@ public class CheatMenu extends Menu {
             case "8" -> "Show all map locations";
             case "9" -> "Show Available information";
             case "0" -> "Want to quit?";
-            case "33" -> "Go to previous menu";
+            case "33" -> "Go to movement menu"; // TODO MAKE MORE
             default -> null;
         };
     }

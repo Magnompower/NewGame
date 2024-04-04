@@ -25,7 +25,10 @@ public abstract class Menu {
         return ui.getSpecificStringInput();
     }
 
-    public String changeUserInput() {
+    public String changeUserStringInput() {
         return ui.getSpecificStringInput();
+    }
+    public int changeUserIntInput(){
+        return ui.getSpecificPositiveIntInput();
     }
 }

@@ -1,12 +1,12 @@
 package map_logic;
 
-import armor.inheritance.Armor;
 import armor.ArmorCreator;
-import enemies.inheritance.Enemy;
+import armor.inheritance.Armor;
 import enemies.EnemyCreator;
+import enemies.inheritance.Enemy;
 import ui.UI;
-import weapons.inheritance.Weapon;
 import weapons.WeaponCreator;
+import weapons.inheritance.Weapon;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -27,6 +27,9 @@ public final class MapFrame extends JFrame {
     private Map<Point, Enemy> enemyLocations = new HashMap<>(); // Designate enemies posistions on the map TODO
     private Map<Point, Weapon> weaponLocations = new HashMap<Point, Weapon>();
     private Map<Point, Armor> armorLocations = new HashMap<>();
+    Point currentPlayerLocation = new Point(15, 15); // Starting point
+    Component[] components;
+    int playerIndex;
 
     private final Set<Point> cityLocations = new HashSet<>(Arrays.asList(
 
@@ -79,13 +82,13 @@ public final class MapFrame extends JFrame {
 
     public void placeWeaponsOnMapLocations() {
         weaponLocations.put(haewenCityLocation, weaponCreator.getWeaponByName("Common longsword"));
-        weaponLocations.put(pointOfInterest5, weaponCreator.getWeaponByName("Sword of Keilier"));
+        weaponLocations.put(pointOfInterest5, weaponCreator.getWeaponByName("Uncommon war hammer"));
+        weaponLocations.put(pointOfInterest1, weaponCreator.getWeaponByName("Sword of Keilier"));
     }
 
-    // TODO SoK ON PoI1!
     public void placeArmorOnMapLocations() {
         armorLocations.put(haewenCityLocation, armorCreator.getArmorByName("Common splint"));
-        armorLocations.put(pointOfInterest5, armorCreator.getArmorByName("Splint of Keilier"));
+        armorLocations.put(pointOfInterest1, armorCreator.getArmorByName("Splint of Keilier"));
     }
 
     private final Point playerStartLocationOnMap = new Point(15, 15);
@@ -192,6 +195,7 @@ public final class MapFrame extends JFrame {
                 add(panel);
             }
         }
+       components = getContentPane().getComponents();
     }
 
     public void makeMapVisible() {
@@ -202,21 +206,69 @@ public final class MapFrame extends JFrame {
         setVisible(false);
     }
 
-    public String updatePlayerPosition(int playerPositionX, int playerPositionY, int playerLevel) { // TODO DÅRLIG METODE? OPMÆRKOSM PÅ RÆKKEFØLGEN
-        Point currentPlayerLocation = new Point(playerPositionX, playerPositionY);
-        StringBuilder result = new StringBuilder();
+    public void updateMapFromPlayerPosition(int playerPositionX, int playerPositionY) { // TODO DÅRLIG METODE? OPMÆRKOSM PÅ RÆKKEFØLGEN
+        currentPlayerLocation = new Point(playerPositionX, playerPositionY);
+        visitedLocations.add(currentPlayerLocation); // TODO find plads for denne.
 
-        if (!visitedLocations.contains(currentPlayerLocation)) {
+        updatePlayerRevealedLocations();
+        updateMapColors(playerPositionX, playerPositionY);
+
+    }
+
+    public Boolean checkForEnemy() {
+        if (!specialLocations.containsKey(currentPlayerLocation) // TODO MAYBE CHANGE
+                && !currentPlayerLocation.equals(playerStartLocationOnMap)) {
             int randomNumber = random.nextInt(11);
-            if (randomNumber >= 5) {
-                Enemy enemyToSpawn = decideEnemyBasedOnLevel(playerLevel);
-                enemyLocations.put(currentPlayerLocation, enemyToSpawn);
-                ui.printCombatInfo(enemyToSpawn.getEnemyColor() + enemyToSpawn.getEnemyName());
-                result.append("Combat"); // Combat
-                if (result.length() > 0) result.append(", "); //TODO MAKE SMARTER
+            if (randomNumber >= 5) { // Enemy spawns at player location at random.
+                return true;
             }
         }
-        if (visitedLocations.contains(haewenCityLocation)) {
+
+        if (enemyLocations.containsKey(currentPlayerLocation)) {
+            return true;
+            // bossfight or legendary
+        } else return false;
+    }
+
+    public Armor checkForArmor() {
+        if (armorLocations.containsKey(currentPlayerLocation) && !visitedLocations.contains(currentPlayerLocation)) {
+            Armor armor = armorLocations.get(currentPlayerLocation);
+            return ui.wantToEquipArmor(armor);
+        } else return null; // TODO
+    }
+
+    public Weapon checkForWeapon() {
+        if (weaponLocations.containsKey(currentPlayerLocation) && !visitedLocations.contains(currentPlayerLocation)) {
+            Weapon weapon = weaponLocations.get(currentPlayerLocation);
+            return ui.wantToEquipWeapon(weapon);
+        } else return null; //TODO RETURNING NULL?!?!?
+    }
+
+    private void updateMapColors(int playerPositionX, int playerPositionY) {
+        playerIndex = playerPositionY * mapSize + playerPositionX; // TODO SPRØG PATCIRK HVORNÅR LOKALE VARIABLER
+        for (Point point : visitedLocations) { // Color visited locations. TODO MAKE N
+            int visitedIndex = point.y * mapSize + point.x;
+            if (visitedIndex >= 0 && visitedIndex < components.length &&
+                    !(visitedIndex >= 0 && visitedIndex < playerPositionY)) {
+                JPanel visitedPanel = (JPanel) components[visitedIndex];
+
+                if (cityLocations.contains(point)) {
+                    visitedPanel.setBackground(MapElement.CITIES.getColor());
+                } else if (specialLocations.containsKey(point)) {
+                    visitedPanel.setBackground(MapElement.VISITED_SPECIAL_LOCATION.getColor());
+                } else if (visitedIndex != playerIndex) {
+                    visitedPanel.setBackground(MapElement.VISITED.getColor());
+                }
+            }
+        }
+        if (playerIndex >= 0 && playerIndex < components.length) { // Color player location
+            JPanel playerPanel = (JPanel) components[playerIndex];
+            playerPanel.setBackground(MapElement.PLAYER_LOCATION.getColor());
+        }
+    }
+
+    private void updatePlayerRevealedLocations() {
+        if (visitedLocations.contains(haewenCityLocation)) { // todo make selvstænding metode
             revealNewLocationsFromHaewenCity(); // Boss, cities and points of interest.
         }
         if (visitedLocations.contains(logeCityLocation)) {
@@ -238,52 +290,14 @@ public final class MapFrame extends JFrame {
         if (visitedLocations.contains(suspiciousArea5)) {
             revealNewLocationsFromSuspiciousArea5();
         }
-
-        Component[] components = getContentPane().getComponents();
-        int playerIndex = playerPositionY * mapSize + playerPositionX;
-
-        for (Point point : visitedLocations) { // Color visited locations.
-            int visitedIndex = point.y * mapSize + point.x;
-            if (visitedIndex >= 0 && visitedIndex < components.length &&
-                    !(visitedIndex >= 0 && visitedIndex < playerPositionY)) {
-                JPanel visitedPanel = (JPanel) components[visitedIndex];
-
-                if (cityLocations.contains(point)) {
-                    visitedPanel.setBackground(MapElement.CITIES.getColor());
-                } else if (specialLocations.containsKey(point)) {
-                    visitedPanel.setBackground(MapElement.VISITED_SPECIAL_LOCATION.getColor());
-                } else if (visitedIndex != playerIndex) {
-                    visitedPanel.setBackground(MapElement.VISITED.getColor());
-                }
-            }
-        }
-
-        if (playerIndex >= 0 && playerIndex < components.length) { // Color player location
-            JPanel playerPanel = (JPanel) components[playerIndex];
-            playerPanel.setBackground(MapElement.PLAYER_LOCATION.getColor());
-        }
-
-        if (enemyLocations.containsKey(currentPlayerLocation)) {
-            // bossfight or legendary
-        }
-        if (weaponLocations.containsKey(currentPlayerLocation) && !visitedLocations.contains(currentPlayerLocation)) {
-            Weapon weapon = weaponLocations.get(currentPlayerLocation);
-            result.append(ui.printWeaponOnLocation(weapon));
-            if (result.length() > 0) result.append(", ");
-        }
-        if (armorLocations.containsKey(currentPlayerLocation) && !visitedLocations.contains(currentPlayerLocation)) {
-            Armor armor = armorLocations.get(currentPlayerLocation);
-            result.append(ui.printArmorOnLocation(armor));
-        }
-
-        visitedLocations.add(currentPlayerLocation);
-        if (result.isEmpty()) {
-            result.append("Nothing");
-        }
-        return result.toString(); //TODO
     }
 
-    private Enemy decideEnemyBasedOnLevel(int playerLevel) {
+    public void placeEnemyOnMap(Enemy enemy) {
+        enemyLocations.put(currentPlayerLocation, enemy);
+
+    }
+
+    public Enemy decideEnemyBasedOnLevel(int playerLevel) {
         int randomNumber = random.nextInt(3);
         if (playerLevel < 5) {
             if (randomNumber == 0) {
@@ -329,7 +343,7 @@ public final class MapFrame extends JFrame {
                 return enemyCreator.getEnemiesByName("Anders the duck");
             }
         }
-        return enemyCreator.getEnemiesByName("Bandit"); // TODO?
+        return enemyCreator.getEnemiesByName("Bandit"); // Default
     }
 
     private void revealNewLocationsFromHaewenCity() {
@@ -418,7 +432,6 @@ public final class MapFrame extends JFrame {
     }
 
     private void refreshMapVisibility() {
-        Component[] components = getContentPane().getComponents();
         for (int i = 0; i < components.length; i++) {
             JPanel panel = (JPanel) components[i];
             int x = i % mapSize;
@@ -484,12 +497,12 @@ public final class MapFrame extends JFrame {
         SwingUtilities.invokeLater(() -> MapFrame.getInstance().makeMapVisible());
     }
 
-    public void showAllMapLocationsCHEAT(int playerPositionX, int playerPositionY, int playerLevel) {
+    public void showAllMapLocationsCHEAT(int playerPositionX, int playerPositionY) {
         revealedLocations.addAll(specialLocations.keySet()); // Add all special locations to visible locations.
         hubeCityDiscovered = true;
         waeegCityDiscovered = true;
         refreshMapVisibility();
-        updatePlayerPosition(playerPositionX, playerPositionY, playerLevel); // TODO NOT NEEDED PLAYERLEVEL HERE?!
+        updateMapFromPlayerPosition(playerPositionX, playerPositionY); // TODO NOT NEEDED PLAYERLEVEL HERE?!
     }
 
 }

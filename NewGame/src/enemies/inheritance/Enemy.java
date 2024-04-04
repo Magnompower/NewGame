@@ -47,7 +47,7 @@ public abstract class Enemy {
     // ------------------ GETTERS ------------------
 
     public String getEnemyName() {
-        return enemyName;
+        return enemyColor + enemyName;
     }
 
     public double getEnemyAttackDamage() {

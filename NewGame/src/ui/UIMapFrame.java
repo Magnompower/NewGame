@@ -10,8 +10,8 @@ public class UIMapFrame {
     Scanner scanner = new Scanner(System.in);
 
 
-    public void promptUpdatePlayerPosition(int playerPositionX, int playerPositionY, int playerLevel) {
-        mapFrame.updatePlayerPosition(playerPositionX, playerPositionY, playerLevel);
+    public void promptUpdatePlayerPosition(int playerPositionX, int playerPositionY) {
+        mapFrame.updateMapFromPlayerPosition(playerPositionX, playerPositionY);
     }
 
     public void promptMakeMapVisible() {

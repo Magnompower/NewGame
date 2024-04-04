@@ -12,13 +12,13 @@ public class CombatMenu extends Menu {
 
     @Override
     public String returnUserInput() {
-        String userInput = changeUserInput();
+        int userInput = changeUserIntInput();
         return switch (userInput) {
-            case "1" -> "Attack";
-            case "2" -> "Attempt to flee";
-            case "9" -> "Show available information";
-            case "0" -> "Want to quit?";
-            case "33" -> "Go to cheat menu";
+            case 1 -> "Attack";
+            case 2 -> "Attempt to flee";
+            case 9 -> "Show available information";
+            case 0 -> "Want to quit?";
+            case 33 -> "Go to cheat menu";
             default -> null;
         };
     }

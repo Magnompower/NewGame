@@ -10,7 +10,7 @@ public abstract class Weapon {
     private String weaponColor;
     private String weaponModifier;
     private WeaponType weaponType = WeaponType.ONEHANDED_DAGGER;
-    private WeaponCondition weaponCondition = WeaponCondition.BROKEN;
+    private WeaponCondition weaponCondition;
     private int baseWeaponDamage;
     private int actualWeaponDamage;
 

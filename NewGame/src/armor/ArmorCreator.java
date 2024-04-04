@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class ArmorCreator {
     UI ui = new UI();
-    private final ArrayList<Armor> armorPieces = new ArrayList<>();
+    private final ArrayList<Armor> armorPiecesArrayList = new ArrayList<>();
 
     public void instantiateArmor() { //TODO
+
+        Armor poorKilt = new PoorArmor("Poor kilt");
 
         Armor poorBreastplate = new PoorArmor("Poor breastplate");
         Armor commonBreastplate = new CommonArmor("Common breastplate");
@@ -39,51 +41,52 @@ public class ArmorCreator {
 
         Armor pyjamas = new PlotArmor("Pyjamas");
 
-        armorPieces.add(poorBreastplate);
-        armorPieces.add(commonBreastplate);
-        armorPieces.add(uncommonBreastplate);
+        armorPiecesArrayList.add(poorKilt);
 
-        armorPieces.add(poorLeatherArmor);
-        armorPieces.add(commonLeatherArmor);
-        armorPieces.add(uncommonLeatherArmor);
+        armorPiecesArrayList.add(poorBreastplate);
+        armorPiecesArrayList.add(commonBreastplate);
+        armorPiecesArrayList.add(uncommonBreastplate);
 
-        armorPieces.add(poorChainmail);
-        armorPieces.add(commonChainmail);
-        armorPieces.add(uncommonChainmail);
+        armorPiecesArrayList.add(poorLeatherArmor);
+        armorPiecesArrayList.add(commonLeatherArmor);
+        armorPiecesArrayList.add(uncommonLeatherArmor);
 
-        armorPieces.add(poorSplint);
-        armorPieces.add(commonSplint);
-        armorPieces.add(uncommonSplint);
+        armorPiecesArrayList.add(poorChainmail);
+        armorPiecesArrayList.add(commonChainmail);
+        armorPiecesArrayList.add(uncommonChainmail);
 
-        armorPieces.add(breastplateOfBeebus);
-        armorPieces.add(wickedChainmail);
+        armorPiecesArrayList.add(poorSplint);
+        armorPiecesArrayList.add(commonSplint);
+        armorPiecesArrayList.add(uncommonSplint);
 
-        armorPieces.add(breastplateOfKeilier);
-        armorPieces.add(splintOfKeilier);
+        armorPiecesArrayList.add(breastplateOfBeebus);
+        armorPiecesArrayList.add(wickedChainmail);
 
-        armorPieces.add(breastplateOfOddie);
-        armorPieces.add(hideOfOzra);
+        armorPiecesArrayList.add(breastplateOfKeilier);
+        armorPiecesArrayList.add(splintOfKeilier);
 
-        armorPieces.add(pyjamas);
+        armorPiecesArrayList.add(breastplateOfOddie);
+        armorPiecesArrayList.add(hideOfOzra);
+
+        armorPiecesArrayList.add(pyjamas);
     }
 
-    ArrayList<Armor> armorPiecesCopy = armorPieces;
+    ArrayList<Armor> armorPiecesArrayListCopy = armorPiecesArrayList;
 
-    public Armor getArmorByName(String name) {
+    public Armor getArmorByName(String armorPieceName) {
         instantiateArmor();
-        for (Armor specificArmorPiece : armorPiecesCopy) {
-            if (specificArmorPiece.getArmorName().equals((name))) {
+        for (Armor specificArmorPiece : armorPiecesArrayListCopy) {
+            if (specificArmorPiece.getArmorName().equals((armorPieceName))) {
                 return specificArmorPiece;
             }
         }
         ui.printErrorGettingitemMessage();
-        return null; // Somehow return the message is better?
+        return null; // Somehow return the message is better? TODO
     }
 
-
     public ArrayList<Armor> getArmorPiecesCopyArraylistInOrder() {
-        armorPiecesCopy.sort(new ArmorDamageTakenPercentageComparator());
-        return armorPiecesCopy;
+        armorPiecesArrayListCopy.sort(new ArmorDamageTakenPercentageComparator());
+        return armorPiecesArrayListCopy;
     }
 
 }

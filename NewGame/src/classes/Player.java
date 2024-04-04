@@ -1,48 +1,43 @@
 package classes;
 
-import armor.ArmorCreator;
 import armor.ArmorCondition;
+import armor.ArmorCreator;
 import armor.inheritance.Armor;
-import armor.inheritance.PoorArmor;
-
 import enemies.EnemyCreator;
 import enemies.inheritance.Enemy;
-
-import ui.UI;
 import ui.ConsoleColors;
-
-import java.util.Set;
-import java.util.EnumSet;
-
-import weapons.WeaponType;
-import weapons.WeaponCreator;
+import ui.UI;
 import weapons.WeaponCondition;
+import weapons.WeaponCreator;
+import weapons.WeaponType;
 import weapons.inheritance.Weapon;
-import weapons.inheritance.PoorWeapon;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 
 public class Player {
 
     UI ui = new UI(); // TODO MAKING new everywhere is bad?
-    Weapon playerWeapon = new PoorWeapon(WeaponType.ONEHANDED_DAGGER, "Poor dagger"); // START WEAPON
-    private Armor playerArmor = new PoorArmor("Poor kilt"); // START ARMOR
+    Weapon playerWeapon;
+    private Armor playerArmor;
     private WeaponCreator weaponCreator;
-    private EnemyCreator enemyCreator = new EnemyCreator();
+    private EnemyCreator enemyCreator;
     private ArmorCreator armorCreator;
-    private Enemy enemy = enemyCreator.getEnemiesByName("Cow"); // TODO INSTANCIERERING
+    private Enemy enemy; // TODO INSTANCIERERING
     private String playerName;
     private int playerPositionX = 15;
     private int playerPositionY = 15;
-    private int playerLevel = 1; // can never go below 1.
-    private int playerAgility = 6;
-    private int playerIntelligence = 6;
-    private int playerStamina = 6;
-    private int playerStrength = 6;
+    private int playerLevel = 1; // Start value.
+    private int playerAgility = 6; // Start value.
+    private int playerIntelligence = 6; // Start value.
+    private int playerStamina = 6; // Start value.
+    private int playerStrength = 6; // Start value.
     private int playerHealthPoints = playerLevel * 5 + playerStamina * 3 + 7;
     private int playerDamage;
     private int escapeChancePercentage;
-    private int enemiesKilled = 0;
-    private int playerAmountOfCoins = 0;
+    private int enemiesKilled = 0; // Start value.
+    private int playerAmountOfCoins = 0; // Start value.
     private int playerExperiencePoints; // XP needed to lvl = base(100) * level * level (100 lvl 1, 10000 lvl 10)
 
 
@@ -178,6 +173,12 @@ public class Player {
 
     }
 
+    public Boolean evaluateCombat() {
+        if (enemy.getEnemyHealthPoints() <= 0) {
+            return false;
+        } else return true;
+    }
+
     public void checkPlayerLevel() {
         switch (playerExperiencePoints) {
             case 100 -> playerLevel = 2;
@@ -221,7 +222,7 @@ public class Player {
         if (escapeChancePercentage > 100) {
             setEscapeChancePercentage(100);
         }
-        // if bossenemy escapechance + 20
+        // if bossenemy escapechance + 20 TODO
         if (escapeChancePercentage < 40) {
             setEscapeChancePercentage(40);
         } else setEscapeChancePercentage(escapeChancePercentage);
@@ -306,7 +307,6 @@ public class Player {
             ui.cannotMoveFurtherNorthMessage();
         }
     }
-
 
     public void attack() {
         calculatePlayerDamage();

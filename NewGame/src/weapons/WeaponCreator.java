@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class WeaponCreator {
     UI ui = new UI();
-    private final ArrayList<Weapon> weapons = new ArrayList<>();
+    private final ArrayList<Weapon> weaponsArrayList = new ArrayList<>();
 
     public void instantiateWeapons() {
+
+        Weapon poorDagger = new PoorWeapon(WeaponType.ONEHANDED_DAGGER, "Poor dagger");
 
         Weapon clubPoor = new PoorWeapon(WeaponType.ONEHANDED_MACE, "Poor club");
         Weapon clubCommon = new CommonWeapon(WeaponType.ONEHANDED_MACE, "Common club");
@@ -43,37 +45,39 @@ public class WeaponCreator {
 
 //        weapons.addAll(Weapon); TODO
 
-        weapons.add(clubPoor);
-        weapons.add(clubCommon);
-        weapons.add(clubUncommon);
+        weaponsArrayList.add(poorDagger);
 
-        weapons.add(warHammerPoor);
-        weapons.add(warHammerCommon);
-        weapons.add(warHammerUncommon);
+        weaponsArrayList.add(clubPoor);
+        weaponsArrayList.add(clubCommon);
+        weaponsArrayList.add(clubUncommon);
 
-        weapons.add(shortSwordPoor);
-        weapons.add(shortSwordCommon);
-        weapons.add(shortSwordUncommon);
+        weaponsArrayList.add(warHammerPoor);
+        weaponsArrayList.add(warHammerCommon);
+        weaponsArrayList.add(warHammerUncommon);
 
-        weapons.add(longswordPoor);
-        weapons.add(longswordCommon);
-        weapons.add(longswordUncommon);
+        weaponsArrayList.add(shortSwordPoor);
+        weaponsArrayList.add(shortSwordCommon);
+        weaponsArrayList.add(shortSwordUncommon);
 
-        weapons.add(staffOfMindorr);
+        weaponsArrayList.add(longswordPoor);
+        weaponsArrayList.add(longswordCommon);
+        weaponsArrayList.add(longswordUncommon);
 
-        weapons.add(swordOfKeilier);
+        weaponsArrayList.add(staffOfMindorr);
 
-        weapons.add(axeOfOddie);
+        weaponsArrayList.add(swordOfKeilier);
 
-        weapons.add(lilleLom);
+        weaponsArrayList.add(axeOfOddie);
+
+        weaponsArrayList.add(lilleLom);
     }
 
-    ArrayList<Weapon> weaponsCopy = weapons;
+    ArrayList<Weapon> weaponsArrayListCopy = weaponsArrayList;
 
-    public Weapon getWeaponByName(String name) {
+    public Weapon getWeaponByName(String weaponName) {
         instantiateWeapons();
-        for (Weapon specificWeapon : weaponsCopy) {
-            if (specificWeapon.getWeaponName().equals(name)) {
+        for (Weapon specificWeapon : weaponsArrayListCopy) {
+            if (specificWeapon.getWeaponName().equals(weaponName)) {
                 return specificWeapon;
             }
         }
@@ -82,8 +86,8 @@ public class WeaponCreator {
     }
 
     public ArrayList<Weapon> getWeaponsCopyArraylistInOrder() {
-        weaponsCopy.sort(new WeaponDamageComparator());
-        return weaponsCopy;
+        weaponsArrayListCopy.sort(new WeaponDamageComparator());
+        return weaponsArrayListCopy;
     }
 
 }

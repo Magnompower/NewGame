@@ -2,7 +2,6 @@ package ui;
 
 import armor.inheritance.Armor;
 import enemies.inheritance.Enemy;
-import map_logic.MapFrame;
 import weapons.inheritance.Weapon;
 
 import java.time.Duration;
@@ -13,8 +12,9 @@ import java.util.Scanner;
 
 public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     //    UIMapFrame uiMapFrame;// = new UIMapFrame(); // TODO PROBLEM WITH INSTANCIATION
-    Scanner scanner = new Scanner(System.in);
-    LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
+    private final Scanner scanner = new Scanner(System.in);
+    private final LocalTime timeWhenGameStart = LocalTime.now(); // TODO SKAL MÅSKE INSTACIERES FØR DEN "TÆLLER"?
+    private boolean validInput;
 
     public void welcomeMessage() {
         System.out.print(ConsoleColors.PURPLE_BRIGHT + "MAGNOM ");
@@ -40,21 +40,24 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.print(ConsoleColors.YELLOW_BRIGHT + " of ");
         sleepForOneSecond();
         System.out.println(ConsoleColors.CYAN_BRIGHT + "JUSTICE" + ConsoleColors.RESET);
+
+        sleepForOneSecond();
+        sleepForHalfASecond();
     }
 
 
     public boolean wantToQuitGame() {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "\nType " + ConsoleColors.RED_BRIGHT
-                + "yes" + ConsoleColors.YELLOW_BRIGHT + " if you want to quit. Everything else will " + ConsoleColors.GREEN_BRIGHT + "continue" +
-                ConsoleColors.YELLOW_BRIGHT + " the game." + ConsoleColors.RESET);
+                + "YES" + ConsoleColors.YELLOW_BRIGHT + " if you want to quit. Everything else will " +
+                ConsoleColors.GREEN_BRIGHT + "CONTINUE" + ConsoleColors.YELLOW_BRIGHT + " the game." + ConsoleColors.RESET);
 
-        String playerInput = scanner.nextLine().trim();
+        String playerInput = getSpecificStringInput();
 
-        if (playerInput.trim().equalsIgnoreCase("YES") || playerInput.trim().equalsIgnoreCase("Y")) {
+        if (playerInput.equalsIgnoreCase("YES") || playerInput.equalsIgnoreCase("Y")) {
             printTimePlayed();
             return true;
+
         } else return false;
-        // TODO
     }
 
 
@@ -154,22 +157,40 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "1. My name is Micheal.\n2. I am Hisha.\n" +
                 "3. Howdy partner. I am Bobb.\n4. Hello mister my name is Kim.\n5. Me name Jeff.\n6. I am Null.\n7. I dont remember." +
                 ConsoleColors.RESET);
-        try {
-            int playerInput = scanner.nextInt();
-            switch (playerInput) {
-                case 1 -> playerName = "Micheal";
-                case 2 -> playerName = "Hisha";
-                case 3 -> playerName = "Bobb";
-                case 4 -> playerName = "Kim";
-                case 5 -> playerName = "Jeff";
-                case 6 -> playerName = "Null";
-                case 7 -> playerName = "Nameless";
-                default -> printNotAName();
-            }
-        } catch (InputMismatchException e) {
-            printNotAName();
+        int playerInput = getSpecificPositiveIntInputBetween1And10();
+        switch (playerInput) {
+            case 0 -> wantToQuitGameAndNotAName();
+            case 1 -> playerName = "Micheal";
+            case 2 -> playerName = "Hisha";
+            case 3 -> playerName = "Bobb";
+            case 4 -> playerName = "Kim";
+            case 5 -> playerName = "Jeff";
+            case 6 -> playerName = "Null";
+            case 7 -> playerName = "Nameless";
+            //TODO FIND 10 NAMES
+            default -> printNotAName();
         }
         return playerName;
+    }
+
+    private void wantToQuitGameAndNotAName() {
+        wantToQuitGame();
+        printNotAName();
+    }
+
+    private int getSpecificPositiveIntInputBetween1And10() {
+        int returnInt = -1;
+        while (!validInput) {
+            try {
+                returnInt = scanner.nextInt();
+            } catch (InputMismatchException e) { // TODO WHAT EXECPTION?
+                printInvalidInput();
+            }
+            if (returnInt > -1 && returnInt < 11) //TODO MORE
+                validInput = true;
+        }
+        validInput = false; // Prep validInput to next use.
+        return returnInt;
     }
 
     private void printNotAName() {
@@ -188,7 +209,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public String printCombatMenuHeader(String playerNameColored, String enemyNameColored) {
-        return ConsoleColors.MENU_COLOR_SANDY_BROWN + "COMBAT MENU" + ConsoleColors.RESET + "\n           " + playerNameColored +
+        return ConsoleColors.MENU_COLOR_SANDY_BROWN + "COMBAT MENU" + ConsoleColors.RESET + "\n" + playerNameColored +
                 " versus " + enemyNameColored + ConsoleColors.RESET;
     }
 
@@ -217,7 +238,7 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
                 "2. Make map invisible.", "3. Grant yourself a weapon.", "4. Grant yourself a piece of armor.",
                 "5. Change attributes.", "6. Sharpen weapon.", "7. Repair armor.", "8. Show all map locations.",
                 "9. Show all Available information.", "10. Teleport to location.",
-                "\n0. Quit game.", "33. Go to previous menu."};
+                "\n0. Quit game.", "33. Go to movement menu."};
     }
 
     // ------------------ SLEEP-TIMERS ------------------
@@ -389,20 +410,36 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
     }
 
     public String getSpecificStringInput() {
-//        try { // TODO MAKE SURE TRYCATCH WITH ALL INPUT
-        return scanner.nextLine().trim();
-//        } catch (InputMismatchException e) {
-//            printInvalidInput();
-//        } return ???
+        String returnString = "";
+        while (!validInput) {
+            try {
+                returnString = scanner.nextLine().trim(); // TODO FIX
+            } catch (NullPointerException e) { // TODO WHAT EXCEPTION?
+                printInvalidInput();
+            } catch (Exception e) {
+                printInvalidInput();
+            }
+            if (!returnString.isEmpty() && returnString.length() < 40) // TODO MORE MAYBE?
+                validInput = true;
+        }
+        validInput = false; // Prep validInput to next use.
+        return returnString;
     }
 
-    public int getSpecificIntInput() {
-//        try {
-        return scanner.nextInt();
-//        } catch (InputMismatchException e) {
-//            printInvalidInput();
-//        }
-//        return ...
+    public int getSpecificPositiveIntInput() {
+        int returnInt = -1;
+        while (!validInput) {
+            try {
+                returnInt = scanner.nextInt();
+            } catch (InputMismatchException e) { // TODO WHAT EXECPTION?
+                printInvalidInput();
+            }
+            if (returnInt > -1 && returnInt < 34) //TODO MORE
+                validInput = true;
+        }
+        validInput = false; // Prep validInput to next use.
+        return returnInt;
+
     }
 
     public void printEnemyAttack(String enemyNameColored, int enemyDamageAmount) { // todo maybe get enemycolor?
@@ -410,32 +447,39 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
                 enemyDamageAmount + ConsoleColors.YELLOW_BRIGHT + " damage " + ConsoleColors.RESET);
     }
 
-    public String printWeaponOnLocation(Weapon weapon) {
+
+//    printInvalidInput();
+//        return""; // TODO ?? WHAT TO RETURN WHEN NOTHING
+
+    public Weapon wantToEquipWeapon(Weapon weapon) {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "You find " + weapon.getWeaponColor() + weapon.getWeaponName() +
                 ConsoleColors.YELLOW_BRIGHT + ". Do you want to equip it?" + ConsoleColors.GREEN_BRIGHT + " Y" +
                 ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.RED_BRIGHT + "N");
-        String playerInput = scanner.nextLine();
+
+        String playerInput = getSpecificStringInput();
+
         if (playerInput.equalsIgnoreCase("YES") || playerInput.equalsIgnoreCase("Y")) { // TODO MOVE SOUT LOGIC AFTER IT IS ACUALLY DONE
             System.out.println(ConsoleColors.YELLOW_BRIGHT + "You have now equipped " + weapon.getWeaponColor() +
                     weapon.getWeaponName() + ConsoleColors.YELLOW_BRIGHT + "." + ConsoleColors.RESET);
-            return weapon.getWeaponName();
-        }
-        if (playerInput.equalsIgnoreCase("NO") || playerInput.equalsIgnoreCase("N")) {
-            return "Keep old item"; // Todo
-        } else printInvalidInput();
-        return null; // TODO ?? MAYBE NO GOOD
+            return weapon;
+        } else if (playerInput.equalsIgnoreCase("NO") || playerInput.equalsIgnoreCase("N")) {
+            return null; // TODO Make inventory
+        } else return null; // WHAT TO RETURN AS DEFAULT? TODO
     }
 
-    public String printArmorOnLocation(Armor armor) {
+    public Armor wantToEquipArmor(Armor armor) {
         System.out.println(ConsoleColors.YELLOW_BRIGHT + "You find " + armor.getArmorColor() + armor.getArmorName() +
                 ConsoleColors.YELLOW_BRIGHT + ". Do you want to equip it?" + ConsoleColors.GREEN_BRIGHT + " Y" +
                 ConsoleColors.YELLOW_BRIGHT + "/" + ConsoleColors.RED_BRIGHT + "N");
-        String playerInput = scanner.nextLine();
+
+        String playerInput = getSpecificStringInput();
+
         if (playerInput.equalsIgnoreCase("YES") || playerInput.equalsIgnoreCase("Y")) {
             System.out.println(ConsoleColors.YELLOW_BRIGHT + "You have now equipped " + armor.getArmorColor() +
                     armor.getArmorName() + ConsoleColors.YELLOW_BRIGHT + "." + ConsoleColors.RESET);
-            return armor.getArmorName();
-        } else return "Keep old item"; // Todo
+            return armor;
+            // TODO RETURN  WHAT IF "N"
+        } else return null; // Todo Sammenlign med wantToEquipWeapon og sikr fejlhåndtering.
 
     }
 
@@ -455,4 +499,5 @@ public class UI { //TODO UDVIDET UI KLASSE?! Polymorfi?
                 " attacks you and deal " + enemyAttackDamage + ConsoleColors.YELLOW_BRIGHT +
                 " your remaining health is " + playerHealthPoints + ConsoleColors.RESET);
     }
+
 }

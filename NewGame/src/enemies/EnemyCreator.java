@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class EnemyCreator {
     UI ui = new UI();
-    private static final ArrayList<Enemy> enemies = new ArrayList<>();
+    private static final ArrayList<Enemy> enemiesArrayList = new ArrayList<>();
 
     public void instantiateEnemies() {
 
@@ -42,36 +42,36 @@ public class EnemyCreator {
         Enemy mossTheMad = new BossEnemy("Moss the mad");
 
 
-        enemies.add(human);
-        enemies.add(dog);
-        enemies.add(honeyBadger);
+        enemiesArrayList.add(human);
+        enemiesArrayList.add(dog);
+        enemiesArrayList.add(honeyBadger);
 
-        enemies.add(wolf);
-        enemies.add(zombie);
-        enemies.add(skeleton);
+        enemiesArrayList.add(wolf);
+        enemiesArrayList.add(zombie);
+        enemiesArrayList.add(skeleton);
 
-        enemies.add(centaur);
-        enemies.add(tiger);
-        enemies.add(bear);
+        enemiesArrayList.add(centaur);
+        enemiesArrayList.add(tiger);
+        enemiesArrayList.add(bear);
 
-        enemies.add(elephant);
-        enemies.add(anders);
-        enemies.add(otto);
+        enemiesArrayList.add(elephant);
+        enemiesArrayList.add(anders);
+        enemiesArrayList.add(otto);
 
-        enemies.add(hussein);
-        enemies.add(hasan);
-        enemies.add(husasan);
+        enemiesArrayList.add(hussein);
+        enemiesArrayList.add(hasan);
+        enemiesArrayList.add(husasan);
 
-        enemies.add(blob);
-        enemies.add(zlats);
-        enemies.add(mossTheMad);
+        enemiesArrayList.add(blob);
+        enemiesArrayList.add(zlats);
+        enemiesArrayList.add(mossTheMad);
     }
-    ArrayList<Enemy> enemiesCopy = enemies;
+    ArrayList<Enemy> enemiesArrayListCopy = enemiesArrayList;
 
-    public Enemy getEnemiesByName(String name) {
+    public Enemy getEnemiesByName(String enemyName) {
         instantiateEnemies();
-        for (Enemy specificEnemy : enemiesCopy) {
-            if (specificEnemy.getEnemyName().equalsIgnoreCase(name)) {
+        for (Enemy specificEnemy : enemiesArrayListCopy) {
+            if (specificEnemy.getEnemyName().equalsIgnoreCase(enemyName)) {
                 return specificEnemy;
             }
         }
@@ -80,7 +80,7 @@ public class EnemyCreator {
     }
 
     public ArrayList<Enemy> getEnemiesCopyArraylistInOrder() {
-        enemiesCopy.sort(new EnemyHealthComparator());
-        return enemiesCopy;
+        enemiesArrayListCopy.sort(new EnemyHealthComparator());
+        return enemiesArrayListCopy;
     }
 }

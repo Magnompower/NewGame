@@ -10,7 +10,7 @@ public class MovementMenu extends Menu {
 
     @Override
     public String returnUserInput() {
-        String userInput = changeUserInput().toUpperCase();
+        String userInput = changeUserStringInput().toUpperCase();
         return switch (userInput) {
             case "W", "8" -> "Move north";
             case "A", "4" -> "Move west";
